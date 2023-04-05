@@ -1,0 +1,325 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["title"] = "TextWarp";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="d-flex flex-column h-100" style="">
+    <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px">
+        <div class="p-3">
+            <a href="#" style="font-size: 28px; font-weight: bold; color: #ffffff">TextWarp</a>
+        </div>
+        <div class="p-3">
+            <button style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem;">Gallery</button>
+            <button style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem;">Sign in</button>
+        </div>
+    </div>
+    <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
+        @*gallery*@
+        <div id="galleryView" class="sub-view d-flex flex-column w-100 h-100" style="background-color:#76787c;padding:5rem 5rem;overflow:auto;">
+            <div class="d-flex" style="height: 2rem;">
+                <div class="col-md-9 col-sm-6 d-flex align-items-center" style="background-color:#2f2d33;overflow:hidden;border-radius:10px;">
+                    <div style="margin: 0 0.5rem;">
+                        <i class="fa fa-search" style="font-size: 14px;color:#dad8dd"></i>
+                    </div>
+                    <input type="text" class="search_input flex-grow-1" value="" placeholder="Search">
+                </div>
+                <div class="align-items-center col-md-3 col-sm-6 d-flex" style="padding-left: 3rem;color: #dad8dd;font-size: 14px;">
+                    <div id="" style="padding: 0 0.5rem;">
+                        Select
+                    </div>
+                    <div id="" style="padding: 0 0.5rem;">
+                        New
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 4rem 0;">
+                <div id="createNewDocument" class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/plus_item.png" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                    <div style="color:#dad8dd;font-size: 14px;">2023-04-12 04:55</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+            </div>
+        </div>
+        @*word input view*@
+        <div id="wordInputView" class="sub-view d-none align-items-center d-flex justify-content-around w-100 h-100">
+            <div class="align-items-center d-flex flex-column col-sm-12 col-md-9 col-lg-8 col-xl-6">
+                <div>
+                    <label style="font-size: 28px;color: #9a9a9a;">Enter up to 3 words here</label>
+                </div>
+                <div class="w-100" style="padding: 85px 10px">
+                    <input name="tags" placeholder="Type a word and hit enter" value="LOVE" style="width:100%">
+                    <input name="inputedWords" type="hidden" value="LOVE"/>
+                </div>
+                <div>
+                    <button id="wordsInput" class="btn-next">Next</button>
+                </div>
+            </div>
+        </div>
+        @*style choose view*@
+        <div id="styleChooseView" class="sub-view d-none align-items-center d-flex justify-content-around w-100 h-100">
+            <div class="align-items-center d-flex flex-column col-sm-12 col-md-9 col-lg-8 col-xl-6">
+                <div>
+                    <label style="font-size: 28px;color: #9a9a9a;">Select your prefered shape</label>
+                </div>
+                <div class="w-100 d-flex justify-content-between align-items-center" style="height: 238px">
+                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="0" style="position:relative; width:27%;">
+                        <img src="icons/circle.svg" style="max-width:85%;position:absolute;" />
+                        <img src="icons/circle_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                    </div>
+                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="1" style="position:relative; width:35%;">
+                        <img src="icons/ellipse.svg" style="max-width:85%;position:absolute;" />
+                        <img src="icons/ellipse-shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                    </div>
+                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="2" style="position:relative; width:27%;">
+                        <img src="icons/heart.svg" style="max-width:85%;position:absolute;" />
+                        <img src="icons/heart_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                    </div>
+                </div>
+                <div>
+                    <button class="btn-next">Next</button>
+                </div>
+            </div>
+        </div>
+        @*eidt view*@
+        <div id="svgEditorView" class="sub-view d-none align-items-center w-100 h-100">
+            <div class="d-flex h-100 w-100">
+                <div class="d-flex align-items-center h-100">
+                    <div id="sideToolBar" class="d-flex flex-column justify-content-between" style="height: 30%">
+                        <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="width: 30px;height: 70%;">
+                            <div id="color-previewer" style="width: 20px;height:20px;border-radius:50%; background-color: #ec008c;cursor:pointer;">
+                            </div>
+                            <img class="toolbar-icon" id="setting" src="~/icons/setting.png">
+                            <img class="toolbar-icon" id="spana" src="~/icons/spana.png">
+                        </div>
+                        <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 25%">
+                            <img style="width:15px;height:15px" id="undo" src="~/icons/rotate-left.png" />
+                            <img style="width:15px;height:15px" id="redo" src="~/icons/rotate-right.png" />
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center h-100" style="padding-left:20px">
+                        <div id="colorToolBox" class="toolBox-theme flex-column" style="padding:30px 0 0 0 !important">
+                            <div id="tab_name" class="default-text">Colors</div>
+                            <div class="d-flex" style="margin:10px 25px;border-radius:8px;background-color:#fff;">
+                                <div class="col-4 colorPanelTab active">Colors</div>
+                                <div class="col-4 colorPanelTab">Palettes</div>
+                                <div class="col-4 colorPanelTab">Gradients</div>
+                            </div>
+                            <div id="color_panel" class="color-tab color-picker-container active" style="padding: 0 25px 0 25px !important;">
+                                <div class="colorPanel-container" id="colors_container">
+                                    <div style="position:relative; width:100%;">
+                                        <div class="snippet" id="snippet-block" style="margin: 16px 0px;">
+                                            <input id="color-block"
+                                                   type="text"
+                                                   value="#ff8800"
+                                                   data-wheelcolorpicker
+                                                   data-wcp-format="css"
+                                                   data-wcp-layout="block"
+                                                   data-wcp-sliders="w"
+                                                   data-wcp-cssClass="color-block d-flex flex-column justify-content-center align-items-center"
+                                                   data-wcp-autoResize="true"
+                                                   data-wcp-mobile="true" />
+                                        </div>
+                                    </div>
+                                    <div class="brightnessValueContainer">
+                                        <input type="range" min="0" max="1" value="1" step="0.01" id="brightness" class="brightnessSlider" />
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-between align-items-center" style="width:100% !important; padding-top:8px; padding-bottom:8px;">
+                                        <span class="color-setting-title default-text">Hex Color</span>
+                                        <input id="color-input" type="text" class="color-input form-control"/>
+                                    </div>
+                                    <div class="color-history-container">
+                                        <div class="history-control d-flex flex-row justify-content-between">
+                                            <div class="color-setting-title default-text">History</div>
+                                            <div class="color-setting-title default-text" style="text-align:right" id="clearHistory">Clear</div>
+                                        </div>
+                                        <div class="history-colors d-flex">
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                            <div class="oldColor flex-fill"></div>
+                                        </div>
+                                    </div>
+                                    <div class="cur-palette d-flex" id="cur-palette"></div>
+                                </div>
+                            </div>
+                            <div id="palettes_container" class="color-tab palettes-container flex-column">
+                                <div class="flex-grow-1 d-flex flex-column justify-content-between" id="palettes">
+
+                                </div>
+                                <div id="generatePalettes">
+                                    Generate More
+                                </div>
+                            </div>
+                        </div>
+                        <div id="filterToolBox" class="toolBox-theme flex-column">
+                            <div class="default-text" style="font-size: 22px;margin-bottom: 10px;">
+                                Filters
+                            </div>
+                            <div class="detail-set-option">
+                                <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                    <div class="">
+                                        Brightness
+                                    </div>
+                                    <div class="progress-value"><span id="stroke_brightness">1%</span></div>
+                                </div>
+                                <div class="">
+                                    <tc-range-slider id="sli_stroke_brightness" data-default-value="1" data-shower-id="stroke_brightness" min="1" max="100" value="1"
+                                                     slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                     pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                     pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                    </tc-range-slider>
+                                </div>
+                            </div>
+                            <div class="detail-set-option">
+                                <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                    <div class="">
+                                        Contrast
+                                    </div>
+                                    <div class="progress-value"><span id="stroke_contrast">1%</span></div>
+                                </div>
+                                <div class="">
+                                    <tc-range-slider id="sli_stroke_contrast" data-default-value="1" data-shower-id="stroke_contrast" min="1" max="100" value="1"
+                                                     slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                     pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                     pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                    </tc-range-slider>
+                                </div>
+                            </div>
+                            <div class="detail-set-option">
+                                <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                    <div class="">
+                                        Saturation
+                                    </div>
+                                    <div class="progress-value"><span id="stroke_saturation">1%</span></div>
+                                </div>
+                                <div class="">
+                                    <tc-range-slider id="sli_stroke_saturation" data-default-value="1" data-shower-id="stroke_saturation" min="1" max="100" value="1"
+                                                     slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                     pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                     pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                    </tc-range-slider>
+                                </div>
+                            </div>
+                            <div class="detail-set-option">
+                                <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                    <div class="">
+                                        Hue
+                                    </div>
+                                    <div class="progress-value"><span id="stroke_hue">1%</span></div>
+                                </div>
+                                <div class="">
+                                    <tc-range-slider id="sli_stroke_hue" data-default-value="1" data-shower-id="stroke_hue" min="1" max="360" value="1"
+                                                     slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                     pointer-height="16px" slider-bg="linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 16.666%, rgb(0, 255, 0) 33.333%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 66.666%, rgb(255, 0, 255) 83.333%, rgb(255, 0, 0) 100%)"
+                                                     slider-bg-hover="None"
+                                                     slider-bg-fill="None"
+                                                     pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                    </tc-range-slider>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="actionToolBox" class="toolBox-theme flex-column" style="height: 30% !important">
+                            <div class="default-text" style="font-size: 22px;margin-bottom: 15px;">
+                                Actions
+                            </div>
+                            <div class="d-flex my-2">
+                                <div></div>
+                                <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TrueBrush</div>
+                            </div>
+                            <div class="d-flex my-2">
+                                <div></div>
+                                <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TDT</div>
+                            </div>
+                            <div class="d-flex my-2">
+                                <img style="width:15px;height:15px" src="/icons/share.png" />
+                                <div class="default-text" style="font-size:12px;padding-left: 15px;">Share</div>
+                            </div>
+                            <div class="d-flex my-2">
+                                <img style="width:15px;height:15px" src="/icons/download.png" />
+                                <div class="default-text" style="font-size:12px;padding-left: 15px;">Download</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="svgViewer" class="d-flex align-items-center justify-content-center flex-grow-1">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

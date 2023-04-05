@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/stylesheet.css" rel="stylesheet">
+    <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="~/css/tagify.css" rel="stylesheet">
+    <title>@ViewData["title"]</title>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body style="height:100vh">
+    @RenderBody()
+</body>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/jQuery.tagify.min.js"></script>
+<script src="~/lib/fontawesome/js/all.min.js"></script>
+<script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
+<script src="~/js/GalleryScript.js"></script>
+</html>

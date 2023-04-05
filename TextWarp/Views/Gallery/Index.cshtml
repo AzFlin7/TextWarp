@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["title"] = "Gallery";
+    Layout = "~/Views/Shared/_GalleryLayout.cshtml";
+}
+<div class="d-flex flex-column h-100" style="">
+    <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px">
+        <div class="p-3">
+            <a href="#" style="font-size: 28px; font-weight: bold; color: #ffffff; text-decoration:none;">TextWarp</a>
+        </div>
+    </div>
+    <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
+        @*gallery*@
+        <div id="galleryView" class="sub-view d-flex flex-column w-100 h-100" style="background-color:#76787c;padding:5rem 5rem;overflow:auto;">
+            <div class="d-flex" style="height: 2rem;">
+                <div class="col-md-9 col-sm-6 d-flex align-items-center" style="background-color:#2f2d33;overflow:hidden;border-radius:10px;">
+                    <div style="margin: 0 0.5rem;">
+                        <i class="fa fa-search" style="font-size: 14px;color:#dad8dd"></i>
+                    </div>
+                    <input type="text" class="search_input flex-grow-1" value="" placeholder="Search">
+                </div>
+                <div class="align-items-center col-md-3 col-sm-6 d-flex" style="padding-left: 3rem;color: #dad8dd;font-size: 14px;">
+                    <div id="" style="padding: 0 0.5rem;">
+                        Select
+                    </div>
+                    <div id="" style="padding: 0 0.5rem;">
+                        New
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 4rem 0;">
+                <a href="/gallery/newwarp" class="gallery-item d-flex flex-column align-items-center" style="text-decoration:none;">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/plus_item.png" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </a>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                    <div style="color:#dad8dd;font-size: 14px;">2023-04-12 04:55</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+                <div class="gallery-item d-flex flex-column align-items-center">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
+                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                    </div>
+                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

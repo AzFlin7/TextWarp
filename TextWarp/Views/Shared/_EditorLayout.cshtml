@@ -12,7 +12,7 @@
 </head>
 <body style="height:100vh; position:relative;overflow:hidden;">
     <div class="d-flex flex-column h-100" style="">
-        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px">
+        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;z-index:101;">
             <div class="p-3">
                 <a href="/gallery/#" style="font-size: 28px; font-weight: bold; color: #ffffff; text-decoration:none;">TextWarp</a>
             </div>
@@ -26,8 +26,17 @@
         </div>
     </div>
     <div id="svg_temp" style="position:absolute; left:100vw;top:100vh;"></div>
-    <svg id="svg_container" style="position:absolute;left:100vw;top:100vh;"></svg>
+    <svg id="svg_container" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:100vw;top:100vh;">
+        <defs>
+            <linearGradient id="sampleGradient" gradientTransform="rotate(1)" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" id="first_color" stop-color="#6b6fff" />
+                <stop offset="100%" id="second_color" stop-color="#bc91c1" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <div id="bodyOverlay"></div>
 </body>
+
 <script src="~/js/warp_asset/d3.v3.min.js"></script>
 <script src="~/js/warp_asset/svg-path-properties.min.js"></script>
 <script src="~/js/warp_asset/seperatePathGenerator.js"></script>
@@ -39,5 +48,6 @@
 <script src="~/js/toolcool-range-slider.min.js"></script>
 <script src="~/js/ColorPickerScript.js"></script>
 <script src="~/js/warp_asset/app.js"></script>
+<script src="~/lib/fabric.min.js"></script>
 <script src="~/js/EditorScript.js"></script>
 </html>

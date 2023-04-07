@@ -1,13 +1,25 @@
 body {
     font-family: Lato;
 }
+#bodyOverlay {
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    position: absolute;
+    background-color: transparent;
+    left: 0;
+    top: 0;
+}
 
 .toolbar-icon {
     width: 20px;
     height: 20px;
     cursor:pointer;
 }
-
+.toolbar-icon.active {
+    filter: invert(58%) sepia(47%) saturate(1947%) hue-rotate(165deg) brightness(104%) contrast(101%);
+    -webkit-filter: invert(58%) sepia(47%) saturate(1947%) hue-rotate(165deg) brightness(104%) contrast(101%);
+}
 .down-arrow {
     display: block;
     width: 19px;
@@ -621,4 +633,78 @@ a:link, a:visited, a:hover {
     border-radius: 10px;
     overflow: hidden;
     background-color:#fff;  
+}
+.edit-svg {
+    max-width: 100%;
+    padding: 3rem;
+    z-index:101;
+}
+.currentActivePath {
+    stroke: #30f4ff;
+    stroke-width: 0.5rem;
+}
+.gradients-container {
+    display: none;
+    padding-bottom:25px;
+}
+.gradients-container.active{
+    display:flex;
+}
+.gradient {
+    padding-right: 25px;
+    height: 50px;
+    width: 100%;
+}
+.btn_chooseTemplate {
+    color: #dfdce0 !important;
+}
+.btn_chooseTemplate.active {
+    color: #0097eb !important;
+}
+
+.gallery-item-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity:0;
+}
+.gallery-item-overlay.active {
+    background-color: #a9a7a7;
+    opacity: 0.5 !important;
+}
+.check_container {
+    width: 24px;
+    height: 24px;
+    border: solid 2px #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: transparent;
+    display: none;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.check_container.active{
+    display:block;
+}
+.check-icon {
+    position:absolute;
+    left:0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    background-color: #0d9fdf;
+}
+.check-icon-container {
+    display: none;
+}
+.check-icon-container.active {
+    width:100%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:relative;
 }

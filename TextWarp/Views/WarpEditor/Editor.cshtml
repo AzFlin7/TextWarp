@@ -1,14 +1,14 @@
 ﻿
 @{
     ViewData["Title"] = "Editor";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
 @*eidt view*@
 <div id="svgEditorView" class="sub-view d-flex align-items-center w-100 h-100">
     <div class="d-flex h-100 w-100">
         <div class="d-flex align-items-center h-100">
-            <div id="sideToolBar" class="d-flex flex-column justify-content-between" style="height: 30%">
+            <div id="sideToolBar" class="d-flex flex-column justify-content-between" style="height: 30%;z-index:101;">
                 <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="width: 30px;height: 70%;">
                     <div id="color-previewer" style="width: 20px;height:20px;border-radius:50%; background-color: #ec008c;cursor:pointer;">
                     </div>
@@ -20,8 +20,8 @@
                     <img style="width:15px;height:15px" id="redo" src="~/icons/rotate-right.png" />
                 </div>
             </div>
-            <div class="d-flex align-items-center h-100" style="padding-left:20px">
-                <div id="colorToolBox" class="toolBox-theme flex-column" style="padding:30px 0 0 0 !important">
+            <div class="d-flex align-items-center h-100" style="padding-left:20px;">
+                <div id="colorToolBox" class="toolBox-theme flex-column" style="padding:30px 0 0 0 !important;z-index:101;">
                     <div id="tab_name" class="default-text">Colors</div>
                     <div class="d-flex" style="margin:10px 25px;border-radius:8px;background-color:#fff;">
                         <div class="col-4 colorPanelTab active">Colors</div>
@@ -78,9 +78,26 @@
                             Generate More
                         </div>
                     </div>
-                    <div id="gradient_container"></div>
+                    <div id="gradients_container" class="color-tab gradients-container flex-column">
+                        <div style="margin-bottom: 20px;padding: 0 30px;">
+                            <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                <div class="">
+                                    Gradient Angle
+                                </div>
+                                <div class="progress-value"><span id="stroke_gradientAngle">1%</span></div>
+                            </div>
+                            <div class="">
+                                <tc-range-slider id="sli_stroke_gradientAngle" data-default-value="1" data-shower-id="stroke_gradientAngle" min="0" max="360" value="1"
+                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                 pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                </tc-range-slider>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 d-flex flex-column justify-content-between" id="gradients"></div>
+                    </div>
                 </div>
-                <div id="filterToolBox" class="toolBox-theme flex-column">
+                <div id="filterToolBox" class="toolBox-theme flex-column" style="z-index:101;">
                     <div class="default-text" style="font-size: 22px;margin-bottom: 10px;">
                         Filters
                     </div>
@@ -147,25 +164,29 @@
                         </div>
                     </div>
                 </div>
-                <div id="actionToolBox" class="toolBox-theme flex-column" style="height: 30% !important">
+                <div id="actionToolBox" class="toolBox-theme flex-column" style="height: 30% !important;z-index:101;">
                     <div class="default-text" style="font-size: 22px;margin-bottom: 15px;">
                         Actions
                     </div>
                     <div class="d-flex my-2">
                         <div></div>
-                        <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TrueBrush</div>
+                        <div class="default-text" style="font-size:12px;padding-left: 30px;cursor:pointer;">Send to TrueBrush</div>
                     </div>
-                    <div class="d-flex my-2">
+                    <div class="d-flex my-2" style="cursor:pointer;">
                         <div></div>
                         <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TDT</div>
                     </div>
-                    <div class="d-flex my-2">
+                    <div class="d-flex my-2" style="cursor:pointer;">
                         <img style="width:15px;height:15px" src="~/icons/share.png" />
                         <div class="default-text" style="font-size:12px;padding-left: 15px;">Share</div>
                     </div>
-                    <div class="d-flex my-2">
+                    <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
                         <img style="width:15px;height:15px" src="~/icons/download.png" />
                         <div class="default-text" style="font-size:12px;padding-left: 15px;">Download</div>
+                    </div>
+                    <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
+                        <div></div>
+                        <div class="default-text" id="btn_save" style="font-size:12px;padding-left: 30px;">Save</div>
                     </div>
                 </div>
             </div>
@@ -173,7 +194,9 @@
         <button id="btn_warpText" class="d-none"></button>
         <div id="svgViewer" class="d-flex align-items-center justify-content-center flex-grow-1">
         </div>
-
+        <div style="position:fixed;left:100vw;top:100vh;">
+            <canvas id="print_canvas"></canvas>
+        </div>
     </div>
 </div>
    

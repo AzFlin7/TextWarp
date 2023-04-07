@@ -16,14 +16,22 @@ namespace TextWarp.Models.Database
         {
         }
 
+        public virtual DbSet<Artist> Artists { get; set; } = null!;
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; } = null!;
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; } = null!;
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; } = null!;
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; } = null!;
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; } = null!;
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
+        public virtual DbSet<BrandmarkColor> BrandmarkColors { get; set; } = null!;
         public virtual DbSet<Brush> Brushes { get; set; } = null!;
+        public virtual DbSet<Clipart> Cliparts { get; set; } = null!;
         public virtual DbSet<Document> Documents { get; set; } = null!;
+        public virtual DbSet<FavouriteWarpText> FavouriteWarpTexts { get; set; } = null!;
+        public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
+        public virtual DbSet<Upload> Uploads { get; set; } = null!;
+        public virtual DbSet<Warpfont> Warpfonts { get; set; } = null!;
+        public virtual DbSet<Wynwood> Wynwoods { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,6 +44,21 @@ namespace TextWarp.Models.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Artist>(entity =>
+            {
+                entity.ToTable("artists");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.SubTitle).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<AspNetRole>(entity =>
             {
                 entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
@@ -125,6 +148,33 @@ namespace TextWarp.Models.Database
                     .HasForeignKey(d => d.UserId);
             });
 
+            modelBuilder.Entity<BrandmarkColor>(entity =>
+            {
+                entity.Property(e => e.Color1)
+                    .HasMaxLength(10)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.Color2)
+                    .HasMaxLength(10)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.Color3)
+                    .HasMaxLength(10)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.Color4)
+                    .HasMaxLength(10)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.Color5)
+                    .HasMaxLength(10)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.IndexColor)
+                    .HasMaxLength(50)
+                    .UseCollation("Korean_Wansung_CI_AS");
+            });
+
             modelBuilder.Entity<Brush>(entity =>
             {
                 entity.Property(e => e.JsonPath).HasColumnType("text");
@@ -132,11 +182,26 @@ namespace TextWarp.Models.Database
                 entity.Property(e => e.UserId).HasMaxLength(450);
             });
 
+            modelBuilder.Entity<Clipart>(entity =>
+            {
+                entity.ToTable("cliparts");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.SubTitle).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Document>(entity =>
             {
-                entity.Property(e => e.CreatedAt).HasColumnType("date");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.DeletedAt).HasColumnType("date");
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.JsonPath).HasColumnType("text");
 
@@ -144,9 +209,127 @@ namespace TextWarp.Models.Database
 
                 entity.Property(e => e.State).HasColumnType("text");
 
-                entity.Property(e => e.UpdatedAt).HasColumnType("date");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.UserId).HasMaxLength(450);
+            });
+
+            modelBuilder.Entity<FavouriteWarpText>(entity =>
+            {
+                entity.ToTable("favouriteWarpTexts");
+
+                entity.Property(e => e.FontId).HasColumnName("fontId");
+
+                entity.Property(e => e.SvgFileName)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("svgFileName");
+            });
+
+            modelBuilder.Entity<Graffix>(entity =>
+            {
+                entity.ToTable("graffixes");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
+                entity.Property(e => e.Oheight).HasColumnName("OHeight");
+
+                entity.Property(e => e.Ourl)
+                    .HasMaxLength(50)
+                    .HasColumnName("OUrl");
+
+                entity.Property(e => e.Owidth).HasColumnName("OWidth");
+
+                entity.Property(e => e.Theight).HasColumnName("THeight");
+
+                entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.Property(e => e.Turl)
+                    .HasMaxLength(50)
+                    .HasColumnName("TUrl");
+
+                entity.Property(e => e.Twidth).HasColumnName("TWidth");
+            });
+
+            modelBuilder.Entity<Upload>(entity =>
+            {
+                entity.ToTable("uploads");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
+                entity.Property(e => e.Oheight).HasColumnName("OHeight");
+
+                entity.Property(e => e.Ourl)
+                    .HasMaxLength(50)
+                    .HasColumnName("OUrl");
+
+                entity.Property(e => e.Owidth).HasColumnName("OWidth");
+
+                entity.Property(e => e.Theight).HasColumnName("THeight");
+
+                entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.Property(e => e.Turl)
+                    .HasMaxLength(50)
+                    .HasColumnName("TUrl");
+
+                entity.Property(e => e.Twidth).HasColumnName("TWidth");
+            });
+
+            modelBuilder.Entity<Warpfont>(entity =>
+            {
+                entity.ToTable("warpfonts");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Wynwood>(entity =>
+            {
+                entity.ToTable("wynwoods");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
+                entity.Property(e => e.Oheight).HasColumnName("OHeight");
+
+                entity.Property(e => e.Ourl)
+                    .HasMaxLength(50)
+                    .HasColumnName("OUrl");
+
+                entity.Property(e => e.Owidth).HasColumnName("OWidth");
+
+                entity.Property(e => e.Theight).HasColumnName("THeight");
+
+                entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.Property(e => e.Turl)
+                    .HasMaxLength(50)
+                    .HasColumnName("TUrl");
+
+                entity.Property(e => e.Twidth).HasColumnName("TWidth");
             });
 
             OnModelCreatingPartial(modelBuilder);

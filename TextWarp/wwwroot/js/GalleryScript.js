@@ -1,28 +1,5 @@
 ﻿$(document).ready(function () {
-    var inputElm = $('[name=tags]')[0]; //first word input box
-    var contentWords = "";
-    var currentPathIndex = -1;
-    //initialize tagify input
-    tagify = new Tagify(inputElm, {
-        duplicates: false,
-        addTagOnBlur: true,
-        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(' ')
-    });
-    inputElm.addEventListener('change', onChange);
-    function onChange(e) {
-        // outputs a String
-        var values = e.target.value;
-        values = values.split(" ");
-        if (values.length == 2) {
-            // alert("You can enter only 3 words.");
-            $(".tagify__input")[0].classList.add("d-none");
-            contentWords = e.target.value;
-        }
-        else {
-            $(".tagify__input")[0].classList.remove("d-none");
-            $(".tagify__input")[0].classList.add("d-inline-block");
-        }
-    }
+    
     //end of initialize tagify input
 
     $("#wordsInput").click(function () {
@@ -45,5 +22,14 @@
 
     $("#chooseStyle").click(function () {
         window.localStorage.setItem("pathIndex", currentPathIndex);
+    });
+
+    $(".btn_chooseTemplate").on("click",function () {
+        $(".btn_chooseTemplate").removeClass("active");
+        $(this).addClass("active");
+    })
+
+    $("#btn_select").click(function () {
+        $("#select_sub_menu").addClass("d-flex");
     });
 });

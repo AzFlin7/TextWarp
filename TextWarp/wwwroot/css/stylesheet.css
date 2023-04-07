@@ -669,8 +669,10 @@ a:link, a:visited, a:hover {
     left: 0;
     top: 0;
     opacity:0;
+    display:none;
 }
 .gallery-item-overlay.active {
+    display:block;
     background-color: #a9a7a7;
     opacity: 0.5 !important;
 }

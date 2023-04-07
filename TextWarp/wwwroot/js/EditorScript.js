@@ -5,6 +5,7 @@
     var controlPoints = splitPath(pathIndex, warp_words);
 
     var triggerButton = $("#btn_warpText")[0];
+
     var event = new CustomEvent("custom-event", {
         'detail': {
             words: warp_words,
@@ -14,6 +15,7 @@
     triggerButton.dispatchEvent(event);
     
     var warpedSvg = $("#svg_container")[0];
+
     $("#svgViewer")[0].appendChild(warpedSvg);
     
     $("#spana").click(function (e) {
@@ -64,32 +66,21 @@
         window.localStorage.setItem("pathSelected", 0);
     });
 
-    var fabricCanvas = new fabric.Canvas('print_canvas');
-
     $("#svg_download").click(function () {
-        var pathString = "";
-        $("#svg_container>path").each(function (i, item) {
-            var d = $(item).attr("d");
-            pathString += d;
-        });
-
-        fabricCanvas.clear();
-        var pathElt = new fabric.Path(pathString);
-
-        var pathWidth = pathElt.width;
-        var pathHeight = pathElt.height;
-        fabricCanvas.setDimensions({
-            width: pathWidth,
-            height: pathHeight
-        });
-
-        fabricCanvas.add(pathElt);
-        pathElt.center();
-        fabricCanvas.renderAll();
-
+        var svg = $("#svg_container")[0];
+        var serializer = new XMLSerializer();
+        var source = serializer.serializeToString(svg);
+        if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+            source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+        }
+        source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+        var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
         var theAnchor = $('<a />')
-            .attr('href', fabricCanvas.toDataURL())
-            .attr('download', "warp-text.png")
+            .attr('href', url)
+            .attr('download', "warp-text.svg")
             .appendTo('body');
 
         theAnchor[0].click();
@@ -97,6 +88,20 @@
     });
 
     $("#btn_save").click(function () {
-
-    })
+        var svg_data = document.getElementById("svg_container").outerHTML;
+        let blob = new Blob([svg_data], { type: 'image/svg+xml' });
+        var warppedImgID = parseInt(Math.random() * 100);
+        var formData = new FormData();
+        formData.append("svg_file", blob, 'warp-text.svg');
+        $.ajax({
+            url: "/warpeditor/save/" + warppedImgID,
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+                console.log("success saved!");
+            },
+        });
+    });
 });

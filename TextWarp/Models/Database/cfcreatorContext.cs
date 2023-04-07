@@ -31,6 +31,7 @@ namespace TextWarp.Models.Database
         public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
         public virtual DbSet<Upload> Uploads { get; set; } = null!;
         public virtual DbSet<Warpfont> Warpfonts { get; set; } = null!;
+        public virtual DbSet<WarppedSvg> WarppedSvgs { get; set; } = null!;
         public virtual DbSet<Wynwood> Wynwoods { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -207,6 +208,8 @@ namespace TextWarp.Models.Database
 
                 entity.Property(e => e.Name).HasMaxLength(256);
 
+                entity.Property(e => e.PreviewImg).HasColumnType("text");
+
                 entity.Property(e => e.State).HasColumnType("text");
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
@@ -299,6 +302,32 @@ namespace TextWarp.Models.Database
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Thumbnail).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<WarppedSvg>(entity =>
+            {
+                entity.ToTable("WarppedSVGs");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ID");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.SvgfileName)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("SVGFileName");
+
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(450)
+                    .HasColumnName("UserID");
+
+                entity.Property(e => e.WorkName).HasMaxLength(450);
             });
 
             modelBuilder.Entity<Wynwood>(entity =>

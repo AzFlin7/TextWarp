@@ -1,9 +1,11 @@
 ﻿$(document).ready(function () {
     let currentPaletteIndex = 0;
     let currentGradientIndex = 0;
+    let currentPathIndex = -1;
     const historyColors = [];
     var brightness, contrast, saturation, hue;
     let palettes = [];
+    let historyActions = [];
     
     const gradients = [
         ["#f41d6d", "#57a6c8"],
@@ -125,16 +127,32 @@
 
     $("#generatePalettes").on("click", (e) => generatePalettes(e));
 
-    $("#sli_stroke_gradientAngle").on("change",setCurrentGradient());
-
     $("tc-range-slider").on("change", function () {
         let shower_id = "#" + $(this).attr("data-shower-id") + "";
         if ($(this).attr("data-shower-id") != "") {
             var intValue = parseInt($(this)[0].value);
             $(shower_id).text(intValue + "%")
         }
+        if (this.id == "sli_stroke_gradientAngle") {
+            setCurrentGradient();
+        }
+        if (this.id == "sli_stroke_brightness" || this.id == "sli_stroke_hue" || this.id == "sli_stroke_saturation") {
+            brightness = parseInt($("#sli_stroke_brightness")[0].value);
+            brightness = brightness / 100;
+            hue = parseInt($("#sli_stroke_hue")[0].value);
+            hue = hue / 360;
+            saturation = parseInt($("#sli_stroke_saturation")[0].value);
+            saturation = saturation / 100;
+            $("#color-block").wheelColorPicker('setHsv', hue, saturation, brightness);
+            //var color = $("#color-block").wheelColorPicker("color");
+            //var pathSelected = window.localStorage.getItem("pathSelected");
+            //if (pathSelected == 1) {
+            //    $(".currentActivePath")[0].setAttribute("fill", color);
+            //}
+        }
     });
-    function generatePalettes(e) {
+
+    function generatePalettes() {
         $("#palettes")[0].innerHTML = "";
         palettes = [];
         $.ajax({
@@ -272,14 +290,13 @@
             }
         }
         $(".warpedPath").on("click", function () {
-            console.log('click-wrapped');
             $(".warpedPath").removeClass("currentActivePath");
             $(this).addClass("currentActivePath");
             window.localStorage.setItem("pathSelected", 1);
         });
     }
 
-    generatePalettes(e=null);
+    generatePalettes();
 
     //showCurrentPalette();
 

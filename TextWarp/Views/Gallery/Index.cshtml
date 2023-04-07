@@ -46,156 +46,34 @@
                 </div>
             </div>
             <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 2rem 0;">
-                <a href="/gallery/newwarp" class="gallery-item d-flex flex-column align-items-center" style="text-decoration:none;">
+                <div id="createNewWarp" href="/gallery/newwarp" class="gallery-item d-flex flex-column align-items-center" style="text-decoration:none;">
                     <div class="gallery-item-img d-flex align-items-center justify-content-center">
                         <img src="~/icons/plus_item.png" style="max-width: 100%;max-height: 100%;">
                     </div>
                     <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </a>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                    <div style="color:#dad8dd;font-size: 14px;">2023-04-12 04:55</div>
                 </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
+                @foreach(var saved_svg in Model){
+                    <div class="gallery-item d-flex flex-column align-items-center">
+                        <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
+                            <div class="gallery-item-overlay"></div>
+                            <div class="check_container">
+                                <div class="check-icon-container">
+                                    <div class="check-icon"></div>
+                                    <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
+                                </div>
                             </div>
+                            @if (!String.IsNullOrEmpty(saved_svg.SvgFileName))
+                            {
+                                <img src="uploads/@saved_svg.SvgFileName" class="fullscreen-box-preview-img">
+                            }
+                            else {
+                                <img style="max-width: 100%;max-height: 100%;" src="~/icons/heart.svg" />
+                            }
                         </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
+                        <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">@saved_svg.SvgFileName</div>
+                        <div style="color:#dad8dd;font-size: 14px;">@saved_svg.CreatedAt</div>
                     </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
-                <div class="gallery-item d-flex flex-column align-items-center">
-                     <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="check_container active">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="~/icons/heart.svg" style="max-width: 100%;max-height: 100%;">
-                    </div>
-                    <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
-                </div>
+                }
             </div>
         </div>
     </div>

@@ -16,8 +16,8 @@
 </body>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/jQuery.tagify.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 <script src="~/lib/fontawesome/js/all.min.js"></script>
 <script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
-@await RenderSectionAsync("Scripts", required: false)
 <script src="~/js/GalleryScript.js"></script>
 </html>

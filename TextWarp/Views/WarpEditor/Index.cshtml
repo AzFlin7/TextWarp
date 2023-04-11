@@ -2,7 +2,42 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["title"] = "Warpped SVG";
+    ViewData["title"] = "Warped SVG";
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
-<div></div>
+@section Styles{
+    <link href="~/css/slick.css" rel="stylesheet" />
+}
+
+<input type="hidden" id="svg_id" data-id="@Model.id" />
+<input type="hidden" id="words" data-words="@Model.words" />
+<input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex" />
+<div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex align-items-center justify-content-center" style="width:20px; height:20px;">
+            <i class="fa-sharp fa-light fa-heart w-100; h-100;" style="color: #97a2b4;"></i>
+        </div>
+        <div class="d-flex align-items-center justify-content-center" style="width:20px; height:20px;">
+            <i class="fa-regular fa-pen"></i>
+        </div>
+    </div>
+    <div class="vcarousel" style="height:100%; width:500px;">
+        <div class="vcarousel-item" style="width: 500px; height:500px;background:#000000;">
+        </div>
+        <div class="vcarousel-item" style="width: 500px; height:500px;background:#00ff00;">
+        </div>
+        <div class="vcarousel-item" style="width: 500px; height:500px;background:#0000ff;">
+        </div>
+        <div class="vcarousel-item" style="width: 500px; height:500px;background:#00ffff;">
+        </div>
+        <div class="vcarousel-item" style="width: 500px; height:500px;background:#ffff00;">
+        </div>
+    </div>
+    <div id="favourites">
+
+    </div>
+</div>
+@section Scripts{
+    <script src="~/js/slick.js"></script>
+    <script src="~/js/carouselScript.js"></script>
+}

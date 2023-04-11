@@ -1,12 +1,14 @@
 ﻿$(document).ready(function () {
     let currentPaletteIndex = 0;
     let currentGradientIndex = 0;
-    let currentPathIndex = -1;
     const historyColors = [];
     var brightness, contrast, saturation, hue;
     let palettes = [];
-    let historyActions = [];
-    
+    var svgActivated = 0;
+
+    let actionHistory = [];
+    let currentActionIndex = -1;
+
     const gradients = [
         ["#f41d6d", "#57a6c8"],
         ["#f89412", "#f5ee5d"],
@@ -67,6 +69,14 @@
         $(".oldColor").css("background", "#fff");
     });
 
+    function findRow3(node) {
+        var i = 0;
+        while (node = node.previousSibling) {
+            if (node.nodeType === 1) { ++i }
+        }
+        return i;
+    }
+
     $(".oldColor").click(function (e) {
         let color = e.currentTarget.style.backgroundColor;
         historyColors.unshift(color);
@@ -74,6 +84,10 @@
         $("#color-previewer").css("background-color", color);
         var pathSelected = window.localStorage.getItem("pathSelected");
         if (pathSelected == 1) {
+            var pathIndex = findRow3($(".currentActivePath")[0]);
+            var action = { type:"set_indi_color", pathIndex: pathIndex, fill: color };
+            actionHistory.push(action);
+            currentActionIndex = actionHistory.length - 1;
             $(".currentActivePath")[0].setAttribute("fill", color);
         }
         $("#color-block").wheelColorPicker("setValue", color);
@@ -90,7 +104,12 @@
         changeHistory();
         $("#color-previewer").css("background-color", value);
         var pathSelected = window.localStorage.getItem("pathSelected");
+        
         if (pathSelected == 1) {
+            var pathIndex = findRow3($(".currentActivePath")[0]);
+            var action = { type:"set_indi_color", pathIndex: pathIndex, fill: color };
+            actionHistory.push(action);
+            currentActionIndex = actionHistory.length - 1;
             $(".currentActivePath")[0].setAttribute("fill", value);
         }
     });
@@ -101,6 +120,13 @@
         $("#color-input").val(value);
         brightness = $(this).wheelColorPicker('color').v;
         $("#brightness").val(brightness);
+        var pathSelected = window.localStorage.getItem("pathSelected");
+        if (pathSelected == 1) {
+            var pathIndex = findRow3($(".currentActivePath")[0]);
+            var action = { type: "set_indi_color", pathIndex: pathIndex, fill: value };
+            actionHistory.push(action);
+            currentActionIndex = actionHistory.length - 1;
+        }
         historyColors.unshift(value);
         changeHistory();
     });
@@ -144,13 +170,46 @@
             saturation = parseInt($("#sli_stroke_saturation")[0].value);
             saturation = saturation / 100;
             $("#color-block").wheelColorPicker('setHsv', hue, saturation, brightness);
-            //var color = $("#color-block").wheelColorPicker("color");
-            //var pathSelected = window.localStorage.getItem("pathSelected");
-            //if (pathSelected == 1) {
-            //    $(".currentActivePath")[0].setAttribute("fill", color);
-            //}
         }
     });
+
+    $("#undo").click(function () {
+        if (actionHistory.length > 0) {
+            currentActionIndex -= 1;
+            if (currentActionIndex > 0) {
+                actionHandler(actionHistory[currentActionIndex]);
+            }
+        }
+    });
+
+    $("#redo").click(function () {
+        if (actionHistory.length > 0) {
+            currentActionIndex += 1;
+            if (currentActionIndex < actionHistory.length) {
+                actionHandler(actionHistory[currentActionIndex]);
+            }
+        }
+    });
+
+    function actionHandler(action) {
+        switch (action.type) {
+            case "set_indi_color":
+                $("#svg_container")[0].children[action.pathIndex].setAttribute("fill", action.fill);
+                break;
+            case "set_palette":
+                $("#svg_container")[0].children[1].setAttribute("fill", action.first_color);
+                $("#svg_container")[0].children[2].setAttribute("fill", action.second_color);
+                break;
+            case "set_gradient":
+                $("#sampleGradient").attr("gradientTransform", action.rotate);
+                $("#first_color").attr("stop-color", action.first_color);
+                $("#second_color").attr("stop-color", action.second_color);
+                var gradientImage = "url(#sampleGradient)";
+                $("#svg_container")[0].children[1].setAttribute("fill", gradientImage);
+                $("#svg_container")[0].children[2].setAttribute("fill", gradientImage);
+                break;
+        }
+    }
 
     function generatePalettes() {
         $("#palettes")[0].innerHTML = "";
@@ -246,6 +305,9 @@
         $("#second_color").attr("stop-color", gradients[currentGradientIndex][1]);
 
         var gradientImage = "url(#sampleGradient)";
+        var action = { type: "set_gradient", rotate: gradientDirection, first_color: gradients[currentGradientIndex][0], second_color: gradients[currentGradientIndex][1] };
+        actionHistory.push(action);
+        currentActionIndex = actionHistory.length - 1;
         for (const path of $(".warpedPath")) {
             path.setAttribute("fill", gradientImage);
         }
@@ -268,6 +330,9 @@
             }
             index++;
         }
+        var action = { type: "set_palette", first_color: palettes[currentPaletteIndex][0], second_color: palettes[currentPaletteIndex][1] };
+        actionHistory.push(action);
+        currentActionIndex = actionHistory.length - 1;
     };
 
     function usePalette(e) {
@@ -278,26 +343,37 @@
         $("#color-previewer").css("background-color", color);
         var pathSelected = window.localStorage.getItem("pathSelected");
         if (pathSelected == 1) {
+            var pathIndex = findRow3($(".currentActivePath")[0]);
+            var action = { type : "set_indi_color",pathIndex: pathIndex, fill: color };
+            actionHistory.push(action);
+            currentActionIndex = actionHistory.length - 1;
             $(".currentActivePath")[0].setAttribute("fill", color);
         }
         $("#color-block").wheelColorPicker("setValue", color);
     }
 
     function SvgContainerActivation(e = null) {
-        for (const path of $("#svg_container")[0].children) {
-            if (path.tagName == "path") {
-                path.classList.add("warpedPath");
+        if (svgActivated == 0) {
+            for (const path of $("#svg_container")[0].children) {
+                if (path.tagName == "path") {
+                    path.classList.add("warpedPath");
+                }
             }
+            $(".warpedPath").on("click", function () {
+                $(".warpedPath").removeClass("currentActivePath");
+                $(this).addClass("currentActivePath");
+                window.localStorage.setItem("pathSelected", 1);
+            });
+            var initailState = {
+                type: "set_palette",
+                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
+                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
+            }
+            actionHistory.push(initailState);
         }
-        $(".warpedPath").on("click", function () {
-            $(".warpedPath").removeClass("currentActivePath");
-            $(this).addClass("currentActivePath");
-            window.localStorage.setItem("pathSelected", 1);
-        });
+        svgActivated += 1;
     }
 
     generatePalettes();
-
-    //showCurrentPalette();
 
 })

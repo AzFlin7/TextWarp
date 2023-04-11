@@ -1,23 +1,30 @@
 ﻿$(document).ready(function () {
-    var warp_words = window.localStorage.getItem("warp_words");
-    var pathIndex = window.localStorage.getItem("pathIndex");
+    var svgFilePath = $("#svg_filePath").attr("data-filePath");
+    var svg_id = $("#svg_id").attr("data-id");
+    if (svgFilePath != "") {
+        var svgUrl = "/" + svgFilePath;
+        fetch(svgUrl)
+            .then(response => response.text())
+            .then(svg => $("#svgViewer").html(svg));
+        $("body>svg").remove();
+    }
+    else {
+        var words = $("#words").attr("data-words");
+        var styleIndex = $("#styleIndex").attr("data-styleIndex");
+        var controlPoints = splitPath(styleIndex, words);
+        var triggerButton = $("#btn_warpText")[0];
 
-    var controlPoints = splitPath(pathIndex, warp_words);
+        var event = new CustomEvent("custom-event", {
+            'detail': {
+                words: words,
+                controlPoints: controlPoints
+            }
+        });
+        triggerButton.dispatchEvent(event);
+        var warpedSvg = $("#svg_container")[0];
+        $("#svgViewer")[0].appendChild(warpedSvg);
+    }
 
-    var triggerButton = $("#btn_warpText")[0];
-
-    var event = new CustomEvent("custom-event", {
-        'detail': {
-            words: warp_words,
-            controlPoints: controlPoints
-        }
-    });
-    triggerButton.dispatchEvent(event);
-    
-    var warpedSvg = $("#svg_container")[0];
-
-    $("#svgViewer")[0].appendChild(warpedSvg);
-    
     $("#spana").click(function (e) {
         $(".toolbar-icon").removeClass("active");
         $(this).addClass("active");
@@ -90,17 +97,16 @@
     $("#btn_save").click(function () {
         var svg_data = document.getElementById("svg_container").outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
-        var warppedImgID = parseInt(Math.random() * 100);
         var formData = new FormData();
         formData.append("svg_file", blob, 'warp-text.svg');
         $.ajax({
-            url: "/warpeditor/save/" + warppedImgID,
+            url: "/warpeditor/save/" + svg_id,
             type: "POST",
             data: formData,
             processData: false,
             contentType: false,
             success: function (res) {
-                console.log("success saved!");
+                alert("Your svg saved successfully!")
             },
         });
     });

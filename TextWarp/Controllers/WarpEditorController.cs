@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TextWarp.Models;
 using TextWarp.Models.Database;
 
 namespace TextWarp.Controllers
@@ -11,17 +12,37 @@ namespace TextWarp.Controllers
             this._context = context;
         }
 
-        public IActionResult Index()
+        [Route("warpeditor/index/{id?}")]
+        public IActionResult Index(int id)
         {
-            return View();
+            var record = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+            var SvgViewModel = new SVGViewModel();
+            SvgViewModel.id = record.Id;
+            SvgViewModel.words = record.Words;
+            SvgViewModel.styleIndex = record.StyleIndex;
+            return View(SvgViewModel);
         }
 
-        public IActionResult Editor()
+        [Route("warpeditor/editor/{id?}")]
+        public IActionResult Editor(int id = -1)
         {
-
-            return View();
+            var record = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+            var SvgViewModel = new SVGViewModel();
+            SvgViewModel.id = record.Id;
+            SvgViewModel.words = record.Words;
+            SvgViewModel.styleIndex = record.StyleIndex;
+            if (record.SvgfileName != "")
+            {
+                var svgImgPath = "uploads/" + record.SvgfileName;
+                SvgViewModel.svgFilePath = svgImgPath;
+                return View(SvgViewModel);
+            }
+            else
+            {
+                return View(SvgViewModel);
+            }
         }
-
+        
         [HttpGet]
         public ActionResult GeneratePalettes()
         {
@@ -38,20 +59,21 @@ namespace TextWarp.Controllers
 
         [Route("warpeditor/save/{id?}")]
         [HttpPost]
-        public ActionResult Save(int id, IFormFile svgFile)
+        public ActionResult Save(int id, IFormFile svg_file)
         {
             var svgImgPath = "";
-            var warppedImg = _context.WarppedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+            var warpedImg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
 
-            if (warppedImg.SvgfileName != null && warppedImg.SvgfileName != "")
+            if (warpedImg.SvgfileName != null && warpedImg.SvgfileName != "")
             {
-                svgImgPath = warppedImg.SvgfileName;
+                svgImgPath = warpedImg.SvgfileName;
+                warpedImg.UpdatedAt = DateTime.Now;
             }
             else
             {
                 var filename = Guid.NewGuid().ToString() + ".svg";
-                svgImgPath = "svgFiles/" + filename;
-                warppedImg.SvgfileName = svgImgPath;
+                svgImgPath = "svgFiles\\" + filename;
+                warpedImg.SvgfileName = "svgFiles/" + filename;
             }
 
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
@@ -70,11 +92,11 @@ namespace TextWarp.Controllers
             {
                 using (var stream = new FileStream(imgfilepath, FileMode.Create))
                 {
-                    svgFile.CopyTo(stream);
+                    svg_file.CopyTo(stream);
                 }
             }
-
-            _context.WarppedSvgs.Update(warppedImg);
+            
+            _context.WarpedSvgs.Update(warpedImg);
             _context.SaveChanges();
 
             return Json(new { status = "success" });

@@ -1,10 +1,15 @@
-﻿
+﻿@model SVGViewModel
 @{
     ViewData["Title"] = "Editor";
     Layout = "~/Views/Shared/_EditorLayout.cshtml";
 }
 
 @*eidt view*@
+<input type="hidden" id="svg_id" data-id="@Model.id"/>
+<input type="hidden" id="svg_filePath" data-filePath="@Model.svgFilePath" />
+<input type="hidden" id="words" data-words="@Model.words"/>
+<input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex"/>
+<div id="bodyOverlay"></div>
 <div id="svgEditorView" class="sub-view d-flex align-items-center w-100 h-100">
     <div class="d-flex h-100 w-100">
         <div class="d-flex align-items-center h-100">
@@ -15,9 +20,9 @@
                     <img class="toolbar-icon" id="setting" src="~/icons/setting.png">
                     <img class="toolbar-icon" id="spana" src="~/icons/spana.png">
                 </div>
-                <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 25%">
-                    <img style="width:15px;height:15px" id="undo" src="~/icons/rotate-left.png" />
-                    <img style="width:15px;height:15px" id="redo" src="~/icons/rotate-right.png" />
+                <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 25%;min-height: 52px;">
+                    <button id="undo" title="undo" class="btn_redo"><img style="width:100%;height:100%" src="~/icons/rotate-left.png" /></button>
+                    <button id="redo" title="redo" class="btn_redo"><img style="width:100%;height:100%" src="~/icons/rotate-right.png" /></button>
                 </div>
             </div>
             <div class="d-flex align-items-center h-100" style="padding-left:20px;">
@@ -87,7 +92,7 @@
                                 <div class="progress-value"><span id="stroke_gradientAngle">1%</span></div>
                             </div>
                             <div class="">
-                                <tc-range-slider id="sli_stroke_gradientAngle" data-default-value="1" data-shower-id="stroke_gradientAngle" min="0" max="360" value="1"
+                                <tc-range-slider id="sli_stroke_gradientAngle" data-default-value="1" data-shower-id="stroke_gradientAngle" min="0" max="359" value="1"
                                                  slider-width="100%" slider-height="3px" pointer-width="16px"
                                                  pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
                                                  pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
@@ -168,25 +173,27 @@
                     <div class="default-text" style="font-size: 22px;margin-bottom: 15px;">
                         Actions
                     </div>
-                    <div class="d-flex my-2">
-                        <div></div>
-                        <div class="default-text" style="font-size:12px;padding-left: 30px;cursor:pointer;">Send to TrueBrush</div>
-                    </div>
-                    <div class="d-flex my-2" style="cursor:pointer;">
-                        <div></div>
-                        <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TDT</div>
-                    </div>
-                    <div class="d-flex my-2" style="cursor:pointer;">
-                        <img style="width:15px;height:15px" src="~/icons/share.png" />
-                        <div class="default-text" style="font-size:12px;padding-left: 15px;">Share</div>
-                    </div>
-                    <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
-                        <img style="width:15px;height:15px" src="~/icons/download.png" />
-                        <div class="default-text" style="font-size:12px;padding-left: 15px;">Download</div>
-                    </div>
-                    <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
-                        <div></div>
-                        <div class="default-text" id="btn_save" style="font-size:12px;padding-left: 30px;">Save</div>
+                    <div style="font-size: 22px;overflow-y: auto;">
+                        <div class="d-flex my-2">
+                            <div></div>
+                            <div class="default-text" style="font-size:12px;padding-left: 30px;cursor:pointer;">Send to TrueBrush</div>
+                        </div>
+                        <div class="d-flex my-2" style="cursor:pointer;">
+                            <div></div>
+                            <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TDT</div>
+                        </div>
+                        <div class="d-flex my-2" style="cursor:pointer;">
+                            <img style="width:15px;height:15px" src="~/icons/share.png" />
+                            <div class="default-text" style="font-size:12px;padding-left: 15px;">Share</div>
+                        </div>
+                        <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
+                            <img style="width:15px;height:15px" src="~/icons/download.png" />
+                            <div class="default-text" style="font-size:12px;padding-left: 15px;">Download</div>
+                        </div>
+                        <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
+                            <div></div>
+                            <div class="default-text" id="btn_save" style="font-size:12px;padding-left: 30px;">Save</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -196,5 +203,10 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/js/ColorPickerScript.js"></script>
+    <script src="~/js/EditorScript.js"></script>
+}
    
 

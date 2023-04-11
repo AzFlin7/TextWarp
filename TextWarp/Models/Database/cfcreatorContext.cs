@@ -30,8 +30,8 @@ namespace TextWarp.Models.Database
         public virtual DbSet<FavouriteWarpText> FavouriteWarpTexts { get; set; } = null!;
         public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
         public virtual DbSet<Upload> Uploads { get; set; } = null!;
+        public virtual DbSet<WarpedSvg> WarpedSvgs { get; set; } = null!;
         public virtual DbSet<Warpfont> Warpfonts { get; set; } = null!;
-        public virtual DbSet<WarppedSvg> WarppedSvgs { get; set; } = null!;
         public virtual DbSet<Wynwood> Wynwoods { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -291,26 +291,9 @@ namespace TextWarp.Models.Database
                 entity.Property(e => e.Twidth).HasColumnName("TWidth");
             });
 
-            modelBuilder.Entity<Warpfont>(entity =>
+            modelBuilder.Entity<WarpedSvg>(entity =>
             {
-                entity.ToTable("warpfonts");
-
-                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
-
-                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
-
-                entity.Property(e => e.Thumbnail).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<WarppedSvg>(entity =>
-            {
-                entity.ToTable("WarppedSVGs");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                entity.ToTable("WarpedSVGs");
 
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
@@ -327,7 +310,22 @@ namespace TextWarp.Models.Database
                     .HasMaxLength(450)
                     .HasColumnName("UserID");
 
+                entity.Property(e => e.Words).HasMaxLength(450);
+
                 entity.Property(e => e.WorkName).HasMaxLength(450);
+            });
+
+            modelBuilder.Entity<Warpfont>(entity =>
+            {
+                entity.ToTable("warpfonts");
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.DeletedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+                entity.Property(e => e.Thumbnail).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Wynwood>(entity =>

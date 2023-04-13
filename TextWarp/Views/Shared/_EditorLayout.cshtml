@@ -9,6 +9,7 @@
     <link href="~/css/wheelcolorpicker.css" rel="stylesheet" />
     <title>@ViewData["title"]</title>
     @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 <body style="height:100vh;  width: 100vw;position:relative;overflow:hidden;">
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
@@ -25,8 +26,8 @@
             @RenderBody()
         </div>
     </div>
-    <div id="svg_temp" style="position:absolute; left:100vw;top:100vh;"></div>
-    <svg id="svg_container" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:100vw;top:100vh;display:none;">
+    <div id="svg_temp" style="position: fixed;left: -10000000px;top: -100000px;visibility:hidden;"></div>
+    <svg id="svg_container" xmlns="http://www.w3.org/2000/svg" style="position: fixed;left: -10000000px;top: -100000px;visibility:hidden;">
         <defs>
             <linearGradient id="sampleGradient" gradientTransform="rotate(1)" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" id="first_color" stop-color="#6b6fff" />
@@ -34,9 +35,17 @@
             </linearGradient>
         </defs>
     </svg>
-    
+    <div class="d-none align-items-center justify-content-center w-100 h-100" id="loader">
+        <div class="loader">
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
 </body>
-
 <script src="~/js/warp_asset/d3.v3.min.js"></script>
 <script src="~/js/warp_asset/svg-path-properties.min.js"></script>
 <script src="~/js/warp_asset/seperatePathGenerator.js"></script>
@@ -46,6 +55,5 @@
 <script src="~/js/jquery.wheelcolorpicker.js"></script>
 <script src="~/js/toolcool-range-slider.min.js"></script>
 <script src="~/js/warp_asset/app.js"></script>
-<script src="~/lib/fabric.min.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </html>

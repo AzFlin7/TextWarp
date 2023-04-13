@@ -47,8 +47,8 @@
             </div>
             <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 2rem 0;">
                 <div id="createNewWarp">
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center">
-                        <img src="~/icons/plus_item.png" style="max-width: 100%;max-height: 100%;">
+                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="background: #dad8dd;">
+                        <img src="~/imgs/plus_item.png" style="max-width: 100%;max-height: 100%;">
                     </div>
                     <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">Create Document</div>
                 </div>
@@ -71,12 +71,12 @@
                                 }
                                 else
                                 {
-                                    <img style="max-width: 100%;max-height: 100%;" src="~/icons/heart.svg" />
+                                    <img style="max-width: 100%;max-height: 100%;" src="~/imgs/heart.svg" />
                                 }
                             </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
                                 <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">@saved_svg.WorkName</div>
-                                <div style="color:#dad8dd;font-size: 14px;">@saved_svg.CreatedAt</div>
+                                <div style="color:#dad8dd;font-size: 14px;">@saved_svg.UpdatedAt</div>
                             </div>
                         </div>
                     }
@@ -103,9 +103,10 @@
                 <div>
                     <label style="font-size: 28px;color: #9a9a9a;">Enter up to 2 words here</label>
                 </div>
-                <div class="w-100" style="padding: 85px 10px">
-                    <input id="warp_words" name="tags" placeholder="Type a word and hit enter" value="LOVE" style="width:100%">
-                    <input name="inputedWords" type="hidden" value="LOVE" />
+                <div class="align-items-center d-flex flex-column w-100" style="padding: 85px 10px 50px 10px;">
+                    <input id="warp_words" name="tags" placeholder="Type a word and hit enter" value="" style="width:100%">
+                    <input name="inputedWords" type="hidden" value="" />
+                    <div id="messageWraper" style="color:#ff0000;height: 35px;padding: 10px;"></div>
                 </div>
                 <div>
                     <button id="wordsInput" class="btn-next">Next</button>
@@ -120,19 +121,19 @@
                 </div>
                 <div class="w-100 d-flex justify-content-between align-items-center" style="height: 300px;">
                     <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="0" style="position:relative; width:27%;">
-                        <img src="~/icons/circle.svg" style="max-width:85%;position:absolute;" />
-                        <img src="~/icons/circle_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                        <img src="~/imgs/circle.svg" style="max-width:85%;position:absolute;" />
+                        <img src="~/imgs/circle_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
                     </div>
                     <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="1" style="position:relative; width:35%;">
-                        <img src="~/icons/ellipse.svg" style="max-width:85%;position:absolute;" />
-                        <img src="~/icons/ellipse-shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                        <img src="~/imgs/ellipse.svg" style="max-width:85%;position:absolute;" />
+                        <img src="~/imgs/ellipse-shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
                     </div>
                     <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="2" style="position:relative; width:27%;">
-                        <img src="~/icons/heart.svg" style="max-width:85%;position:absolute;" />
-                        <img src="~/icons/heart_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
+                        <img src="~/imgs/template_heart.svg" style="max-width:77%;position:absolute;" />
+                        <img src="~/imgs/heart_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
                     </div>
                 </div>
-                <div>
+                <div style="z-index:101;">
                     <div id="chooseStyle" class="align-items-center btn-next d-flex justify-content-center" style="text-decoration:none;">Next</div>
                 </div>
             </div>

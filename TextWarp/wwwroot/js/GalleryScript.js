@@ -16,10 +16,11 @@
         var values = e.target.value;
         values = values.split(" ");
         if (values.length == 2) {
-            // alert("You can enter only 3 words.");
+            $("#messageWraper").html("You can input 2 words now.");
             $(".tagify__input")[0].classList.add("d-none");
         }
         else {
+            $("#messageWraper").html("");
             $(".tagify__input")[0].classList.remove("d-none");
             $(".tagify__input")[0].classList.add("d-inline-block");
         }
@@ -35,7 +36,7 @@
             $("#styleChooseView").addClass("d-flex");
         }
         else {
-            alert("You should input two words.");
+            $("#messageWraper").html("You should input 2 words.");
         }
     });
 
@@ -48,13 +49,16 @@
     });
 
     $("#chooseStyle").click(function () {
+        if (currentStyleIndex == -1) {
+            currentStyleIndex = 0;
+        }
         $.ajax({
             url: "/gallery/createNew/" + words + "/" + currentStyleIndex,
             type: "get",
             data: {},
             success: function (res) {
                 svg_id = res.id;
-                window.location.href = "/warpeditor/editor?" + "id=" + svg_id;
+                window.location.href = "/warpeditor/index?" + "id=" + svg_id;
             },
         });
     });
@@ -80,6 +84,8 @@
             }
         }
         if (svg_id != -1) {
+            $("#loader").removeClass("d-none");
+            $("#loader").addClass("d-flex");
             $.ajax({
                 url: "/gallery/duplicate/" + svg_id,
                 type: "get",
@@ -89,10 +95,10 @@
                         var copied_svg = res.copiedSvg;
                         var bodyNode = selected_svg.parentElement;
                         var newDoc = $(`<div class="gallery-item">
-                    <input type="hidden" data-id="`+ copied_svg.id + `" />
-                    <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
+                        <input type="hidden" data-id="`+ copied_svg.id + `" />
+                        <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
                         <div class="gallery-item-overlay active"></div>
-                        <div class="check_container">
+                        <div class="active check_container">
                             <div class="check-icon-container">
                                 <div class="check-icon"></div>
                                 <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
@@ -106,6 +112,8 @@
                             </div>
                         </div>`);
                         newDoc.insertBefore(bodyNode);
+                        $("#loader").removeClass("d-flex");
+                        $("#loader").addClass("d-none");
                     }
                 },
             });
@@ -123,6 +131,8 @@
             }
         }
         if (svg_id != -1) {
+            $("#loader").removeClass("d-none");
+            $("#loader").addClass("d-flex");
             $.ajax({
                 url: "/gallery/delete/" + svg_id,
                 type: "get",
@@ -130,6 +140,8 @@
                 success: function (res) {
                     if (res.status == "success") {
                         selected_svg.parentElement.remove();
+                        $("#loader").removeClass("d-flex");
+                        $("#loader").addClass("d-none");
                     }
                 },
             });

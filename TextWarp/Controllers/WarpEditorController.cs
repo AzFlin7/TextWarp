@@ -24,7 +24,7 @@ namespace TextWarp.Controllers
         }
 
         [Route("warpeditor/editor/{id?}")]
-        public IActionResult Editor(int id = -1)
+        public IActionResult Editor(int id)
         {
             var record = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
             var SvgViewModel = new SVGViewModel();

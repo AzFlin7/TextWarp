@@ -146,12 +146,35 @@
     });
 
     $("html").on("click", function (e) {
-        SvgContainerActivation(e);
+        if (svgActivated == 0) {
+            for (const path of $("#svg_container")[0].children) {
+                if (path.tagName == "path") {
+                    path.classList.add("warpedPath");
+                }
+            }
+            $(".warpedPath").on("click", function () {
+                $(".warpedPath").removeClass("currentActivePath");
+                $(this).addClass("currentActivePath");
+                var color = this.getAttribute("fill");
+                window.localStorage.setItem("pathSelected", 1);
+            });
+            var initailState = {
+                type: "set_palette",
+                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
+                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
+            }
+            actionHistory.push(initailState);
+        }
+        svgActivated += 1;
     });
 
     $('#svg_container')[0].classList.add("edit-svg");
 
-    $("#generatePalettes").on("click", (e) => generatePalettes(e));
+    $("#generatePalettes").on("click", () => {
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
+        generatePalettes();
+    });
 
     $("tc-range-slider").on("change", function () {
         let shower_id = "#" + $(this).attr("data-shower-id") + "";
@@ -266,6 +289,8 @@
                         row.setAttribute("id", index);
                         palettes_container.appendChild(row);
                     };
+                    $("#loader").removeClass("d-flex");
+                    $("#loader").addClass("d-none");
                 }
                 else {
                     alert(res.message);
@@ -352,28 +377,5 @@
         $("#color-block").wheelColorPicker("setValue", color);
     }
 
-    function SvgContainerActivation(e = null) {
-        if (svgActivated == 0) {
-            for (const path of $("#svg_container")[0].children) {
-                if (path.tagName == "path") {
-                    path.classList.add("warpedPath");
-                }
-            }
-            $(".warpedPath").on("click", function () {
-                $(".warpedPath").removeClass("currentActivePath");
-                $(this).addClass("currentActivePath");
-                window.localStorage.setItem("pathSelected", 1);
-            });
-            var initailState = {
-                type: "set_palette",
-                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
-                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
-            }
-            actionHistory.push(initailState);
-        }
-        svgActivated += 1;
-    }
-
     generatePalettes();
-
 })

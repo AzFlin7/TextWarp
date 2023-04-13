@@ -26,7 +26,7 @@ namespace TextWarp.Controllers
                         _context.SaveChanges();
                     }
                 }
-                saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").ToList();
+                saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderByDescending(s=> s.UpdatedAt).ToList();
                 return View(saved_svgs);
             }
             return View();
@@ -36,22 +36,13 @@ namespace TextWarp.Controllers
         [HttpGet]
         public ActionResult createNew(string words, int styleIndex)
         {
-            var names = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d") && s.WorkName.StartsWith("Untitled")).ToList();
-            var name = "Untitled1";
             var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
-
+            var name = "Untitled" + "_" + DateTime.Now;
             var WarpedSvgs = new WarpedSvg();
             WarpedSvgs.CreatedAt = DateTime.Now;
             WarpedSvgs.UpdatedAt = DateTime.Now;
             WarpedSvgs.Words = words;
             WarpedSvgs.StyleIndex = styleIndex;
-            if (saved_svgs.Count > 0)
-            {
-                if (names.Count > 0)
-                {
-                    name = "Untitled" + (names.Count + 1);
-                }
-            }
             WarpedSvgs.SvgfileName = "";
             WarpedSvgs.WorkName = name;
             WarpedSvgs.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";

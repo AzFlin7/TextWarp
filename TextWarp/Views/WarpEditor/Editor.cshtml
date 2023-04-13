@@ -9,6 +9,7 @@
 <input type="hidden" id="svg_filePath" data-filePath="@Model.svgFilePath" />
 <input type="hidden" id="words" data-words="@Model.words"/>
 <input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex"/>
+<button id="btn_warpEndHandler" style="display:none"></button>
 <div id="bodyOverlay"></div>
 <div id="svgEditorView" class="sub-view d-flex align-items-center w-100 h-100">
     <div class="d-flex h-100 w-100">
@@ -17,12 +18,12 @@
                 <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="width: 30px;height: 70%;">
                     <div id="color-previewer" style="width: 20px;height:20px;border-radius:50%; background-color: #ec008c;cursor:pointer;">
                     </div>
-                    <img class="toolbar-icon" id="setting" src="~/icons/setting.png">
-                    <img class="toolbar-icon" id="spana" src="~/icons/spana.png">
+                    <img class="toolbar-icon" id="setting" src="~/imgs/setting.png">
+                    <img class="toolbar-icon" id="spana" src="~/imgs/spana.png">
                 </div>
                 <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 25%;min-height: 52px;">
-                    <button id="undo" title="undo" class="btn_redo"><img style="width:100%;height:100%" src="~/icons/rotate-left.png" /></button>
-                    <button id="redo" title="redo" class="btn_redo"><img style="width:100%;height:100%" src="~/icons/rotate-right.png" /></button>
+                    <button id="undo" title="undo" class="btn_redo"><img style="width:100%;height:100%" src="~/imgs/rotate-left.png" /></button>
+                    <button id="redo" title="redo" class="btn_redo"><img style="width:100%;height:100%" src="~/imgs/rotate-right.png" /></button>
                 </div>
             </div>
             <div class="d-flex align-items-center h-100" style="padding-left:20px;">
@@ -169,30 +170,30 @@
                         </div>
                     </div>
                 </div>
-                <div id="actionToolBox" class="toolBox-theme flex-column" style="height: 30% !important;z-index:101;">
+                <div id="actionToolBox" class="d-flex flex-column toolBox-theme" style="height: 30% !important;z-index:101;">
                     <div class="default-text" style="font-size: 22px;margin-bottom: 15px;">
                         Actions
                     </div>
-                    <div style="font-size: 22px;overflow-y: auto;">
+                    <div style="overflow-y: auto;" class="d-flex flex-column flex-grow-1 justify-content-around">
                         <div class="d-flex my-2">
                             <div></div>
-                            <div class="default-text" style="font-size:12px;padding-left: 30px;cursor:pointer;">Send to TrueBrush</div>
+                            <div class="default-text" style="font-size:14px;padding-left: 38px;cursor:pointer;">Send to TrueBrush</div>
                         </div>
                         <div class="d-flex my-2" style="cursor:pointer;">
                             <div></div>
-                            <div class="default-text" style="font-size:12px;padding-left: 30px;">Send to TDT</div>
+                            <div class="default-text" style="font-size:14px;padding-left: 38px;">Send to TDT</div>
                         </div>
-                        <div class="d-flex my-2" style="cursor:pointer;">
-                            <img style="width:15px;height:15px" src="~/icons/share.png" />
-                            <div class="default-text" style="font-size:12px;padding-left: 15px;">Share</div>
+                        <div class="align-items-center d-flex my-2" style="cursor:pointer;">
+                            <img style="width: 22px;height: 20px;" src="~/imgs/share.png" />
+                            <div class="default-text" style="font-size:14px;padding-left: 15px;">Share</div>
                         </div>
-                        <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
-                            <img style="width:15px;height:15px" src="~/icons/download.png" />
-                            <div class="default-text" style="font-size:12px;padding-left: 15px;">Download</div>
+                        <div class="align-items-center d-flex my-2" id="svg_download" style="cursor:pointer;">
+                            <img style="width: 22px;height: 20px;" src="~/imgs/download.png" />
+                            <div class="default-text" style="font-size:14px;padding-left: 15px;">Download</div>
                         </div>
                         <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
                             <div></div>
-                            <div class="default-text" id="btn_save" style="font-size:12px;padding-left: 30px;">Save</div>
+                            <div class="default-text" id="btn_save" style="font-size:14px;padding-left: 38px;">Save</div>
                         </div>
                     </div>
                 </div>

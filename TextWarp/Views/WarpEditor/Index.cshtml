@@ -12,32 +12,35 @@
 <input type="hidden" id="svg_id" data-id="@Model.id" />
 <input type="hidden" id="words" data-words="@Model.words" />
 <input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex" />
-<div class="d-flex justify-content-center align-items-center">
-    <div class="d-flex flex-column justify-content-center">
-        <div class="d-flex align-items-center justify-content-center" style="width:20px; height:20px;">
-            <i class="fa-sharp fa-light fa-heart w-100; h-100;" style="color: #97a2b4;"></i>
+<button id="btn_warpText" style="display:none;"></button>
+<button id="btn_warpEndHandler" style="display:none"></button>
+<div class="d-flex justify-content-center align-items-center" style="position:relative;width: 100%;">
+    <div class="align-items-end d-flex flex-column justify-content-center" style="width:200px;padding-right: 50px;">
+        <div id="addFavourite" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-bottom: 5px;cursor:pointer;">
+            <img src="~/imgs/heart.svg" class="mw-100 mh-100 iconImg"/>
         </div>
-        <div class="d-flex align-items-center justify-content-center" style="width:20px; height:20px;">
-            <i class="fa-regular fa-pen"></i>
+            <div id="edit" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-top: 5px;cursor:pointer;">
+            <img src="~/imgs/pen.svg" class="mw-100 mh-100 iconImg" />
         </div>
     </div>
     <div class="vcarousel" style="height:100%; width:500px;">
-        <div class="vcarousel-item" style="width: 500px; height:500px;background:#000000;">
-        </div>
-        <div class="vcarousel-item" style="width: 500px; height:500px;background:#00ff00;">
-        </div>
-        <div class="vcarousel-item" style="width: 500px; height:500px;background:#0000ff;">
-        </div>
-        <div class="vcarousel-item" style="width: 500px; height:500px;background:#00ffff;">
-        </div>
-        <div class="vcarousel-item" style="width: 500px; height:500px;background:#ffff00;">
+        <div class="vcarousel-item"></div>
+        <div class="vcarousel-item"></div>
+    </div>
+        <div id="favourites" class="d-flex flex-column justify-content-between align-items-center" style="width: 200px;max-height: 50%;overflow: auto;">
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="position: absolute;left: 0;top: 0;height: 100px;width: 100%;">
+        <div id="up" class="d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-angle-up"></i>
         </div>
     </div>
-    <div id="favourites">
-
+    <div class="d-flex justify-content-center align-items-center" style="position: absolute;left: 0;bottom: 0;height: 100px;width: 100%;">
+        <div id="down" class="d-flex align-items-center justify-content-center">
+            <i class="fa-solid fa-angle-down"></i>
+        </div>
     </div>
 </div>
 @section Scripts{
     <script src="~/js/slick.js"></script>
-    <script src="~/js/carouselScript.js"></script>
+    <script src="~/js/CarouselScript.js"></script>
 }

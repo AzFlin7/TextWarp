@@ -11,8 +11,18 @@
     <title>@ViewData["title"]</title>
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body style="height:100vh">
+<body style="height: 100vh;position: relative;">
     @RenderBody()
+    <div class="d-none align-items-center justify-content-center w-100 h-100" id="loader">
+        <div class="loader">
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/jQuery.tagify.min.js"></script>

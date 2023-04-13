@@ -10,14 +10,18 @@
     }
     else {
         var words = $("#words").attr("data-words");
-        var styleIndex = $("#styleIndex").attr("data-styleIndex");
-        var controlPoints = splitPath(styleIndex, words);
+        var controlPointString = window.localStorage.getItem("controlPoints");
+        var controlPoints = JSON.parse(controlPointString);
         var triggerButton = $("#btn_warpText")[0];
+        var warpEndHandler = $("#btn_warpEndHandler")[0];
+
+        warpEndHandler.addEventListener("warpEnded", (e) => {});
 
         var event = new CustomEvent("custom-event", {
             'detail': {
                 words: words,
-                controlPoints: controlPoints
+                controlPoints: controlPoints,
+                container_id: "svg_container"
             }
         });
         triggerButton.dispatchEvent(event);
@@ -74,6 +78,8 @@
     });
 
     $("#svg_download").click(function () {
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
         var svg = $("#svg_container")[0];
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svg);
@@ -92,6 +98,8 @@
 
         theAnchor[0].click();
         theAnchor.remove();
+        $("#loader").removeClass("d-flex");
+        $("#loader").addClass("d-none");
     });
 
     $("#btn_save").click(function () {
@@ -99,6 +107,8 @@
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
         formData.append("svg_file", blob, 'warp-text.svg');
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
         $.ajax({
             url: "/warpeditor/save/" + svg_id,
             type: "POST",
@@ -106,7 +116,8 @@
             processData: false,
             contentType: false,
             success: function (res) {
-                alert("Your svg saved successfully!")
+                $("#loader").removeClass("d-flex");
+                $("#loader").addClass("d-none");
             },
         });
     });

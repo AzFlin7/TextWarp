@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using TextWarp.Models;
 using TextWarp.Models.Database;
 
@@ -54,6 +55,21 @@ namespace TextWarp.Controllers
             catch (Exception e)
             {
                 return Json(new { status = e.Message });
+            }
+        }
+
+        [Route("/warpeditor/getcolors/{number?}")]
+        [HttpGet]
+        public ActionResult GetColors(int number)
+        {
+            try
+            {
+                var colors = _context.BrandmarkColors.OrderBy(r => Guid.NewGuid()).Take(number);
+                return Json(new { colors = colors, status = 200 });
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = 500, message = e.Message });
             }
         }
 

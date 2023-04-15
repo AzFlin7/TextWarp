@@ -1,10 +1,10 @@
 ﻿$(document).ready(function () {
+    var svgFilePath = $("#svg_filePath").attr("data-filePath");
     let currentPaletteIndex = 0;
     let currentGradientIndex = 0;
     const historyColors = [];
     var brightness, contrast, saturation, hue;
     let palettes = [];
-    var svgActivated = 0;
 
     let actionHistory = [];
     let currentActionIndex = -1;
@@ -54,7 +54,25 @@
     };
 
     window.localStorage.setItem("pathSelected", 0);
-    
+
+    if (svgFilePath != "") {
+        var svgUrl = "/" + svgFilePath;
+        fetch(svgUrl)
+            .then(response => response.text())
+            .then(svg => {
+                $("#svgViewer").html(svg);
+                initial();
+            });
+        $("body>svg").remove();
+    }
+    else {
+        var selectedSvg = window.localStorage.getItem("selectedSvg");
+        $("#svgViewer")[0].innerHTML = selectedSvg;
+        $("#svgViewer")[0].children[0].setAttribute("id", "svg_container");
+        $("#svgViewer")[0].children[0].removeAttribute("data-id");
+        initial();
+    }
+
     $("#brightness").on("input", function (e) {
         e.stopPropagation();
         brightness = $(this).val();
@@ -68,14 +86,6 @@
         }
         $(".oldColor").css("background", "#fff");
     });
-
-    function findRow3(node) {
-        var i = 0;
-        while (node = node.previousSibling) {
-            if (node.nodeType === 1) { ++i }
-        }
-        return i;
-    }
 
     $(".oldColor").click(function (e) {
         let color = e.currentTarget.style.backgroundColor;
@@ -119,7 +129,12 @@
         var value = $(this).wheelColorPicker('value');
         $("#color-input").val(value);
         brightness = $(this).wheelColorPicker('color').v;
+        var hue = $(this).wheelColorPicker('color').h;
+        var saturation = $(this).wheelColorPicker('color').s;
         $("#brightness").val(brightness);
+        $("#sli_stroke_brightness").val(brightness * 100);
+        $("#sli_stroke_hue").val(hue * 360);
+        $("#sli_stroke_saturation").val(saturation * 100);
         var pathSelected = window.localStorage.getItem("pathSelected");
         if (pathSelected == 1) {
             var pathIndex = findRow3($(".currentActivePath")[0]);
@@ -133,42 +148,15 @@
 
     $('#color-block').on('colorchange', function (e) {
         e.stopPropagation();
-        var red = $(this).wheelColorPicker("color").r * 255;
-        var green = $(this).wheelColorPicker("color").g * 255;
-        var blue = $(this).wheelColorPicker("color").b * 255;
+        var value = $(this).wheelColorPicker("value");
         brightness = $("#brightness").val();
-        var rgba = "rgba(" + parseInt(red) + "," + parseInt(green) + "," + parseInt(blue) + "," + brightness + ")";
-        $("#color-previewer").css("background-color", rgba);
+        $("#brightness").val(brightness);
+        $("#color-previewer").css("background", value);
         var pathSelected = window.localStorage.getItem("pathSelected");
         if (pathSelected == 1) {
-            $(".currentActivePath")[0].setAttribute("fill", rgba);
+            $(".currentActivePath")[0].setAttribute("fill", value);
         }
     });
-
-    $("html").on("click", function (e) {
-        if (svgActivated == 0) {
-            for (const path of $("#svg_container")[0].children) {
-                if (path.tagName == "path") {
-                    path.classList.add("warpedPath");
-                }
-            }
-            $(".warpedPath").on("click", function () {
-                $(".warpedPath").removeClass("currentActivePath");
-                $(this).addClass("currentActivePath");
-                var color = this.getAttribute("fill");
-                window.localStorage.setItem("pathSelected", 1);
-            });
-            var initailState = {
-                type: "set_palette",
-                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
-                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
-            }
-            actionHistory.push(initailState);
-        }
-        svgActivated += 1;
-    });
-
-    $('#svg_container')[0].classList.add("edit-svg");
 
     $("#generatePalettes").on("click", () => {
         $("#loader").removeClass("d-none");
@@ -214,6 +202,54 @@
         }
     });
 
+    function initial() {
+        for (const path of $("#svg_container")[0].children) {
+            if (path.tagName == "path") {
+                path.classList.add("warpedPath");
+            }
+        }
+        var initailState;
+        if ($("#svg_container")[0].children.length == 2) {
+            initailState = {
+                type: "set_palette",
+                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
+            }
+        }
+        else if ($("#svg_container")[0].children.length == 3) {
+            initailState = {
+                type: "set_palette",
+                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
+                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
+            }
+        }
+        $('#svg_container')[0].classList.add("edit-svg");
+        $(".warpedPath").on("click", function () {
+            $(".warpedPath").removeClass("currentActivePath");
+            $(this).addClass("currentActivePath");
+            var color = this.getAttribute("fill");
+            color = color.toUpperCase();
+            var reg = /^#([0-9A-F]{3}){1,2}$/i;
+            if (reg.test(color)) {
+                $("#color-block").wheelColorPicker("setValue", color);
+                var hue = $("#color-block").wheelColorPicker('color').h;
+                var saturation = $("#color-block").wheelColorPicker('color').s;
+                $("#sli_stroke_brightness").val(brightness * 100);
+                $("#sli_stroke_hue").val(hue * 360);
+                $("#sli_stroke_saturation").val(saturation * 100);
+            }
+            window.localStorage.setItem("pathSelected", 1);
+        });
+        actionHistory.push(initailState);
+    }
+
+    function findRow3(node) {
+        var i = 0;
+        while (node = node.previousSibling) {
+            if (node.nodeType === 1) { ++i }
+        }
+        return i;
+    }
+
     function actionHandler(action) {
         switch (action.type) {
             case "set_indi_color":
@@ -249,7 +285,6 @@
                         palette.push(field.color3);
                         palettes.push(palette);
                     }
-                    console.log("palettes:", palettes);
                     let palettes_container = document.getElementById("palettes");
                     let index = -1;
                     for (const palette of palettes) {
@@ -278,7 +313,7 @@
                         for (const color of palette) {
                             let colorButton = document.createElement('div')
                             colorButton.setAttribute('data-swatchy-color', color)
-                            colorButton.style.backgroundColor = color
+                            colorButton.style.background = color
                             colorButton.classList.add('swatchy-color-button')
                             colorButton.classList.add("col-4");
                             paletteBody.appendChild(colorButton)
@@ -350,7 +385,7 @@
             colorButton.classList.add('swatchy-color-button');
             colorButton.classList.add('col-4');
             curPalette.appendChild(colorButton);
-            if (index + 1 < 3 && $("#svg_container")[0].children.length > 0) {
+            if ($("#svg_container")[0].children.length > index + 1 && $("#svg_container")[0].children[index + 1].tagName == "path" && $("#svg_container")[0].children.length > 1) {
                 $("#svg_container")[0].children[index + 1].setAttribute("fill", color);
             }
             index++;

@@ -28,7 +28,7 @@
 
     $("#wordsInput").click(function () {
         words = $("#warp_words")[0].value;
-        if (words.split(" ").length == 2) {
+        if (words != "" && (words.split(" ").length == 1 || words.split(" ").length == 2)) {
             words = words.toUpperCase();
             $("#wordInputView").removeClass("d-flex");
             $("#wordInputView").addClass("d-none");
@@ -36,7 +36,7 @@
             $("#styleChooseView").addClass("d-flex");
         }
         else {
-            $("#messageWraper").html("You should input 2 words.");
+            $("#messageWraper").text("You should input any words");
         }
     });
 

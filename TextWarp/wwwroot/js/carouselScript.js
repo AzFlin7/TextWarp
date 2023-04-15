@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    var svgFilePath = $("#svg_filePath").attr("data-filePath");
     var svg_id = $("#svg_id").attr("data-id");
     
     var words = $("#words").attr("data-words");
@@ -8,18 +7,37 @@
     var triggerButton = $("#btn_warpText")[0];
     var warpEndHandler = $("#btn_warpEndHandler")[0];
     var controlPoints_pair = [];
+    var colorPair = [];
+    var currentColorIndex = -1;
     var currentWarpIndex = -1;
-    var i1 = 0;
+    var currentSlideIndex = -1;
     var favouriteIds = [];      //not real ID
 
-    warpEndHandler.addEventListener("warpEnded", (e) => {
-        currentWarpIndex++;
+    warpEndHandler.addEventListener("warpEnded", () => {
         if (currentWarpIndex < 2) {
-            newWarp(e);
+            currentWarpIndex++;
+            currentColorIndex++;
+            newWarp();
+        }
+        else {
+            currentSlideIndex = $('.vcarousel').slick('slickCurrentSlide');
+            if (currentWarpIndex > 2) {
+                $(".vcarousel").slick("slickNext");
+            }
+            if (currentSlideIndex > 0) {
+                $("#up").removeClass("d-none");
+                $("#up").addClass("d-flex");
+            }
+            else {
+                $("#up").removeClass("d-flex");
+                $("#up").addClass("d-none");
+            }
+            $("#loader").removeClass("d-flex");
+            $("#loader").addClass("d-none");
         }
     });
 
-    function newWarp(e = null) {
+    function newWarp() {
         var warpedSvg = $("#svg_container")[0].cloneNode(true);
         warpedSvg.setAttribute("data-id", currentWarpIndex);
         var id = "warpedSvg" + currentWarpIndex;
@@ -40,29 +58,66 @@
             var wrapper = document.createElement("div");
             wrapper.appendChild(newVcarouselItem);
             $(".vcarousel").slick("slickAdd", wrapper);
-            if ($(".slick-track")[0].children.length > 3) {
-                //$(".vcarousel").slick("slickRemove", 0);
+        }
+        var controlPoints;
+        if (currentWarpIndex > controlPoints_pair.length - 20) {
+            for (var i = 0; i < 30; i++) {
+                var temp_controlPoints = splitPath(styleIndex, words);
+                controlPoints_pair.push(temp_controlPoints);
             }
         }
-        
-        var controlPoints = controlPoints_pair[currentWarpIndex];
-
+        //if (currentColorIndex > colorPair.length - 20) {
+        //    $.ajax({
+        //        url: '/WarpEditor/getColors/' + 30,
+        //        type: 'get',
+        //        success: function (res, data) {
+        //            colorPair.push(...res.colors);
+        //        },
+        //        failure: function (res, data) {
+        //            alert(res.message);
+        //        }
+        //    });
+        //}
+        controlPoints = controlPoints_pair[currentWarpIndex];
+        //var colors = colorPair[currentColorIndex];
         var event = new CustomEvent("custom-event", {
             'detail': {
                 words: words,
                 controlPoints: controlPoints,
                 container_id: id
+                //colors: colors
             }
         });
         triggerButton.dispatchEvent(event);
     }
 
     function initial() {
+        controlPoints_pair = [];
+        colorPair = [];
+        $("#loader").removeClass("d-none");
+        $("#loader").addClass("d-flex");
         for (var i = 0; i < 100; i++) {
             var controlPoints = splitPath(styleIndex, words);
             controlPoints_pair.push(controlPoints);
         }
+
+        $.ajax({
+            url: '/WarpEditor/getColors/'+ 100,
+            type: 'get',
+            success: function (res, data) {
+                colorPair = res.colors.map((item) => {
+                    return [item.color1, item.color2];
+                });
+            },
+            failure: function (res, data) {
+                alert(res.message);
+            }
+        });
         currentWarpIndex = 0;
+        currentColorIndex = 0;
+
+        $("#up").removeClass("d-flex");
+        $("#up").addClass("d-none");
         newWarp();
     }
 
@@ -71,30 +126,48 @@
     $(".vcarousel").slick({
         vertical: true,
         centerMode: true,
-        arrows: true,
+        arrows: false,
         centerPadding: '210px',
         touchMove: true,
-        prevArrow: $("#up"),
-        nextArrow: $("#down"),
         infinite: false,
+        draggable: false,
+    });
+
+    $("#up").click(function () {
+        currentSlideIndex = $('.vcarousel').slick('slickCurrentSlide');
+        if (currentSlideIndex == 1) {
+            $("#up").removeClass("d-flex");
+            $("#up").addClass("d-none");
+        }
+        $(".vcarousel").slick("slickPrev");
     });
 
     $("#down").click(function () {
-        currentWarpIndex++;
-        newWarp();
+        currentSlideIndex = $('.vcarousel').slick('slickCurrentSlide');
+        if (currentSlideIndex + 2 > currentWarpIndex) {
+            currentWarpIndex++;
+            $("#loader").removeClass("d-none");
+            $("#loader").addClass("d-flex");
+            newWarp();
+        }
+        else {
+            $(".vcarousel").slick("slickNext");
+        }
+        if (currentSlideIndex == 0) {
+            $("#up").removeClass("d-none");
+            $("#up").addClass("d-flex");
+        }
     });
 
     $("#edit").click(function () {
-        var controlPointsIndex;
+        var selectedSvg = "";
         if ($(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].tagName == "svg") {
-            controlPointsIndex = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].getAttribute("data-id");
+            selectedSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].outerHTML;
         }
         else {
-            controlPointsIndex = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].getAttribute("data-id");
+            selectedSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].outerHTML;
         }
-        var currentControlPoints = controlPoints_pair[controlPointsIndex];
-        var controlPointString = JSON.stringify(currentControlPoints);
-        window.localStorage.setItem("controlPoints", controlPointString);
+        window.localStorage.setItem("selectedSvg", selectedSvg);
         window.location.href = "/warpeditor/editor?id=" + svg_id;
     });
 

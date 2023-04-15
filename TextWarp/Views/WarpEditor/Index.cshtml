@@ -17,10 +17,10 @@
 <div class="d-flex justify-content-center align-items-center" style="position:relative;width: 100%;">
     <div class="align-items-end d-flex flex-column justify-content-center" style="width:200px;padding-right: 50px;">
         <div id="addFavourite" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-bottom: 5px;cursor:pointer;">
-            <img src="~/imgs/heart.svg" class="mw-100 mh-100 iconImg"/>
+            <img src="~/imgs/heart.svg" class="mw-100 mh-100 iconImg" style="user-select:none;"/>
         </div>
-            <div id="edit" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-top: 5px;cursor:pointer;">
-            <img src="~/imgs/pen.svg" class="mw-100 mh-100 iconImg" />
+        <div id="edit" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-top: 5px;cursor:pointer;">
+            <img src="~/imgs/pen.svg" class="mw-100 mh-100 iconImg" style="user-select:none;" />
         </div>
     </div>
     <div class="vcarousel" style="height:100%; width:500px;">
@@ -30,7 +30,7 @@
         <div id="favourites" class="d-flex flex-column justify-content-between align-items-center" style="width: 200px;max-height: 50%;overflow: auto;">
     </div>
     <div class="d-flex justify-content-center align-items-center" style="position: absolute;left: 0;top: 0;height: 100px;width: 100%;">
-        <div id="up" class="d-flex align-items-center justify-content-center">
+        <div id="up" class="d-none align-items-center justify-content-center">
             <i class="fa-solid fa-angle-up"></i>
         </div>
     </div>

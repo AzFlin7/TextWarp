@@ -1,33 +1,5 @@
 ﻿$(document).ready(function () {
-    var svgFilePath = $("#svg_filePath").attr("data-filePath");
     var svg_id = $("#svg_id").attr("data-id");
-    if (svgFilePath != "") {
-        var svgUrl = "/" + svgFilePath;
-        fetch(svgUrl)
-            .then(response => response.text())
-            .then(svg => $("#svgViewer").html(svg));
-        $("body>svg").remove();
-    }
-    else {
-        var words = $("#words").attr("data-words");
-        var controlPointString = window.localStorage.getItem("controlPoints");
-        var controlPoints = JSON.parse(controlPointString);
-        var triggerButton = $("#btn_warpText")[0];
-        var warpEndHandler = $("#btn_warpEndHandler")[0];
-
-        warpEndHandler.addEventListener("warpEnded", (e) => {});
-
-        var event = new CustomEvent("custom-event", {
-            'detail': {
-                words: words,
-                controlPoints: controlPoints,
-                container_id: "svg_container"
-            }
-        });
-        triggerButton.dispatchEvent(event);
-        var warpedSvg = $("#svg_container")[0];
-        $("#svgViewer")[0].appendChild(warpedSvg);
-    }
 
     $("#spana").click(function (e) {
         $(".toolbar-icon").removeClass("active");

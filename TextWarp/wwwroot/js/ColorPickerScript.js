@@ -274,7 +274,7 @@
         $("#palettes")[0].innerHTML = "";
         palettes = [];
         $.ajax({
-            url: '/WarpEditor/GeneratePalettes',
+            url: '/Warp/GeneratePalettes',
             type: 'get',
             success: function (res, data) {
                 if (res.status == 200) {

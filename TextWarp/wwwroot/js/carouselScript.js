@@ -75,7 +75,7 @@
         }
         if (currentColorIndex > colorPair.length - 20) {
             $.ajax({
-                url: '/WarpEditor/getColors/' + 30,
+                url: '/Warp/getColors/' + 30,
                 type: 'get',
                 success: function (res, data) {
                     let tempColors = res.colors.map((item) => {
@@ -111,7 +111,7 @@
         }
 
         $.ajax({
-            url: '/WarpEditor/getColors/'+ 100,
+            url: '/Warp/getColors/'+ 100,
             type: 'get',
             success: function (res, data) {
                 colorPair = res.colors.map((item) => {
@@ -178,7 +178,7 @@
             selectedSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].outerHTML;
         }
         window.localStorage.setItem("selectedSvg", selectedSvg);
-        window.location.href = "/warpeditor/editor?id=" + svg_id;
+        window.location.href = "/warp/editor?id=" + svg_id;
     });
 
     $("#addFavourite").click(function () {

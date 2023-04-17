@@ -58,7 +58,7 @@
             data: {},
             success: function (res) {
                 svg_id = res.id;
-                window.location.href = "/warpeditor/index?" + "id=" + svg_id;
+                window.location.href = "/warp/index?" + "id=" + svg_id;
             },
         });
     });
@@ -201,6 +201,6 @@
     $(".gallery-content").on("click", ".gallery-item", function (e) {
         e.stopPropagation();
         var svg_id = this.children[0].getAttribute("data-id");
-        window.location.href = "/warpeditor/editor/" + svg_id;
+        window.location.href = "/warp/editor/" + svg_id;
     })
 });

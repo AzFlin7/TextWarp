@@ -7,6 +7,10 @@
     var triggerButton = $("#btn_warpText")[0];
     var warpEndHandler = $("#btn_warpEndHandler")[0];
     var controlPoints_pair = [];
+    var initialColorPair = [
+        ["#be816c", "#c88087"],
+        ["#41badf", "#375152"]
+    ];
     var colorPair = [];
     var currentColorIndex = -1;
     var currentWarpIndex = -1;
@@ -45,12 +49,15 @@
         warpedSvg.removeAttribute("style");
         warpedSvg.classList.add("mw-100");
         warpedSvg.classList.add("mh-100");
+        let colors = [];
 
         if (currentWarpIndex < 2) {
             var newVcarouselItem = $(".vcarousel-item")[currentWarpIndex];
+            colors = initialColorPair[currentColorIndex];
             newVcarouselItem.appendChild(warpedSvg);
         }
         else {
+            colors = colorPair[currentColorIndex];
             var newVcarouselItem = document.createElement("div");
             newVcarouselItem.classList.add("vcarousel-item");
             newVcarouselItem.style.width = "100%";
@@ -66,26 +73,28 @@
                 controlPoints_pair.push(temp_controlPoints);
             }
         }
-        //if (currentColorIndex > colorPair.length - 20) {
-        //    $.ajax({
-        //        url: '/WarpEditor/getColors/' + 30,
-        //        type: 'get',
-        //        success: function (res, data) {
-        //            colorPair.push(...res.colors);
-        //        },
-        //        failure: function (res, data) {
-        //            alert(res.message);
-        //        }
-        //    });
-        //}
+        if (currentColorIndex > colorPair.length - 20) {
+            $.ajax({
+                url: '/WarpEditor/getColors/' + 30,
+                type: 'get',
+                success: function (res, data) {
+                    let tempColors = res.colors.map((item) => {
+                        return [item.color1, item.color2];
+                    });
+                    colorPair.push(...tempColors);
+                },
+                failure: function (res, data) {
+                    alert(res.message);
+                }
+            });
+        }
         controlPoints = controlPoints_pair[currentWarpIndex];
-        //var colors = colorPair[currentColorIndex];
         var event = new CustomEvent("custom-event", {
             'detail': {
                 words: words,
                 controlPoints: controlPoints,
-                container_id: id
-                //colors: colors
+                container_id: id,
+                colors: colors
             }
         });
         triggerButton.dispatchEvent(event);
@@ -146,6 +155,7 @@
         currentSlideIndex = $('.vcarousel').slick('slickCurrentSlide');
         if (currentSlideIndex + 2 > currentWarpIndex) {
             currentWarpIndex++;
+            currentColorIndex++;
             $("#loader").removeClass("d-none");
             $("#loader").addClass("d-flex");
             newWarp();

@@ -82,7 +82,7 @@
         $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         $.ajax({
-            url: "/warpe/save/" + svg_id,
+            url: "/warp/save/" + svg_id,
             type: "POST",
             data: formData,
             processData: false,

@@ -2,6 +2,8 @@
 using System.Data;
 using TextWarp.Models.Database;
 using TextWarp.Models;
+using Microsoft.AspNetCore.Authorization;
+
 namespace TextWarp.Controllers
 {
     public class GalleryController : Controller
@@ -12,7 +14,7 @@ namespace TextWarp.Controllers
         {
             _context = context;
         }
-
+        //[Authorize]
         public IActionResult Index()
         {
             var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();

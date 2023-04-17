@@ -217,7 +217,7 @@ var seperatePath = function(pathIndex, words){
   var seperatePointIndex1 = -1, seperatePointIndex2 = -1;
   var characterSpace = 10;  //space between each character in x-axis
   var verticalSidePointsNumber = 5; //number of every virtical side
-  var cornorTopPointsNumber = 30; //number of edge character's top side points
+  var cornorTopPointsNumber = 5; //number of edge character's top side points
   var interval;
   var charQuardPoints; //quard points array for each character
   var LTPointIndex = -1, LBPointIndex = -1, RBPointIndex = -1, RTPointIndex = -1;

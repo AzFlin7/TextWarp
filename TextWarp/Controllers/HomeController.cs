@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TextWarp.Models;
 
@@ -12,7 +13,6 @@ namespace TextWarp.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();

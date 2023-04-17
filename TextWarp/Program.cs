@@ -17,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/account/login");
+
 builder.Services.AddDataProtection()
 .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
 .SetApplicationName("cfcreator.histyle37");
@@ -24,7 +26,7 @@ builder.Services.AddDataProtection()
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "cfcreator.histyle37";
-    //options.Cookie.Domain = ".Printpals.com";
+    //options.Cookie.Domain = ".Cfcreator.com";
     //options.Cookie.SecurePolicy = CookieSecurePolicy.None;
     //options.Cookie.SameSite = SameSiteMode.None;
 });

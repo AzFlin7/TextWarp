@@ -19,11 +19,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDataProtection()
 .PersistKeysToFileSystem(new DirectoryInfo(@"c:\temp-keys\"))
-.SetApplicationName("Printpals");
+.SetApplicationName("cfcreator.histyle37");
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.Name = "Printpals";
+    options.Cookie.Name = "cfcreator.histyle37";
     //options.Cookie.Domain = ".Printpals.com";
     //options.Cookie.SecurePolicy = CookieSecurePolicy.None;
     //options.Cookie.SameSite = SameSiteMode.None;

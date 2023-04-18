@@ -187,7 +187,7 @@
     $("#undo").click(function () {
         if (actionHistory.length > 0) {
             currentActionIndex -= 1;
-            if (currentActionIndex > 0) {
+            if (currentActionIndex >= 0) {
                 actionHandler(actionHistory[currentActionIndex]);
             }
         }
@@ -211,8 +211,9 @@
         var initailState;
         if ($("#svg_container")[0].children.length == 2) {
             initailState = {
-                type: "set_palette",
-                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
+                type: "set_indi_color",
+                pathIndex: 1,
+                color: $("#svg_container")[0].children[1].getAttribute("fill"),
             }
         }
         else if ($("#svg_container")[0].children.length == 3) {

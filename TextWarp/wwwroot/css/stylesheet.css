@@ -641,7 +641,7 @@ a:link, a:visited, a:hover {
 }
 .currentActivePath {
     stroke: #30f4ff;
-    stroke-width: 0.5rem;
+    stroke-width: 5px;
 }
 .gradients-container {
     display: none;

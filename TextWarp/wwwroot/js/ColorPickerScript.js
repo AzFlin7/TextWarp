@@ -98,6 +98,12 @@
             var action = { type:"set_indi_color", pathIndex: pathIndex, fill: color };
             actionHistory.push(action);
             currentActionIndex = actionHistory.length - 1;
+            if (currentActionIndex > 0) {
+                $("#undo").addClass("active");
+            }
+            if (currentActionIndex < actionHistory.length - 2) {
+                $("#redo").addClass("active");
+            }
             $(".currentActivePath")[0].setAttribute("fill", color);
         }
         $("#color-block").wheelColorPicker("setValue", color);
@@ -120,6 +126,12 @@
             var action = { type:"set_indi_color", pathIndex: pathIndex, fill: color };
             actionHistory.push(action);
             currentActionIndex = actionHistory.length - 1;
+            if (currentActionIndex > 0) {
+                $("#undo").addClass("active");
+            }
+            if (currentActionIndex < actionHistory.length - 2) {
+                $("#redo").addClass("active");
+            }
             $(".currentActivePath")[0].setAttribute("fill", value);
         }
     });
@@ -141,6 +153,12 @@
             var action = { type: "set_indi_color", pathIndex: pathIndex, fill: value };
             actionHistory.push(action);
             currentActionIndex = actionHistory.length - 1;
+            if (currentActionIndex > 0) {
+                $("#undo").addClass("active");
+            }
+            if (currentActionIndex < actionHistory.length - 2) {
+                $("#redo").addClass("active");
+            }
         }
         historyColors.unshift(value);
         changeHistory();
@@ -185,19 +203,35 @@
     });
 
     $("#undo").click(function () {
-        if (actionHistory.length > 0) {
-            currentActionIndex -= 1;
-            if (currentActionIndex >= 0) {
-                actionHandler(actionHistory[currentActionIndex]);
+        if (this.classList.contains("active")) {
+            if (actionHistory.length > 0) {
+                currentActionIndex -= 1;
+                if (currentActionIndex >= 0) {
+                    actionHandler(actionHistory[currentActionIndex]);
+                    if (currentActionIndex == 0) {
+                        $(this).removeClass("active");
+                    }
+                    if (currentActionIndex < actionHistory.length - 1) {
+                        $("#redo").addClass("active");
+                    }
+                }
             }
         }
     });
 
     $("#redo").click(function () {
-        if (actionHistory.length > 0) {
-            currentActionIndex += 1;
-            if (currentActionIndex < actionHistory.length) {
-                actionHandler(actionHistory[currentActionIndex]);
+        if (this.classList.contains("active")) {
+            if (actionHistory.length > 0) {
+                currentActionIndex += 1;
+                if (currentActionIndex < actionHistory.length) {
+                    actionHandler(actionHistory[currentActionIndex]);
+                    if (currentActionIndex == actionHistory.length - 1) {
+                        $(this).removeClass("active");
+                    }
+                    else {
+                        $("#undo").addClass("active");
+                    }
+                }
             }
         }
     });
@@ -369,6 +403,12 @@
         var action = { type: "set_gradient", rotate: gradientDirection, first_color: gradients[currentGradientIndex][0], second_color: gradients[currentGradientIndex][1] };
         actionHistory.push(action);
         currentActionIndex = actionHistory.length - 1;
+        if (currentActionIndex > 0) {
+            $("#undo").addClass("active");
+        }
+        if (currentActionIndex < actionHistory.length - 2) {
+            $("#redo").addClass("active");
+        }
         for (const path of $(".warpedPath")) {
             path.setAttribute("fill", gradientImage);
         }
@@ -394,6 +434,12 @@
         var action = { type: "set_palette", first_color: palettes[currentPaletteIndex][0], second_color: palettes[currentPaletteIndex][1] };
         actionHistory.push(action);
         currentActionIndex = actionHistory.length - 1;
+        if (currentActionIndex > 0) {
+            $("#undo").addClass("active");
+        }
+        if (currentActionIndex < actionHistory.length - 2) {
+            $("#redo").addClass("active");
+        }
     };
 
     function usePalette(e) {

@@ -727,6 +727,11 @@ a:link, a:visited, a:hover {
     justify-content: center;
     background: transparent;
     padding: 0;
+    opacity:0.4;
+}
+.btn_redo.active{
+    cursor:pointer;
+    opacity: 1;
 }
 .vcarousel-item{
     width:500px;

@@ -1,3 +1,5 @@
+var resultSeperatedPoints = [];
+
 var patterns = [
   {
     path: "M176.6,45.9C71.1,106.2,0,219.8,0,350c0,193.3,156.7,350,350,350s350-156.7,350-350S543.3,0,350,0C286.9,0,227.7,16.7,176.6,45.9",
@@ -32,159 +34,121 @@ var patterns = [
   }
 ];
 
-  var bezier4Point = function(t, p0, p1, p2, p3){
-    var cX = 3 * (p1.x - p0.x),
-        bX = 3 * (p2.x - p1.x) - cX,
-        aX = p3.x - p0.x - cX - bX;
-          
-    var cY = 3 * (p1.y - p0.y),
-        bY = 3 * (p2.y - p1.y) - cY,
-        aY = p3.y - p0.y - cY - bY;
-          
-    var x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
-    var y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
-    x = Math.floor(x);
-    y = Math.floor(y);
-    return {x: x, y: y};
-  };
-  
-  var bezier3Point = function(t, p0, p1, p2) {
-    var x = Math.pow(1 - t, 2) * p0.x + 2 * (1 - t) * t * p1.x + Math.pow(t, 2) * p2.x;
-    var y = Math.pow(1 - t, 2) * p0.y + 2 * (1 - t) * t * p1.y + Math.pow(t, 2) * p2.y;
-    x = Math.floor(x);
-    y = Math.floor(y);
-    return {x: x, y: y};
-  };
-  
-  var createPathString = function (points) {
-    var path = "M";
-    for(var i = 0; i < points.length; i++) {
-      if(i == 0) {
-        path += points[i].x;
-        path += ",";
-        path += points[i].y;
-      }
-      else {
-        path += " L";
-        path += points[i].x;
-        path += ",";
-        path += points[i].y;
-      }
+var bezier4Point = function(t, p0, p1, p2, p3){
+  var cX = 3 * (p1.x - p0.x),
+      bX = 3 * (p2.x - p1.x) - cX,
+      aX = p3.x - p0.x - cX - bX;
+        
+  var cY = 3 * (p1.y - p0.y),
+      bY = 3 * (p2.y - p1.y) - cY,
+      aY = p3.y - p0.y - cY - bY;
+        
+  var x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + p0.x;
+  var y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + p0.y;
+  x = Math.floor(x);
+  y = Math.floor(y);
+  return {x: x, y: y};
+};
+
+var createPathString = function (points) {
+  var path = "M";
+  for(var i = 0; i < points.length; i++) {
+    if(i == 0) {
+      path += points[i].x;
+      path += ",";
+      path += points[i].y;
     }
-    // path += "Z";
-    return path;
-  };
-  
-  var pathRegulazation = function (points) {
-    var tempPathString = createPathString(points);
-    var tempProperties = svgPathProperties.svgPathProperties(tempPathString);
-    var interval_distance = tempProperties.getTotalLength() / (points.length - 1);
-    var regularPoints = [];
-    for ( var distance = 0; distance < tempProperties.getTotalLength() + 1; distance += interval_distance) {
-      var tempPoint = tempProperties.getPointAtLength(distance);
-      regularPoints.push(tempPoint);
+    else {
+      path += " L";
+      path += points[i].x;
+      path += ",";
+      path += points[i].y;
     }
-  
-    if (regularPoints.length == points.length) {
-      return regularPoints;
+  }
+  // path += "Z";
+  return path;
+};
+
+var pathRegulazation = function (points) {
+  var tempPathString = createPathString(points);
+  var tempProperties = svgPathProperties.svgPathProperties(tempPathString);
+  var interval_distance = tempProperties.getTotalLength() / (points.length - 1);
+  var regularPoints = [];
+  for ( var distance = 0; distance < tempProperties.getTotalLength() + 1; distance += interval_distance) {
+    var tempPoint = tempProperties.getPointAtLength(distance);
+    regularPoints.push(tempPoint);
+  }
+
+  if (regularPoints.length == points.length) {
+    return regularPoints;
+  }
+};
+
+var draw4PointBezier = function(p0, p1, p2, p3){
+  var points = [];
+  var accuracy = 0.01;
+  points.push(p0);
+  for (var i = 0; i < 1; i += accuracy){
+      var p = bezier4Point(i, p0, p1, p2, p3);
+      points.push(p);
+  }
+  return points;
+}
+
+var distance = function (p1, p2) {
+  return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
+var convertSpaceBezier = function (points, space = 10) {
+  var spaceBezierPoints = [];
+  for(var i = 0; i < points.length; i++) {
+    var tempPoint = {x: 0, y: 0};
+    tempPoint.x = points[i].x;
+    tempPoint.y = points[i].y + 10;
+    spaceBezierPoints.push(tempPoint);
+  }
+  return spaceBezierPoints;
+}
+
+
+
+var getRandomCorePoint = function(pathIndex) {
+  var corePoint = {x: 0, y: 0};
+  var x = getRandomInt(patterns[pathIndex].center.x - patterns[pathIndex].variationRange_x, patterns[pathIndex].center.x + patterns[pathIndex].variationRange_x);
+  var y = getRandomInt(patterns[pathIndex].center.y - patterns[pathIndex].variationRange_y, patterns[pathIndex].center.y + patterns[pathIndex].variationRange_y);
+  corePoint.x = x;
+  corePoint.y = y;
+  return corePoint;
+}
+
+var getBezierControlPoints = function(point1, point2) {
+  var tempPoint1 = {x: 0, y: 0}, tempPoint2 = {x: 0, y: 0};
+  tempPoint1.x = getRandomInt(point1.x + 20, (point2.x - point1.x) / 2 - 20);
+  tempPoint1.y = getRandomInt(point1.y - 50, point1.y + 50);
+  tempPoint2.x = getRandomInt((point2.x - point1.x) / 2 + 20, point2.x - 20);
+  tempPoint2.y = getRandomInt(point2.y - 50, point2.y + 50);
+  return [tempPoint1, tempPoint2];
+}
+
+var findPosistion = function(points, x_coordinate) {
+    var space = 10000;
+    var neighbourPointIndex = -1;
+    for (var i = 0; i < points.length; i ++) {
+        if(space > Math.abs(points[i].x - x_coordinate)) {
+            space = Math.abs(points[i].x - x_coordinate);
+            neighbourPointIndex = i;
+        }
     }
-  };
-  
-  var draw4PointBezier = function(p0, p1, p2, p3){
-    var points = [];
-    var accuracy = 0.01;
-    for (var i = 0; i < 1; i += accuracy){
-        var p = bezier4Point(i, p0, p1, p2, p3);
-        points.push(p);
-    }
-    points.push(p3);
-    return points;
-  }
-  
-  var draw3PointBezier = function(p0, p1, p2) {
-    var points = [];
-    var accuracy = 0.05;
-    points.push(p0);
-    for (var i = 0; i < 1; i += accuracy){
-        var p = bezier3Point(i, p0, p1, p2);
-        points.push(p);
-    }
-    points.push(p2);
-    return points;
-  }
-  
-  var distance = function (p1, p2) {
-    return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-  }
-  
-  function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-  }
-  
-  var convertSpaceBezier = function (points, space = 10) {
-    var spaceBezierPoints = [];
-    for(var i = 0; i < points.length; i++) {
-      var tempPoint = {x: 0, y: 0};
-      tempPoint.x = points[i].x;
-      tempPoint.y = points[i].y + 10;
-      spaceBezierPoints.push(tempPoint);
-    }
-    return spaceBezierPoints;
-  }
-  
-  var resultSeperatedPoints = [];
-  
-  var getRandomCorePoint = function(pathIndex) {
-    var corePoint = {x: 0, y: 0};
-    var x = getRandomInt(patterns[pathIndex].center.x - patterns[pathIndex].variationRange_x, patterns[pathIndex].center.x + patterns[pathIndex].variationRange_x);
-    var y = getRandomInt(patterns[pathIndex].center.y - patterns[pathIndex].variationRange_y, patterns[pathIndex].center.y + patterns[pathIndex].variationRange_y);
-    corePoint.x = x;
-    corePoint.y = y;
-    return corePoint;
-  }
-  
-  var getBezierControlPoints = function(point1, point2) {
-    var tempPoint1 = {x: 0, y: 0}, tempPoint2 = {x: 0, y: 0};
-    tempPoint1.x = getRandomInt(point1.x + 20, (point2.x - point1.x) / 2 - 20);
-    tempPoint1.y = getRandomInt(point1.y - 50, point1.y + 50);
-    tempPoint2.x = getRandomInt((point2.x - point1.x) / 2 + 20, point2.x - 20);
-    tempPoint2.y = getRandomInt(point2.y - 50, point2.y + 50);
-    return [tempPoint1, tempPoint2];
-  }
-  
-  var getBezier3ControlPoint = function(point1, point2) {
-    var x = getRandomInt(point1.x + (point2.x - point1.x) / 2 - 50, point1.x + (point2.x - point1.x) / 2 + 50);
-    var y = getRandomInt(point1.y - 50, point1.y + 50);
-    return {x: x, y: y};
-  }
-  
-  var findPosistion = function(points, x_coordinate) {
-      var space = 10000;
-      var neighbourPointIndex = -1;
-      for (var i = 0; i < points.length; i ++) {
-          if(space > Math.abs(points[i].x - x_coordinate)) {
-              space = Math.abs(points[i].x - x_coordinate);
-              neighbourPointIndex = i;
-          }
-      }
-      return neighbourPointIndex;
-  }
-  
-  var findOtherLinePosistion = function(points, mainPoint) {
-      var real_distance = 1000;
-      var neighbourPointIndex = -1;
-      for (var i = 0; i < points.length; i ++) {
-          if(real_distance > distance(points[i], mainPoint) && points[i].y > mainPoint.y) {
-              real_distance = distance(points[i], mainPoint)
-              neighbourPointIndex = i;
-          }
-      }
-      return neighbourPointIndex;
-  }
-  
-  var generateIntervalPoints = function(point1, point2, verticalSidePointsNumber = 5, direction = "tb") {
+    return neighbourPointIndex;
+}
+
+var generateIntervalPoints = function(point1, point2, verticalSidePointsNumber = 5, direction = "tb") {
     var height = Math.abs(point2.y - point1.y);
     var interval = height / verticalSidePointsNumber;
     var intervalPoints = [];
@@ -217,7 +181,7 @@ var seperatePath = function(pathIndex, words){
   var seperatePointIndex1 = -1, seperatePointIndex2 = -1;
   var characterSpace = 10;  //space between each character in x-axis
   var verticalSidePointsNumber = 5; //number of every virtical side
-  var cornorTopPointsNumber = 30; //number of edge character's top side points
+  var cornorTopPointsNumber = 5; //number of edge character's top side points
   var interval;
   var charQuardPoints; //quard points array for each character
   var LTPointIndex = -1, LBPointIndex = -1, RBPointIndex = -1, RTPointIndex = -1;
@@ -311,7 +275,6 @@ var seperatePath = function(pathIndex, words){
               topSidePoints.push(topPathPoints[i11]);
             }
           }
-          
           firstPathPoints.push([leftSidePoints, bottomSidePoints, rightSidePoints, topSidePoints]);
         }
       }
@@ -440,7 +403,6 @@ var seperatePath = function(pathIndex, words){
               }
             }
           }
-          
           firstPathPoints.push([leftSidePoints, bottomSidePoints, rightSidePoints, topSidePoints]);
         }
       }
@@ -466,24 +428,27 @@ var seperatePath = function(pathIndex, words){
       secondBezierControlPoint, points[seperatePointIndex2]);
     seperateBezierPoints = pathRegulazation(seperateBezierPoints);
     var spacedSeperateBezierPoints = convertSpaceBezier(seperateBezierPoints, space = 50);
+    spacedSeperateBezierPoints = spacedSeperateBezierPoints.reverse();
 
     var topSidePathPoints = []; 
-    for ( var i1 = seperatePointIndex1 - 1; i1 >= 0; i1 --) {
+    for ( let i1 = seperatePointIndex2; i1 < points.length; i1++) {
       topSidePathPoints.push(points[i1]);
     }
-    for ( var i2 = 399; i2 > seperatePointIndex2 - 1; i2 --) {
+    for ( let i2 = 0; i2 < seperatePointIndex1; i2 ++) {
       topSidePathPoints.push(points[i2]);
     }
     topSidePathPoints = pathRegulazation(topSidePathPoints);
 
-    var firstPathPoints = []; //first word's points array
+    //first word's points array
+    var firstPathPoints = []; 
     var entireDistance = points[seperatePointIndex2].x - points[seperatePointIndex1].x - characterSpace * (words[0].length - 1);
     interval = Math.floor(entireDistance / words[0].length);
     var start_x = points[seperatePointIndex1].x;
     for ( var i3 = 0; i3 < words[0].length; i3++) {
       LTPointIndex = -1, LBPointIndex = -1, RBPointIndex = -1, RTPointIndex = -1;
       if (i3 == 0) {
-          LTPointIndex = findPosistion(topSidePathPoints, start_x + interval) - cornorTopPointsNumber;
+          LTPointIndex = Math.floor((topSidePathPoints.length - 1 - findPosistion(topSidePathPoints, start_x + interval)) / 2)
+           + findPosistion(topSidePathPoints, start_x + interval);
           LBPointIndex = 0;
       }
       else {
@@ -491,8 +456,9 @@ var seperatePath = function(pathIndex, words){
           LBPointIndex = findPosistion(seperateBezierPoints, start_x + i3 * (interval + characterSpace));
       }
       if (i3 == words[0].length - 1) {
-          RBPointIndex = topSidePathPoints.length - 1;
-          RTPointIndex = findPosistion(topSidePathPoints, start_x + i3 * (interval + characterSpace)) + cornorTopPointsNumber;
+          RBPointIndex = seperateBezierPoints.length - 1;
+          RTPointIndex = findPosistion(topSidePathPoints, start_x + i3 * (interval + characterSpace))
+            - Math.floor((findPosistion(topSidePathPoints, start_x + i3 * (interval + characterSpace)) + 1) / 2);
       }
       else {
           RBPointIndex = findPosistion(seperateBezierPoints, start_x + i3 * (interval + characterSpace) + interval);
@@ -504,7 +470,7 @@ var seperatePath = function(pathIndex, words){
     for (var i4 = 0; i4 < charQuardPoints.length; i4++) {
       leftSidePoints = [], bottomSidePoints = [], rightSidePoints = [], topSidePoints = [];
       if (i4 == 0) {
-          for(var i5 = charQuardPoints[i4][0]; i5 >= 0; i5 --) {
+          for(var i5 = charQuardPoints[i4][0]; i5 < topSidePathPoints.length - 1; i5 ++) {
               leftSidePoints.push(topSidePathPoints[i5]);
           }
       }
@@ -514,26 +480,22 @@ var seperatePath = function(pathIndex, words){
           verticalSidePointsNumber, direction="tb");
       }
       if ( i4 == charQuardPoints.length - 1) {
-          for (var i6 = charQuardPoints[i4][1]; i6 < seperateBezierPoints.length - 1; i6 ++) {
-              bottomSidePoints.push(seperateBezierPoints[i6]);
-          }
-          for (var i7 = charQuardPoints[i4][2]; i7 > charQuardPoints[i4][3]; i7 --) {
+          for (var i7 = 0; i7 < charQuardPoints[i4][3]; i7 ++) {
               rightSidePoints.push(topSidePathPoints[i7]);
           }
       }
       else {
-          for (var i6 = charQuardPoints[i4][1]; i6 < charQuardPoints[i4][2]; i6 ++) {
-              bottomSidePoints.push(seperateBezierPoints[i6]);
-          }
           rightSidePoints = generateIntervalPoints( 
               seperateBezierPoints[charQuardPoints[i4][2]], 
               topSidePathPoints[charQuardPoints[i4][3]],
               verticalSidePointsNumber, direction="bt");
       }
-      for (var i8 = charQuardPoints[i4][3]; i8 > charQuardPoints[i4][0]; i8 --) {
+      for (var i6 = charQuardPoints[i4][1]; i6 < charQuardPoints[i4][2]; i6 ++) {
+              bottomSidePoints.push(seperateBezierPoints[i6]);
+          }
+      for (var i8 = charQuardPoints[i4][3]; i8 < charQuardPoints[i4][0]; i8 ++) {
           topSidePoints.push(topSidePathPoints[i8]);
       }
-      
       firstPathPoints.push([leftSidePoints, bottomSidePoints, rightSidePoints, topSidePoints]);
     }
     resultSeperatedPoints.push(firstPathPoints);
@@ -546,34 +508,37 @@ var seperatePath = function(pathIndex, words){
     for (var j2 = seperatePointIndex1; j2 < seperatePointIndex2; j2 ++) {
       bottomSidePathPoints.push(points[j2]);
     }
-    var startPointIndex = findOtherLinePosistion(bottomSidePathPoints, topSidePathPoints[0]);
-    var endPointIndex = findOtherLinePosistion(bottomSidePathPoints, topSidePathPoints[topSidePathPoints.length - 1]);
-    bottomSidePathPoints = bottomSidePathPoints.slice(startPointIndex, endPointIndex + 1);
     
-    if (topSidePathPoints[0].x < bottomSidePathPoints[0].x) {
-      topSidePathPoints.shift();
+    while(topSidePathPoints[0].y > bottomSidePathPoints[bottomSidePathPoints.length - 1].y){
+      bottomSidePathPoints.splice(-1);
+    }
+    while(topSidePathPoints[topSidePathPoints.length - 1].y > bottomSidePathPoints[0].y){
+      bottomSidePathPoints.shift();
+    }
+    while(topSidePathPoints[topSidePathPoints.length - 1].x < bottomSidePathPoints[0].x){
+      topSidePathPoints.splice(-1);
+    }
+    while(topSidePathPoints[0].x > bottomSidePathPoints[bottomSidePathPoints.length - 1].x){
       topSidePathPoints.shift();
     }
-    if (topSidePathPoints[topSidePathPoints.length - 1].x > 
-    bottomSidePathPoints[bottomSidePathPoints.length - 1].x) {
-      topSidePathPoints = topSidePathPoints.slice(0, -1);
-    }
-
-    entireDistance = topSidePathPoints[topSidePathPoints.length - 1].x - topSidePathPoints[0].x - characterSpace * (words[1].length - 1);
+    
+    entireDistance = topSidePathPoints[0].x - topSidePathPoints[topSidePathPoints.length - 1].x - characterSpace * (words[1].length - 1);
     interval = Math.floor(entireDistance / words[1].length);
-    for ( var j3 = 0; j3 < words[1].length; j3++) {
+    start_x = bottomSidePathPoints[0].x;
+    for ( let j3 = 0; j3 < words[1].length; j3++) {
       LTPointIndex = -1, LBPointIndex = -1, RBPointIndex = -1, RTPointIndex = -1;
       if (j3 == 0) {
-          LTPointIndex = 0;
-          LBPointIndex = findPosistion(bottomSidePathPoints, start_x + interval) - cornorTopPointsNumber;
+          LTPointIndex = topSidePathPoints.length - 1;
+          LBPointIndex = Math.floor(findPosistion(bottomSidePathPoints, start_x + interval) / 2);
       }
       else {
           LTPointIndex = findPosistion(topSidePathPoints, start_x + j3 * (interval + characterSpace));
           LBPointIndex = findPosistion(bottomSidePathPoints, start_x + j3 * (interval + characterSpace));
       }
       if (j3 == words[1].length - 1) {
-          RTPointIndex = topSidePathPoints.length - 1;
-          RBPointIndex = findPosistion(bottomSidePathPoints, start_x + j3 * (interval + characterSpace)) + cornorTopPointsNumber;
+          RTPointIndex = 0;
+          RBPointIndex = findPosistion(bottomSidePathPoints, start_x + j3 * (interval + characterSpace)) + 
+            Math.floor((bottomSidePathPoints.length - 1 - findPosistion(bottomSidePathPoints, start_x + j3 * (interval + characterSpace))) / 2);            
       }
       else {
           RTPointIndex = findPosistion(topSidePathPoints, start_x + j3 * (interval + characterSpace) + interval);
@@ -582,10 +547,10 @@ var seperatePath = function(pathIndex, words){
       charQuardPoints.push([LTPointIndex, LBPointIndex, RBPointIndex, RTPointIndex]);
     }
     
-    for (var j4 = 0; j4 < charQuardPoints.length; j4++) {
+    for (let j4 = 0; j4 < charQuardPoints.length; j4++) {
       leftSidePoints = [], bottomSidePoints = [], rightSidePoints = [], topSidePoints = [];
       if (j4 == 0) {
-          for(var j5 = charQuardPoints[j4][0]; j5 < charQuardPoints[j4][1]; j5 ++) {
+          for(var j5 = 0; j5 < charQuardPoints[j4][1]; j5 ++) {
               leftSidePoints.push(bottomSidePathPoints[j5]);
           }
       }
@@ -594,47 +559,44 @@ var seperatePath = function(pathIndex, words){
               , bottomSidePathPoints[charQuardPoints[j4][1]], 
           verticalSidePointsNumber, direction="tb");
       }
-      for (var j6 = charQuardPoints[j4][1]; j6 < charQuardPoints[j4][2]; j6 ++) {
-          bottomSidePoints.push(bottomSidePathPoints[j6]);
-      }
       if (j4 == charQuardPoints.length - 1) {
-          for (var j7 = charQuardPoints[j4][2]; j7 < bottomSidePathPoints.length - 1; j7 ++) {
-              rightSidePoints.push(bottomSidePathPoints[j7]);
-          }
-          for (var j8 = topSidePathPoints.length - 1; j8 > charQuardPoints[j4][0]; j8 --) {
-              topSidePoints.push(topSidePathPoints[j8]);
-          }
+        for (let j7 = charQuardPoints[j4][2]; j7 < bottomSidePathPoints.length - 1; j7 ++) {
+            rightSidePoints.push(bottomSidePathPoints[j7]);
+        }
       }
       else {
-          rightSidePoints = generateIntervalPoints(
-            bottomSidePathPoints[charQuardPoints[j4][2]],
-            topSidePathPoints[charQuardPoints[j4][3]], 
-            verticalSidePointsNumber, direction="bt");
-          for (var j8 = charQuardPoints[j4][3]; j8 >= charQuardPoints[j4][0]; j8 --) {
-              topSidePoints.push(topSidePathPoints[j8]);
-          }
+        rightSidePoints = generateIntervalPoints(
+          bottomSidePathPoints[charQuardPoints[j4][2]],
+          topSidePathPoints[charQuardPoints[j4][3]], 
+          verticalSidePointsNumber, direction="bt");
       }
-      
+      for (let j6 = charQuardPoints[j4][1]; j6 < charQuardPoints[j4][2]; j6 ++) {
+          bottomSidePoints.push(bottomSidePathPoints[j6]);
+      }
+      for (var j8 = charQuardPoints[j4][3]; j8 < charQuardPoints[j4][0]; j8 ++) {
+        topSidePoints.push(topSidePathPoints[j8]);
+      }
       secondPathPoints.push([leftSidePoints, bottomSidePoints, rightSidePoints, topSidePoints]);
     }
     resultSeperatedPoints.push(secondPathPoints);
   }
 }
 
-  function splitPath (pathIndex, words) {
-    resultSeperatedPoints = [];
-    seperatePath(pathIndex, words);
-    let result = resultSeperatedPoints.map((item) => {
-      let lineItem = item.map((subitem) => {
-          let charItem = subitem.map((sideItem) => {
-              let point = sideItem.map((tempPoint) => {
-                  return [tempPoint.x, tempPoint.y];
-              })
-              return point;
-          })
-          return charItem;
-      })
-      return lineItem;
+
+function splitPath (pathIndex, words) {
+  resultSeperatedPoints = [];
+  seperatePath(pathIndex, words);
+  let result = resultSeperatedPoints.map((item) => {
+    let lineItem = item.map((subitem) => {
+        let charItem = subitem.map((sideItem) => {
+            let point = sideItem.map((tempPoint) => {
+                return [tempPoint.x, tempPoint.y];
+            })
+            return point;
+        })
+        return charItem;
     })
-    return result;
-  }
+    return lineItem;
+  })
+  return result;
+}

@@ -6,5 +6,6 @@
         public string words { get; set; }
         public int styleIndex { get; set; }
         public string? svgFilePath { get; set; }
+        public int version { get; set; }
     }
 }

@@ -90,6 +90,9 @@
             success: function (res) {
                 $("#loader").removeClass("d-flex");
                 $("#loader").addClass("d-none");
+                if (res.status == "failed") {
+                    alert("Save failed.")
+                }
             },
         });
     });

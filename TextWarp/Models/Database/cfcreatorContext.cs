@@ -28,6 +28,7 @@ namespace TextWarp.Models.Database
         public virtual DbSet<Clipart> Cliparts { get; set; } = null!;
         public virtual DbSet<Document> Documents { get; set; } = null!;
         public virtual DbSet<FavouriteWarpText> FavouriteWarpTexts { get; set; } = null!;
+        public virtual DbSet<Font> Fonts { get; set; } = null!;
         public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
         public virtual DbSet<Upload> Uploads { get; set; } = null!;
         public virtual DbSet<WarpedSvg> WarpedSvgs { get; set; } = null!;
@@ -227,6 +228,19 @@ namespace TextWarp.Models.Database
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("svgFileName");
+            });
+
+            modelBuilder.Entity<Font>(entity =>
+            {
+                entity.HasIndex(e => e.Family, "NonClusteredIndex-20181225-110313");
+
+                entity.Property(e => e.Family)
+                    .HasMaxLength(100)
+                    .UseCollation("Korean_Wansung_CI_AS");
+
+                entity.Property(e => e.InitShow).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Title).HasDefaultValueSql("((0))");
             });
 
             modelBuilder.Entity<Graffix>(entity =>

@@ -25,6 +25,35 @@
             $(".tagify__input")[0].classList.add("d-inline-block");
         }
     }
+    var availableNames = [];
+
+    window.addEventListener("change_workname", (e) => {
+        $.ajax({
+            url: "/gallery/rename",
+            type: "POST",
+            data: {
+                id: e.detail.id,
+                name: e.detail.name
+            },
+            dataType: "json",
+            success: function (res) {
+                if (res.status == "success") {
+                    $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0].innerHTML = e.detail.name;
+                    $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0].setAttribute("data-workName", e.detail.name);
+                }
+                else {
+                    let alertMsg = "This name is already exist.";
+                    let workNameNode = $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0];
+                    workNameNode.innerHTML = workNameNode.getAttribute("data-workName");
+                    $("#msgWrapper").text(alertMsg);
+                    $("#msgWrapper")[0].style.visibility = "visible";
+                    setTimeout(() => {
+                        $("#msgWrapper")[0].style.visibility = "hidden";
+                    }, 2000);
+                }
+            }
+        });
+    });
 
     $("#wordsInput").click(function () {
         words = $("#warp_words")[0].value;
@@ -57,8 +86,13 @@
             type: "get",
             data: {},
             success: function (res) {
-                svg_id = res.id;
-                window.location.href = "/warp/index?" + "id=" + svg_id;
+                if (res.status == "success") {
+                    svg_id = res.id;
+                    window.location.href = "/warp/index?" + "id=" + svg_id;
+                }
+                else {
+                    alert("Create new document failed.");
+                }
             },
         });
     });
@@ -107,13 +141,16 @@
                         <img src="/uploads/`+ copied_svg.svgfileName + `" style="max-width: 100%; max-height:100%; ">
                         </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
-                                <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">`+ copied_svg.workName + `</div >
+                                <div class="editable-object" data-workName="`+ copied_svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + copied_svg.workName + `</div >
                                 <div style="color:#dad8dd;font-size: 14px;">`+ copied_svg.createdAt + `</div>
                             </div>
                         </div>`);
                         newDoc.insertBefore(bodyNode);
                         $("#loader").removeClass("d-flex");
                         $("#loader").addClass("d-none");
+                    }
+                    else {
+                        alert("Raised unkown exceptions on the Database side");
                     }
                 },
             });
@@ -198,9 +235,41 @@
 
     $("#newWarpedText").click(createNewWarpedText);
 
-    $(".gallery-content").on("click", ".gallery-item", function (e) {
+    $(".gallery-content").on("click", ".gallery-item-img", function (e) {
         e.stopPropagation();
-        var svg_id = this.children[0].getAttribute("data-id");
+        var svg_id = this.parentElement.children[0].getAttribute("data-id");
         window.location.href = "/warp/editor/" + svg_id;
     })
+
+    $(document).on("dblclick", ".editable-object", function () {
+        $(this).attr("spellcheck", "false");
+        $(this).attr("contenteditable", "true");
+        $(this).focus();
+        document.execCommand("selectAll", false, null);
+    });
+
+    $(document).on("keydown", ".editable-object", function (e) {
+        e.stopPropagation();
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            $(this).attr("contenteditable", "false");
+        }
+    });
+
+    $(document).on("blur", ".editable-object", function (e) {
+        let newname = $(this).text();
+        let svg_id = this.parentElement.parentElement.children[0].getAttribute("data-id");
+        let origin_name = this.getAttribute("data-workName");
+        if (newname != "" && newname != origin_name) {
+            window.dispatchEvent(new CustomEvent("change_workname", { detail: { name: newname, id: svg_id } }));
+        }
+        else {
+            this.innerHTML = this.getAttribute("data-workName");
+        }
+    });
+
+    
+    $("#tags").autocomplete({
+        source: availableTags
+    });
 });

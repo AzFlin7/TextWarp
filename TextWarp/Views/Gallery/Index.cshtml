@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="d-flex" style="height: 2rem;">
-                <div class="col-md-9 col-sm-6 d-flex align-items-center">
+                <div class="col-md-9 col-sm-6 d-flex align-items-center" id="msgWrapper" style="text-align:center;color:#ff0000;visibility:hidden;">
                 </div>
                 <div id="select_sub_menu" class="align-items-center col-md-3 col-sm-6" style="display:none;padding-left: 3rem;color: #dad8dd;font-size: 14px;">
                     <div id="act_duplicate" style="padding: 0 0.5rem;color:#a1a1a2;cursor:pointer;">
@@ -67,7 +67,7 @@
                                 </div>
                                 @if (!String.IsNullOrEmpty(saved_svg.SvgfileName))
                                 {
-                                    <img src="~/uploads/@saved_svg.SvgfileName" style="max-width: 100%;max-height: 100%;">
+                                    <img src="~/uploads/@saved_svg.SvgfileName?v=@saved_svg.Version" style="max-width: 100%;max-height: 100%;">
                                 }
                                 else
                                 {
@@ -75,7 +75,7 @@
                                 }
                             </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
-                                <div style="color:#dad8dd;font-size: 14px;margin-top: 8px;">@saved_svg.WorkName</div>
+                                <div class="editable-object" data-workName="@saved_svg.WorkName" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">@saved_svg.WorkName</div>
                                 <div style="color:#dad8dd;font-size: 14px;">@saved_svg.UpdatedAt</div>
                             </div>
                         </div>

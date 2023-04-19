@@ -336,7 +336,7 @@ a:link, a:visited, a:hover {
     color: #dad8dd;
 }
 
-.search_input {
+.search-input {
     border-style: none;
     outline: none;
     color: #dad8dd;
@@ -346,7 +346,7 @@ a:link, a:visited, a:hover {
     margin-right: 10px;
     padding-left: 10px;
 }
-.search_input:focus{
+.search-input:focus{
     background-color: #9f9ea0;
 }
 
@@ -879,4 +879,34 @@ a:link, a:visited, a:hover {
 .action-container::-webkit-scrollbar-thumb {
     background: #585858;
     border-radius: 5px;
+}
+.autocomplete-suggestions {
+    border: 1px solid #999;
+    border-radius: 8px;
+    background: #FFF;
+    overflow: auto;
+}
+
+.autocomplete-suggestion {
+    padding: 2px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.autocomplete-selected {
+    background: #F0F0F0;
+}
+
+.autocomplete-suggestions strong {
+    font-weight: normal;
+    color: #3399FF;
+}
+
+.autocomplete-group {
+    padding: 2px 5px;
+}
+
+.autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
 }

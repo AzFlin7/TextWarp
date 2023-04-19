@@ -3,6 +3,7 @@ using System.Data;
 using TextWarp.Models.Database;
 using TextWarp.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Policy;
 
 namespace TextWarp.Controllers
 {
@@ -172,6 +173,27 @@ namespace TextWarp.Controllers
             catch(Exception exp)
             {
                 return Json(new { status = "failed", msg = "Exception Raised." });
+            }
+        }
+
+        [Route("gallery/getWorkNameList")]
+        public ActionResult getWorkNameList()
+        {
+            try
+            {
+                var workNames = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderBy(s => s.WorkName).Select(s => s.WorkName).ToList();
+                return Json(new
+                {
+                    status = "success",
+                    workNames = workNames
+                }) ;
+            }
+            catch(Exception e)
+            {
+                return Json(new
+                {
+                    status = "failed"
+                });
             }
         }
     }

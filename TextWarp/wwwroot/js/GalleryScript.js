@@ -27,6 +27,22 @@
     }
     var availableNames = [];
 
+    $.ajax({
+        url: "/gallery/getWorkNameList",
+        type: "post",
+        success: function (res) {
+            if (res.status == "success") {
+                availableNames = res.workNames;
+                $('#search_input').autocomplete({
+                    lookup: availableNames,
+                    onSelect: function (suggestion) {
+                        alert('You selected: ' + suggestion.value);
+                    }
+                });
+            }
+        }
+    })
+
     window.addEventListener("change_workname", (e) => {
         $.ajax({
             url: "/gallery/rename",
@@ -268,8 +284,4 @@
         }
     });
 
-    
-    $("#tags").autocomplete({
-        source: availableTags
-    });
 });

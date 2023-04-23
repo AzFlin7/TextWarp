@@ -17,6 +17,13 @@ namespace TextWarp.Controllers
         }
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [Route("gallery/getData/")]
+        [HttpGet]
+        public ActionResult getData()
+        {
             try
             {
                 var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
@@ -31,43 +38,13 @@ namespace TextWarp.Controllers
                         }
                     }
                     saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderByDescending(s => s.UpdatedAt).ToList();
-                    return View(saved_svgs);
+                    return Json(new {status = "success", saved_svgs = saved_svgs});
                 }
-                return View();
+                return Json(new {status = "success", msg = "There is no svgs."});
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                return View();
-            }
-        }
-
-        [Route("gallery/createNew/{words}/{styleIndex}")]
-        [HttpGet]
-        public ActionResult createNew(string words, int styleIndex)
-        {
-            try
-            {
-                var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
-                var name = "Untitled" + "_" + DateTime.Now;
-                var WarpedSvg = new WarpedSvg();
-                WarpedSvg.CreatedAt = DateTime.Now;
-                WarpedSvg.UpdatedAt = DateTime.Now;
-                WarpedSvg.Words = words;
-                WarpedSvg.StyleIndex = styleIndex;
-                WarpedSvg.SvgfileName = "";
-                WarpedSvg.WorkName = name;
-                WarpedSvg.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
-                WarpedSvg.Version = 0;
-                _context.WarpedSvgs.Add(WarpedSvg);
-                _context.SaveChanges();
-
-                var savedSvg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.WorkName.Equals(name))).Single();
-
-                return Json(new { status = "success", id = savedSvg.Id });
-            }
-            catch(Exception e)
-            {
-                return Json(new { status = "error", id = e.Message });
+                return Json(new { status = "fail", msg = "Raised some errors." });
             }
         }
 

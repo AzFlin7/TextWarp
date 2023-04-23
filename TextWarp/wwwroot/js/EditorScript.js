@@ -75,6 +75,7 @@
     });
 
     $("#btn_save").click(function () {
+        $("#svg_container").find(".currentActivePath").removeClass("currentActivePath");
         var svg_data = document.getElementById("svg_container").outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();

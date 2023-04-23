@@ -7,14 +7,16 @@
 }
 <div class="d-flex flex-column h-100" id="gallery_view">
     <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px">
-        <div class="p-3">
-            <a href="#" style="font-size: 28px; font-weight: bold; color: #ffffff; text-decoration:none;">TextWarp</a>
+        <div style="height:100%;width: 10rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
+            <a href="#" class="logo-container">
+                <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
+            </a>
         </div>
     </div>
     <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
         @*gallery*@
         <div id="galleryView" class="sub-view d-flex flex-column w-100 h-100" style="background-color:#76787c;padding:5rem 5rem;overflow:auto;">
-            <div class="d-flex" style="height: 2rem;">
+            <div class="d-flex" style="height: 36px;">
                 <div class="col-md-9 col-sm-6 d-flex align-items-center" style="background-color:#2f2d33;overflow:hidden;border-radius:10px;">
                     <div style="margin: 0 0.5rem;">
                         <i class="fa fa-search" style="font-size: 14px;color:#dad8dd"></i>
@@ -45,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 2rem 0;">
+            <div class="gallery-content d-flex overflow-auto flex-wrap" style="padding: 2rem 0.5rem;">
                 <div id="createNewWarp">
                     <div class="gallery-item-img d-flex align-items-center justify-content-center" style="background: #dad8dd;">
                         <img src="~/imgs/plus_item.png" style="max-width: 100%;max-height: 100%;">
@@ -65,14 +67,7 @@
                                         <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
                                     </div>
                                 </div>
-                                @if (!String.IsNullOrEmpty(saved_svg.SvgfileName))
-                                {
-                                    <img src="~/uploads/@saved_svg.SvgfileName?v=@saved_svg.Version" style="max-width: 100%;max-height: 100%;">
-                                }
-                                else
-                                {
-                                    <img style="max-width: 100%;max-height: 100%;" src="~/imgs/heart.svg" />
-                                }
+                                <img src="~/uploads/@saved_svg.SvgfileName?v=@saved_svg.Version" style="max-width: 100%;max-height: 100%;">
                             </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
                                 <div class="editable-object" data-workName="@saved_svg.WorkName" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">@saved_svg.WorkName</div>
@@ -81,61 +76,6 @@
                         </div>
                     }
                 }
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="d-none flex-column h-100" id="newWarp_view">
-    <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px">
-        <div class="p-3">
-            <a href="/gallery/" style="font-size: 28px; font-weight: bold; color: #ffffff;text-decoration:none;">TextWarp</a>
-        </div>
-        <div class="p-3">
-            <a href="/gallery/" style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem; text-decoration:none;">Gallery</a>
-            <a style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem;text-decoration:none;">Sign in</a>
-        </div>
-    </div>
-    <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
-        @*word input view*@
-        <div id="wordInputView" class="sub-view align-items-center d-flex justify-content-around w-100 h-100">
-            <div class="align-items-center d-flex flex-column col-sm-12 col-md-9 col-lg-8 col-xl-6">
-                <div>
-                    <label style="font-size: 28px;color: #9a9a9a;">Enter up to 2 words here</label>
-                </div>
-                <div class="align-items-center d-flex flex-column w-100" style="padding: 85px 10px 50px 10px;">
-                    <input id="warp_words" name="tags" placeholder="Type a word and hit enter" value="" style="width:100%">
-                    <input name="inputedWords" type="hidden" value="" />
-                    <div id="messageWraper" style="color:#ff0000;height: 35px;padding: 10px;"></div>
-                </div>
-                <div>
-                    <button id="wordsInput" class="btn-next">Next</button>
-                </div>
-            </div>
-        </div>
-        @*style choose view*@
-        <div id="styleChooseView" class="sub-view d-none align-items-center d-flex justify-content-around w-100 h-100">
-            <div class="align-items-center d-flex flex-column col-sm-12 col-md-9 col-lg-8 col-xl-8">
-                <div>
-                    <label style="font-size: 28px;color: #9a9a9a;">Select your prefered shape</label>
-                </div>
-                <div class="w-100 d-flex justify-content-between align-items-center" style="height: 300px;">
-                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="0" style="position:relative; width:27%;">
-                        <img src="~/imgs/circle.svg" style="max-width:85%;position:absolute;" />
-                        <img src="~/imgs/circle_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
-                    </div>
-                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="1" style="position:relative; width:35%;">
-                        <img src="~/imgs/ellipse.svg" style="max-width:85%;position:absolute;" />
-                        <img src="~/imgs/ellipse-shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
-                    </div>
-                    <div class="style-tab h-100 d-flex align-items-center justify-content-center" data-pathIndex="2" style="position:relative; width:27%;">
-                        <img src="~/imgs/template_heart.svg" style="max-width:77%;position:absolute;" />
-                        <img src="~/imgs/heart_shadow.svg" style="display:none;max-width:100%;position:absolute;visibility: visible;opacity: 0.4;" />
-                    </div>
-                </div>
-                <div style="z-index:101;">
-                    <div id="chooseStyle" class="align-items-center btn-next d-flex justify-content-center" style="text-decoration:none;">Next</div>
-                </div>
             </div>
         </div>
     </div>

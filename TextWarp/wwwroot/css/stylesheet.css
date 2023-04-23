@@ -346,9 +346,6 @@ a:link, a:visited, a:hover {
     margin-right: 10px;
     padding-left: 10px;
 }
-.search-input:focus{
-    background-color: #9f9ea0;
-}
 
 .fullscreen-box-content {
     margin-left: 70px;
@@ -405,17 +402,25 @@ a:link, a:visited, a:hover {
     src: url("../fonts/Lato-Regular.ttf");
 }
 .btn-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 20px;
     width: 110px;
     height: 40px;
     color: #ffffff;
     border: none;
-    background-color: #00aeef;
+    background-color: #6f6d70;
     font-family: Lato;
+    cursor: default;
+}
+.btn-next.active {
+    background-color: #00aeef;
+    cursor:pointer;
 }
 .side-toolBar {
     border-radius: 5px;
-    padding:10px 5px;
+    padding: 10px 5px;
     background-color: #6f6d70;
 }
 .toolBox-theme {
@@ -500,17 +505,17 @@ a:link, a:visited, a:hover {
     width: 100%;
 }
 
+.brightnessValueContainer {
+    width: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
 .brightnessSlider::-webkit-slider-runnable-track {
     background: linear-gradient(to right, #000, #fff);
     content: '';
     height: 3px;
     pointer-events: none;
-}
-
-.brightnessValueContainer {
-    width: 100%;
-    padding-top: 12px;
-    padding-bottom: 12px;
 }
 
 .brightnessSlider::-webkit-slider-thumb {
@@ -801,65 +806,6 @@ a:link, a:visited, a:hover {
     opacity: 0.7;
     z-index: 201;
 }
-.loader {
-    width: 20em;
-    height: 20em;
-    font-size: 10px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.loader .face {
-    position: absolute;
-    border-radius: 50%;
-    border-style: solid;
-    animation: animate 3s linear infinite;
-}
-
-.loader .face:nth-child(1) {
-    width: 100%;
-    height: 100%;
-    color: gold;
-    border-color: currentColor transparent transparent currentColor;
-    border-width: 0.2em 0.2em 0em 0em;
-    --deg: -45deg;
-    animation-direction: normal;
-}
-
-.loader .face:nth-child(2) {
-    width: 70%;
-    height: 70%;
-    color: lime;
-    border-color: currentColor currentColor transparent transparent;
-    border-width: 0.2em 0em 0em 0.2em;
-    --deg: -135deg;
-    animation-direction: reverse;
-}
-
-.loader .face .circle {
-    position: absolute;
-    width: 50%;
-    height: 0.1em;
-    top: 50%;
-    left: 50%;
-    background-color: transparent;
-    transform: rotate(var(--deg));
-    transform-origin: left;
-}
-
-.loader .face .circle::before {
-    position: absolute;
-    top: -0.5em;
-    right: -0.5em;
-    content: '';
-    width: 1em;
-    height: 1em;
-    background-color: currentColor;
-    border-radius: 50%;
-    box-shadow: 0 0 2em, 0 0 4em, 0 0 6em, 0 0 8em, 0 0 10em, 0 0 0 0.5em rgba(255, 255, 0, 0.1);
-}
 
 @keyframes animate {
     to {
@@ -909,4 +855,36 @@ a:link, a:visited, a:hover {
 .autocomplete-group strong {
     display: block;
     border-bottom: 1px solid #000;
+}
+.editable-object {
+    color: #dad8dd;
+    font-size: 14px;
+    margin-top: 8px;
+    width: 100%;
+    text-align: center;
+}
+.logo-container {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#favourites::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #000, #fff);
+    content: '';
+    height: 3px;
+    pointer-events: none;
+}
+
+#favourites::-webkit-slider-thumb {
+    height: 12px;
+    width: 12px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 3px 0 -2px #c1c1c1;
+    margin-top: -5px;
+    border: 0.5px solid #dddddd;
 }

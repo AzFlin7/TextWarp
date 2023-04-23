@@ -181,6 +181,9 @@
         window.location.href = "/warp/editor?id=" + svg_id;
     });
 
+    $("#editInfo").click(function () {
+        window.location.href = "/warp/createnew/";
+    });
     $("#addFavourite").click(function () {
         
         var wraper = document.createElement("div");
@@ -217,4 +220,15 @@
             return;
         }
     });
+
+    $("#favourites").on("click", "svg", function () {
+        let currentId = $(".slick-current")[0].children[0].children[0].getAttribute("id");
+        let tempNode = document.createElement("div");
+        tempNode.classList.add("vcarousel-item");
+        tempNode.style.width = "100%";
+        tempNode.setAttribute("id", currentId);
+        tempNode.innerHTML = this.outerHTML;
+        $(".slick-current")[0].innerHTML = "";
+        $(".slick-current")[0].append(tempNode);
+    })
 })

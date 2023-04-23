@@ -189,7 +189,17 @@
             $(shower_id).text(intValue + "%")
         }
         if (this.id == "sli_stroke_gradientAngle") {
-            setCurrentGradient();
+            var gradientDirection = this.value;
+            gradientDirection = "rotate(" + parseInt(gradientDirection) + ")";
+            $("#sampleGradient").attr("gradientTransform", gradientDirection);
+            $("#first_color").attr("stop-color", gradients[currentGradientIndex][0]);
+            $("#second_color").attr("stop-color", gradients[currentGradientIndex][1]);
+
+            var gradientImage = "url(#sampleGradient)";
+
+            for (const path of $(".warpedPath")) {
+                path.setAttribute("fill", gradientImage);
+            }
         }
         if (this.id == "sli_stroke_brightness" || this.id == "sli_stroke_hue" || this.id == "sli_stroke_saturation") {
             brightness = parseInt($("#sli_stroke_brightness")[0].value);
@@ -253,8 +263,7 @@
         else if ($("#svg_container")[0].children.length == 3) {
             initailState = {
                 type: "set_palette",
-                first_color: $("#svg_container")[0].children[1].getAttribute("fill"),
-                second_color: $("#svg_container")[0].children[2].getAttribute("fill")
+                colors: [$("#svg_container")[0].children[1].getAttribute("fill"), $("#svg_container")[0].children[2].getAttribute("fill")]
             }
         }
         $('#svg_container')[0].classList.add("edit-svg");
@@ -291,16 +300,18 @@
                 $("#svg_container")[0].children[action.pathIndex].setAttribute("fill", action.fill);
                 break;
             case "set_palette":
-                $("#svg_container")[0].children[1].setAttribute("fill", action.first_color);
-                $("#svg_container")[0].children[2].setAttribute("fill", action.second_color);
+                for (let i = 1; i < $("#svg_container")[0].children.length; i++) {
+                    $("#svg_container")[0].children[i].setAttribute("fill", action.colors[i-1]);
+                }
                 break;
             case "set_gradient":
                 $("#sampleGradient").attr("gradientTransform", action.rotate);
-                $("#first_color").attr("stop-color", action.first_color);
-                $("#second_color").attr("stop-color", action.second_color);
+                $("#first_color").attr("stop-color", action.colors[0]);
+                $("#second_color").attr("stop-color", action.colors[1]);
                 var gradientImage = "url(#sampleGradient)";
-                $("#svg_container")[0].children[1].setAttribute("fill", gradientImage);
-                $("#svg_container")[0].children[2].setAttribute("fill", gradientImage);
+                for (let i = 1; i < $("#svg_container")[0].children.length; i++) {
+                    $("#svg_container")[0].children[i].setAttribute("fill", gradientImage);
+                }
                 break;
         }
     }
@@ -400,7 +411,12 @@
         $("#second_color").attr("stop-color", gradients[currentGradientIndex][1]);
 
         var gradientImage = "url(#sampleGradient)";
-        var action = { type: "set_gradient", rotate: gradientDirection, first_color: gradients[currentGradientIndex][0], second_color: gradients[currentGradientIndex][1] };
+
+        for (const path of $(".warpedPath")) {
+            path.setAttribute("fill", gradientImage);
+        }
+
+        var action = { type: "set_gradient", rotate: gradientDirection, colors: [gradients[currentGradientIndex][0], gradients[currentGradientIndex][1]] };
         actionHistory.push(action);
         currentActionIndex = actionHistory.length - 1;
         if (currentActionIndex > 0) {
@@ -408,9 +424,6 @@
         }
         if (currentActionIndex < actionHistory.length - 2) {
             $("#redo").addClass("active");
-        }
-        for (const path of $(".warpedPath")) {
-            path.setAttribute("fill", gradientImage);
         }
     }
 
@@ -431,7 +444,7 @@
             }
             index++;
         }
-        var action = { type: "set_palette", first_color: palettes[currentPaletteIndex][0], second_color: palettes[currentPaletteIndex][1] };
+        var action = { type: "set_palette", colors: [palettes[currentPaletteIndex][0], palettes[currentPaletteIndex][1]] };
         actionHistory.push(action);
         currentActionIndex = actionHistory.length - 1;
         if (currentActionIndex > 0) {

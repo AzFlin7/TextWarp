@@ -57,7 +57,42 @@ namespace TextWarp.Controllers
                 return View();
             }
         }
-        
+
+        [Route("warp/addNew/{words}/{styleIndex}")]
+        [HttpGet]
+        public ActionResult addNew(string words, int styleIndex)
+        {
+            try
+            {
+                var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
+                var name = "Untitled" + "_" + DateTime.Now;
+                var WarpedSvg = new WarpedSvg();
+                WarpedSvg.CreatedAt = DateTime.Now;
+                WarpedSvg.UpdatedAt = DateTime.Now;
+                WarpedSvg.Words = words;
+                WarpedSvg.StyleIndex = styleIndex;
+                WarpedSvg.SvgfileName = "";
+                WarpedSvg.WorkName = name;
+                WarpedSvg.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
+                WarpedSvg.Version = 0;
+                _context.WarpedSvgs.Add(WarpedSvg);
+                _context.SaveChanges();
+
+                var savedSvg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.WorkName.Equals(name))).Single();
+
+                return Json(new { status = "success", id = savedSvg.Id });
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "error", id = e.Message });
+            }
+        }
+
+        public IActionResult CreateNew()
+        {
+            return View();
+        }
+
         [HttpGet]
         public ActionResult GeneratePalettes()
         {

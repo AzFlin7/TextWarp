@@ -3,16 +3,75 @@
     $("#loader").removeClass("d-none");
     $("#loader").addClass("d-flex");
 
-    $.ajax({
-        url: "/gallery/getData/",
-        type: "get",
-        success: function (res) {
-            if (res.status == "success") {
-                var container = $(".gallery-content")[0];
-                for (let i = 0; i < res.saved_svgs.length; i++) {
-                    var svg = res.saved_svgs[i];
-                    availableNames.push(svg.workName);
-                    var newDoc = $(`<div class="gallery-item">
+    function init() {
+        $.ajax({
+            url: "/gallery/getData/",
+            type: "post",
+            data: "",
+            success: function (res) {
+                if (res.status == "success") {
+                    drawContent(res.saved_svgs);
+                    $('#search_input').autocomplete({
+                        lookup: availableNames,
+                    });
+
+                    $(".check_container").on("click", function (e) {
+                        e.stopPropagation();
+                        for (const check of $(".check_container")) {
+                            check.children[0].classList.remove("active");
+                        }
+                        if (this.children[0].classList.contains("active")) {
+                            this.children[0].classList.remove("active");
+                        }
+                        else {
+                            this.children[0].classList.add("active");
+                        }
+                    });
+
+                    $(".gallery-item-overlay").click(function (e) {
+                        e.stopPropagation();
+                        for (const check of $(".check_container")) {
+                            check.children[0].classList.remove("active");
+                        }
+                        if ($(this).siblings()[0].children[0].classList.contains("active")) {
+                            $(this).siblings()[0].children[0].classList.remove("active");
+                        }
+                        else {
+                            $(this).siblings()[0].children[0].classList.add("active");
+                        }
+                    });
+
+                    $(document).on("click", ".gallery-content", function (e) {
+                        e.stopPropagation();
+                        if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
+                            $("#select_sub_menu").removeClass("d-flex");
+                            $(".gallery-item-overlay").removeClass("active");
+                            $(".check_container").removeClass('active');
+                        }
+                    });
+
+                    $(".gallery-content").on("click", ".gallery-item-img", function (e) {
+                        e.stopPropagation();
+                        var svg_id = this.parentElement.children[0].getAttribute("data-id");
+                        window.location.href = "/warp/editor/" + svg_id;
+                    })
+
+                    $("#loader").removeClass("d-flex");
+                    $("#loader").addClass("d-none");
+                }
+                else {
+                    alert(res.msg);
+                }
+            }
+        })
+    }
+
+    function drawContent(contentData) {
+        var container = $(".gallery-content")[0];
+        for (let i = 0; i < contentData.length; i++) {
+            var svg = contentData[i];
+            availableNames.push(svg.workName);
+            var newDoc = $(`<div class="gallery-item">
                         <input type="hidden" data-id="`+ svg.id + `" />
                         <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
                         <div class="gallery-item-overlay"></div>
@@ -29,65 +88,9 @@
                                 <div style="color:#dad8dd;font-size: 14px;">`+ svg.createdAt + `</div>
                             </div>
                         </div>`);
-                    container.appendChild(newDoc[0]);
-                }
-                
-                $('#search_input').autocomplete({
-                    lookup: availableNames,
-                    onSelect: function (suggestion) {
-                        console.log(suggestion);
-                    }
-                });
-
-                $(".check_container").on("click", function (e) {
-                    e.stopPropagation();
-                    for (const check of $(".check_container")) {
-                        check.children[0].classList.remove("active");
-                    }
-                    if (this.children[0].classList.contains("active")) {
-                        this.children[0].classList.remove("active");
-                    }
-                    else {
-                        this.children[0].classList.add("active");
-                    }
-                });
-
-                $(".gallery-item-overlay").click(function (e) {
-                    e.stopPropagation();
-                    for (const check of $(".check_container")) {
-                        check.children[0].classList.remove("active");
-                    }
-                    if ($(this).siblings()[0].children[0].classList.contains("active")) {
-                        $(this).siblings()[0].children[0].classList.remove("active");
-                    }
-                    else {
-                        $(this).siblings()[0].children[0].classList.add("active");
-                    }
-                });
-
-                $(document).on("click", ".gallery-content", function (e) {
-                    e.stopPropagation();
-                    if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
-                        $("#select_sub_menu").removeClass("d-flex");
-                        $(".gallery-item-overlay").removeClass("active");
-                        $(".check_container").removeClass('active');
-                    }
-                });
-
-                $(".gallery-content").on("click", ".gallery-item-img", function (e) {
-                    e.stopPropagation();
-                    var svg_id = this.parentElement.children[0].getAttribute("data-id");
-                    window.location.href = "/warp/editor/" + svg_id;
-                })
-
-                $("#loader").removeClass("d-flex");
-                $("#loader").addClass("d-none");
-            }
-            else {
-                alert(res.msg);
-            }
+            container.appendChild(newDoc[0]);
         }
-    })
+    }
 
     window.addEventListener("change_workname", (e) => {
         $.ajax({
@@ -252,4 +255,90 @@
             this.innerHTML = this.getAttribute("data-workName");
         }
     });
+
+    $("#search_input").on("keyup", function (event) {
+        if (event.target.value != "") {
+            if (event.keyCode === 13) {
+                $("#loader").removeClass("d-none");
+                $("#loader").addClass("d-flex");
+                $.ajax({
+                    url: "/gallery/getData/",
+                    type: "post",
+                    data: {
+                        WorkName: event.target.value,
+                    },
+                    success: function (res) {
+                        if (res.status == "success") {
+                            let num_child = $(".gallery-content")[0].children.length;
+                            for (let i = 1; i < num_child; i++) {
+                                let tempNode = $(".gallery-content")[0].children[1];
+                                $(".gallery-content")[0].removeChild(tempNode);
+                            }
+                            if (res.saved_svgs != null) {
+                                drawContent(res.saved_svgs);
+
+                                $(".check_container").on("click", function (e) {
+                                    e.stopPropagation();
+                                    for (const check of $(".check_container")) {
+                                        check.children[0].classList.remove("active");
+                                    }
+                                    if (this.children[0].classList.contains("active")) {
+                                        this.children[0].classList.remove("active");
+                                    }
+                                    else {
+                                        this.children[0].classList.add("active");
+                                    }
+                                });
+
+                                $(".gallery-item-overlay").click(function (e) {
+                                    e.stopPropagation();
+                                    for (const check of $(".check_container")) {
+                                        check.children[0].classList.remove("active");
+                                    }
+                                    if ($(this).siblings()[0].children[0].classList.contains("active")) {
+                                        $(this).siblings()[0].children[0].classList.remove("active");
+                                    }
+                                    else {
+                                        $(this).siblings()[0].children[0].classList.add("active");
+                                    }
+                                });
+
+                                $(document).on("click", ".gallery-content", function (e) {
+                                    e.stopPropagation();
+                                    if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
+                                        $("#select_sub_menu").removeClass("d-flex");
+                                        $(".gallery-item-overlay").removeClass("active");
+                                        $(".check_container").removeClass('active');
+                                    }
+                                });
+
+                                $(".gallery-content").on("click", ".gallery-item-img", function (e) {
+                                    e.stopPropagation();
+                                    var svg_id = this.parentElement.children[0].getAttribute("data-id");
+                                    window.location.href = "/warp/editor/" + svg_id;
+                                })
+                            }
+
+                            $("#loader").removeClass("d-flex");
+                            $("#loader").addClass("d-none");
+                        }
+                        else {
+                            alert(res.msg);
+                        }
+                    }
+                })
+            }
+        }
+        else {
+
+        }
+    });
+
+    $("#search_input").on("input", function () {
+        if (this.value == "") {
+            init();
+        }
+    });
+
+    init();
 });

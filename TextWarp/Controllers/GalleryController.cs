@@ -31,7 +31,7 @@ namespace TextWarp.Controllers
                 {
                     var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.WorkName.Contains(workSearchItem.WorkName)).ToList();
                     if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs });
-                    return Json(new { status = "success", msg = "There is no svgs." });
+                    return Json(new { status = "success", msg = "There are no svgs." });
                 }
                 else
                 {
@@ -49,12 +49,12 @@ namespace TextWarp.Controllers
                         saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderByDescending(s => s.UpdatedAt).ToList();
                         return Json(new { status = "success", saved_svgs = saved_svgs });
                     }
-                    return Json(new { status = "success", msg = "There is no svgs." });
+                    return Json(new { status = "success", msg = "There are no svgs." });
                 }
             }
             catch (Exception e)
             {
-                return Json(new { status = "fail", msg = "Raised some errors." });
+                return Json(new { status = "fail", msg = e.ToString() });
             }
         }
 

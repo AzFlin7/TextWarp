@@ -60,7 +60,7 @@
                     $("#loader").addClass("d-none");
                 }
                 else {
-                    alert(res.msg);
+                    console.error(res.msg);
                 }
             }
         })

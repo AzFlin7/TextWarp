@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     var availableNames = [];
-    $("#loader").removeClass("d-none");
     $("#loader").addClass("d-flex");
 
     function init() {
@@ -57,7 +56,6 @@
                     })
 
                     $("#loader").removeClass("d-flex");
-                    $("#loader").addClass("d-none");
                 }
                 else {
                     console.error(res.msg);
@@ -136,7 +134,6 @@
             }
         }
         if (svg_id != -1) {
-            $("#loader").removeClass("d-none");
             $("#loader").addClass("d-flex");
             $.ajax({
                 url: "/gallery/duplicate/" + svg_id,
@@ -165,7 +162,6 @@
                         </div>`);
                         newDoc.insertBefore(bodyNode);
                         $("#loader").removeClass("d-flex");
-                        $("#loader").addClass("d-none");
                     }
                     else {
                         alert("Raised unkown exceptions on the Database side");
@@ -186,7 +182,6 @@
             }
         }
         if (svg_id != -1) {
-            $("#loader").removeClass("d-none");
             $("#loader").addClass("d-flex");
             $.ajax({
                 url: "/gallery/delete/" + svg_id,
@@ -196,7 +191,6 @@
                     if (res.status == "success") {
                         selected_svg.parentElement.remove();
                         $("#loader").removeClass("d-flex");
-                        $("#loader").addClass("d-none");
                     }
                 },
             });
@@ -259,7 +253,6 @@
     $("#search_input").on("keyup", function (event) {
         if (event.target.value != "") {
             if (event.keyCode === 13) {
-                $("#loader").removeClass("d-none");
                 $("#loader").addClass("d-flex");
                 $.ajax({
                     url: "/gallery/getData/",
@@ -320,7 +313,6 @@
                             }
 
                             $("#loader").removeClass("d-flex");
-                            $("#loader").addClass("d-none");
                         }
                         else {
                             alert(res.msg);

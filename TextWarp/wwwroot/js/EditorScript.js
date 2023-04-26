@@ -50,7 +50,6 @@
     });
 
     $("#svg_download").click(function () {
-        $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         var svg = $("#svg_container")[0];
         var serializer = new XMLSerializer();
@@ -71,7 +70,6 @@
         theAnchor[0].click();
         theAnchor.remove();
         $("#loader").removeClass("d-flex");
-        $("#loader").addClass("d-none");
     });
 
     $("#btn_save").click(function () {
@@ -80,7 +78,6 @@
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
         formData.append("svg_file", blob, 'warp-text.svg');
-        $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         $.ajax({
             url: "/warp/save/" + svg_id,
@@ -90,7 +87,6 @@
             contentType: false,
             success: function (res) {
                 $("#loader").removeClass("d-flex");
-                $("#loader").addClass("d-none");
                 if (res.status == "failed") {
                     alert("Save failed.")
                 }

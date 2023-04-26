@@ -37,7 +37,6 @@
                 $("#up").addClass("d-none");
             }
             $("#loader").removeClass("d-flex");
-            $("#loader").addClass("d-none");
         }
     });
 
@@ -103,7 +102,6 @@
     function initial() {
         controlPoints_pair = [];
         colorPair = [];
-        $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         for (var i = 0; i < 100; i++) {
             var controlPoints = splitPath(styleIndex, words);
@@ -156,7 +154,6 @@
         if (currentSlideIndex + 2 > currentWarpIndex) {
             currentWarpIndex++;
             currentColorIndex++;
-            $("#loader").removeClass("d-none");
             $("#loader").addClass("d-flex");
             newWarp();
         }

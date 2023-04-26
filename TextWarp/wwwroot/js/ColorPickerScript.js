@@ -177,7 +177,6 @@
     });
 
     $("#generatePalettes").on("click", () => {
-        $("#loader").removeClass("d-none");
         $("#loader").addClass("d-flex");
         generatePalettes();
     });
@@ -370,7 +369,6 @@
                         row.setAttribute("id", index);
                         palettes_container.appendChild(row);
                     };
-                    $("#loader").removeClass("d-flex");
                     $("#loader").addClass("d-none");
                 }
                 else {

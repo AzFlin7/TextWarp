@@ -9,6 +9,9 @@
             type: "post",
             data: "",
             success: function (res) {
+                $("#loader").removeClass("d-flex");
+                $("#loader").addClass("d-none");
+
                 if (res.status == "success") {
                     drawContent(res.saved_svgs);
                     $('#search_input').autocomplete({
@@ -55,9 +58,6 @@
                         var svg_id = this.parentElement.children[0].getAttribute("data-id");
                         window.location.href = "/warp/editor/" + svg_id;
                     })
-
-                    $("#loader").removeClass("d-flex");
-                    $("#loader").addClass("d-none");
                 }
                 else {
                     alert(res.msg);

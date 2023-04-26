@@ -9,7 +9,7 @@ tagify = new Tagify(inputElm, {
     originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(' ')
 });
 
-if (window.localStorage.getItem("warp_words") != "") {
+if (window.localStorage.getItem("warp_words") != "" && window.localStorage.getItem("warp_words") != null) {
     let tempWord = window.localStorage.getItem("warp_words");
     tagify.addTags(tempWord.split(" "));
 }

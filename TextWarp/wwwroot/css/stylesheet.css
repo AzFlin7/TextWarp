@@ -419,8 +419,8 @@ a:link, a:visited, a:hover {
     cursor:pointer;
 }
 .side-toolBar {
-    border-radius: 5px;
-    padding: 10px 5px;
+    border-radius: 8px;
+    padding: 10px 0;
     background-color: #6f6d70;
 }
 .toolBox-theme {
@@ -725,14 +725,15 @@ a:link, a:visited, a:hover {
 }
 .btn_redo {
     border: none;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    margin: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     padding: 0;
-    opacity:0.4;
+    opacity: 0.4;
 }
 .btn_redo.active{
     cursor:pointer;
@@ -766,6 +767,7 @@ a:link, a:visited, a:hover {
     font-size: 40px;
     color: #ffffff;
     cursor:pointer;
+    display:flex;
 }
 #up:hover {
     background: #0faeec;
@@ -888,4 +890,15 @@ a:link, a:visited, a:hover {
     box-shadow: 0 3px 0 -2px #c1c1c1;
     margin-top: -5px;
     border: 0.5px solid #dddddd;
+}
+.btn-head-action {
+    background: transparent;
+    position: relative;
+    border: none;
+    color: #ffffff;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    text-decoration: none;
+    z-index: 101;
+    cursor: pointer;
 }

@@ -1,9 +1,7 @@
 ﻿$(document).ready(function () {
     var svg_id = $("#svg_id").attr("data-id");
-    
     var words = $("#words").attr("data-words");
     var styleIndex = $("#styleIndex").attr("data-styleIndex");
-    
     var triggerButton = $("#btn_warpText")[0];
     var warpEndHandler = $("#btn_warpEndHandler")[0];
     var controlPoints_pair = [];
@@ -30,10 +28,8 @@
             }
             if (currentSlideIndex > 0) {
                 $("#up").removeClass("d-none");
-                $("#up").addClass("d-flex");
             }
             else {
-                $("#up").removeClass("d-flex");
                 $("#up").addClass("d-none");
             }
             $("#loader").removeClass("d-flex");
@@ -123,7 +119,6 @@
         currentWarpIndex = 0;
         currentColorIndex = 0;
 
-        $("#up").removeClass("d-flex");
         $("#up").addClass("d-none");
         newWarp();
     }
@@ -178,9 +173,6 @@
         window.location.href = "/warp/editor?id=" + svg_id;
     });
 
-    $("#editInfo").click(function () {
-        window.location.href = "/warp/createnew/";
-    });
     $("#addFavourite").click(function () {
         
         var wraper = document.createElement("div");

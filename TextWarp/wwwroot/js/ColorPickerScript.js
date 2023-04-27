@@ -266,7 +266,15 @@
             }
         }
         $('#svg_container')[0].classList.add("edit-svg");
-        $(".warpedPath").on("click", function () {
+
+        $("#svg_container").click(function () {
+            $(".toolBox-theme").removeClass("active");
+            $(".warpedPath").removeClass("currentActivePath");
+            window.localStorage.setItem("pathSelected", 0);
+        })
+
+        $(".warpedPath").on("click", function (e) {
+            e.stopPropagation();
             $(".warpedPath").removeClass("currentActivePath");
             $(this).addClass("currentActivePath");
             var color = this.getAttribute("fill");

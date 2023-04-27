@@ -15,16 +15,16 @@
 <div id="svgEditorView" class="sub-view d-flex align-items-center w-100 h-100">
     <div class="d-flex h-100 w-100">
         <div class="d-flex align-items-center h-100">
-            <div id="sideToolBar" class="d-flex flex-column justify-content-between" style="height: 30%;z-index:101;">
-                <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="width: 30px;height: 70%;">
-                    <div id="color-previewer" style="width: 20px;height:20px;border-radius:50%; background-color: #ec008c;cursor:pointer;">
+            <div id="sideToolBar" class="d-flex flex-column justify-content-between" style="height: 35%;width:40px;margin-left:1rem;">
+                <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 70%;">
+                    <div id="color-previewer" style="width: 20px;height:20px;border-radius:50%; background-color: #ec008c;cursor:pointer;z-index:101;">
                     </div>
-                    <img class="toolbar-icon" id="setting" src="~/imgs/setting.png">
-                    <img class="toolbar-icon" id="spana" src="~/imgs/spana.png">
+                    <img class="toolbar-icon" id="setting" src="~/imgs/setting.png" style="z-index:101;">
+                    <img class="toolbar-icon" id="spana" src="~/imgs/spana.png" style="z-index:101;">
                 </div>
-                <div class="d-flex flex-column align-items-center justify-content-between side-toolBar" style="height: 25%;min-height: 52px;">
-                    <div id="undo" title="undo" class="btn_redo"><img style="width:100%;height:100%" src="~/imgs/rotate-right.png" /></div>
-                    <div id="redo" title="redo" class="btn_redo"><img style="width:100%;height:100%" src="~/imgs/rotate-left.png" /></div>
+                <div class="align-items-center d-flex flex-column justify-content-center side-toolBar" style="height: 25%;min-height: 52px;padding: 0;">
+                    <div id="undo" title="undo" class="btn_redo" style="z-index:101;"><img style="width:100%;height:100%" src="~/imgs/ic_undo.svg" /></div>
+                    <div id="redo" title="redo" class="btn_redo" style="z-index:101;"><img style="width:100%;height:100%" src="~/imgs/ic_redo.svg" /></div>
                 </div>
             </div>
             <div class="d-flex align-items-center h-100" style="padding-left:20px;">

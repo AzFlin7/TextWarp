@@ -13,15 +13,16 @@
 </head>
 <body style="height:100vh;  width: 100vw;position:relative;overflow:hidden;">
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
-        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;z-index:101;">
+        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;">
             <div style="height:100%;width: 10rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
-                <a href="/gallery/" class="logo-container">
+                <a href="/gallery/" class="logo-container" style="z-index:101;">
                     <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
                 </a>
             </div>
-            <div class="p-3">
-                <a href="/gallery/" style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem; text-decoration:none;">Gallery</a>
-                <a style="background: transparent; border: none; color: #ffffff; margin-left: 0.5rem; margin-right: 0.5rem; text-decoration:none;">Sign in</a>
+            <div style="padding: 0 1rem;">
+                <a href="/warp/createnew/" class="btn-head-action">Edit Info</a>
+                <a href="/gallery/" class="btn-head-action">Gallery</a>
+                <a class="btn-head-action">Sign in</a>
             </div>
         </div>
         <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
@@ -37,7 +38,7 @@
             </linearGradient>
         </defs>
     </svg>
-    <div class="d-none align-items-center justify-content-center w-100 h-100" id="loader">
+    <div class="align-items-center justify-content-center w-100 h-100" id="loader">
         <div>
             <img src="~/imgs//loading.svg" style="width:80px;height:80px;"/>
         </div>

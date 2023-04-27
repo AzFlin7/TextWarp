@@ -42,8 +42,8 @@
         $("#tab_name").text(tab_name);
         $(this).addClass("active");
     });
-
-    $("#bodyOverlay").click(function () {
+   
+    $("#bodyOverlay").click(function(){
         $(".toolBox-theme").removeClass("active");
         $(".warpedPath").removeClass("currentActivePath");
         window.localStorage.setItem("pathSelected", 0);

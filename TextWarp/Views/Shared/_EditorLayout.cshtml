@@ -15,9 +15,17 @@
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
         <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;">
             <div style="height:100%;width: 10rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
-                <a href="/gallery/" class="logo-container" style="z-index:101;">
+                <a href="/gallery/" class="logo-container" style="z-index: 102;">
                     <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
                 </a>
+            </div>
+            <div class="align-items-center d-flex justify-content-center w-100" style="position:fixed;top: 0;left: 0;color:#fff;z-index:101;">
+                <div class="d-flex flex-column">
+                    <div class="align-items-center d-flex justify-content-between" id="save_send" style="width:160px;">
+                        <div>Save and send</div>
+                        <div><i class="fa-solid fa-angle-down"></i></div>
+                    </div>
+                </div>
             </div>
             <div style="padding: 0 1rem;">
                 <a href="/warp/createnew/" class="btn-head-action">Edit Info</a>
@@ -25,7 +33,15 @@
                 <a class="btn-head-action">Sign in</a>
             </div>
         </div>
-        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
+        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;position:relative;">
+            <div class="d-flex justify-content-center align-items-center w-100" style="position:absolute;top:auto;left:0;">
+                <div id="send_actions" style="width: 160px;">
+                    <div class="send-action">Apparel</div>
+                    <div class="send-action">Creator</div>
+                    <div class="send-action">Boxby</div>
+                    <div class="send-action">TrueBrush</div>
+                </div>
+            </div>
             @RenderBody()
         </div>
     </div>
@@ -38,7 +54,7 @@
             </linearGradient>
         </defs>
     </svg>
-    <div class="align-items-center justify-content-center w-100 h-100" id="loader">
+    <div class="align-items-center justify-content-center w-100 h-100" id="loader" style="background: transparent !important;opacity: 1;">
         <div>
             <img src="~/imgs//loading.svg" style="width:80px;height:80px;"/>
         </div>
@@ -53,5 +69,6 @@
 <script src="~/js/jquery.wheelcolorpicker.js"></script>
 <script src="~/js/toolcool-range-slider.min.js"></script>
 <script src="~/js/warp_asset/app.js"></script>
+<script src="~/js/ActionScript.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </html>

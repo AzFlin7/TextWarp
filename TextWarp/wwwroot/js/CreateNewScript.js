@@ -27,11 +27,11 @@ function onChange(e) {
     // outputs a String
     var values = e.target.value;
     values = values.split(" ");
-    $("#messageWraper").css("visibility", "hidden");
+    $("#messageWrapper").css("visibility", "hidden");
     if (values != "") {
         $("#wordsInput").addClass("active");
         if (values.length == 2) {
-            $("#messageWraper").css("visibility", "visible");
+            $("#messageWrapper").css("visibility", "visible");
             $(".tagify__input").addClass("d-none");
         }
         else {

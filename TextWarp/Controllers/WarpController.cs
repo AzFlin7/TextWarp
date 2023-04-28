@@ -174,5 +174,245 @@ namespace TextWarp.Controllers
                 return Json(new { status = "failed" });
             }
         }
+
+        [Route("warp/getLikes")]
+        [HttpGet]
+        public ActionResult GetLikes()
+        {
+            try
+            {
+                var like_svgs = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
+                if (like_svgs.Count > 0)
+                {
+                    return Json(new
+                    {
+                        status = "success",
+                        like_svgs = like_svgs
+                    });
+                }
+                return Json(new
+                {
+                    status = "succss",
+                    msg = "There is no like svg."
+                });
+            }
+            catch(Exception exp)
+            {
+                return Json(new
+                {
+                    status = "failed",
+                    msg = exp.Message
+                });
+            }
+        }
+
+        [Route("warp/saveLike/")]
+        [HttpPost]
+        public ActionResult SaveLike(SVGLikeModel svgLikeModel)
+        {
+            try
+            {
+                var svgImgPath = "";
+                var newSvgLike = new SvgLike();
+                var filename = Guid.NewGuid().ToString() + ".svg";
+                svgImgPath = "svgLikes\\" + filename;
+                filename = "svgLikes/" + filename;
+                newSvgLike.SvgfileName = filename;
+                newSvgLike.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
+                newSvgLike.Words = svgLikeModel.words;
+                newSvgLike.StyleIndex = svgLikeModel.styleIndex;
+                newSvgLike.CreatedAt = DateTime.Now;
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+                if (!Directory.Exists(filepath))
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+                if (!Directory.Exists(filepath + "\\svgLikes"))
+                {
+                    Directory.CreateDirectory(filepath + "\\svgLikes");
+                }
+
+                var imgfilepath = Path.Combine(filepath, svgImgPath);
+
+                if (imgfilepath != null)
+                {
+                    using (var stream = new FileStream(imgfilepath, FileMode.Create))
+                    {
+                        svgLikeModel.svg_file.CopyTo(stream);
+                    }
+                }
+
+                _context.SvgLikes.Add(newSvgLike);
+                _context.SaveChanges();
+
+                var saved_like = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName == filename)).Single();
+
+                return Json(new { status = "success", saved_svg = saved_like });
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "failed", msg = e.Message });
+            }
+        }
+
+        [Route("warp/deleteLike/{id?}")]
+        [HttpDelete]
+        public ActionResult DeleteLike(int id)
+        {
+            try
+            {
+                var selected_svg = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+                if(selected_svg != null)
+                {
+                    var fileName = selected_svg.SvgfileName;
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+                    fileName = Path.Combine(filepath, fileName);
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(fileName);
+                            _context.SvgLikes.Remove(selected_svg);
+                            _context.SaveChanges();
+
+                            return Json(new { status = "success" });
+                        }
+                        catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
+                    }
+                    else
+                    {
+                        return Json(new { status = "failed", msg = "File Not found!" });
+                    }
+                }
+                else
+                {
+                    return Json(new { status = "failed", msg = "Not found saved svg." });
+                }
+            }
+            catch (Exception exp)
+            {
+                return Json(new { status = "failed", msg = exp.Message });
+            }
+        }
+
+        [Route("warp/getDesigns")]
+        [HttpGet]
+        public ActionResult GetDesigns()
+        {
+            try
+            {
+                var design_svgs = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
+                if (design_svgs.Count > 0)
+                {
+                    return Json(new
+                    {
+                        status = "success",
+                        design_svgs = design_svgs
+                    });
+                }
+                return Json(new
+                {
+                    status = "succss",
+                    msg = "There is no like svg."
+                });
+            }
+            catch (Exception exp)
+            {
+                return Json(new
+                {
+                    status = "failed",
+                    msg = exp.Message
+                });
+            }
+        }
+
+        [Route("warp/saveDesign/")]
+        [HttpPost]
+        public ActionResult SaveDesign(SVGDesignModel svgDesignModel)
+        {
+            try
+            {
+                var svgImgPath = "";
+                var newDesign = new MyDesign();
+                var filename = Guid.NewGuid().ToString() + ".svg";
+                svgImgPath = "myDesigns\\" + filename;
+                filename = "myDesigns/" + filename;
+                newDesign.SvgfileName = filename;
+                newDesign.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
+                newDesign.Words = svgDesignModel.words;
+                newDesign.StyleIndex = svgDesignModel.styleIndex;
+                newDesign.CreatedAt = DateTime.Now;
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+                if (!Directory.Exists(filepath))
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+                if (!Directory.Exists(filepath + "\\myDesigns"))
+                {
+                    Directory.CreateDirectory(filepath + "\\myDesigns");
+                }
+
+                var imgfilepath = Path.Combine(filepath, svgImgPath);
+
+                if (imgfilepath != null)
+                {
+                    using (var stream = new FileStream(imgfilepath, FileMode.Create))
+                    {
+                        svgDesignModel.svg_file.CopyTo(stream);
+                    }
+                }
+
+                _context.MyDesigns.Add(newDesign);
+                _context.SaveChanges();
+
+                var saved_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName == filename)).Single();
+
+                return Json(new { status = "success", saved_Design = saved_Design });
+            }
+            catch (Exception e)
+            {
+                return Json(new { status = "failed", msg = e.Message });
+            }
+        }
+
+        [Route("warp/deleteDesign/{id?}")]
+        [HttpDelete]
+        public ActionResult DeleteDesign(int id)
+        {
+            try
+            {
+                var selected_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+                if (selected_Design != null)
+                {
+                    var fileName = selected_Design.SvgfileName;
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+                    fileName = Path.Combine(filepath, fileName);
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(fileName);
+                            _context.MyDesigns.Remove(selected_Design);
+                            _context.SaveChanges();
+
+                            return Json(new { status = "success" });
+                        }
+                        catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
+                    }
+                    else
+                    {
+                        return Json(new { status = "failed", msg = "File Not found!" });
+                    }
+                }
+                else
+                {
+                    return Json(new { status = "failed", msg = "Not found saved svg." });
+                }
+            }
+            catch (Exception exp)
+            {
+                return Json(new { status = "failed", msg = exp.Message });
+            }
+        }
     }
 }

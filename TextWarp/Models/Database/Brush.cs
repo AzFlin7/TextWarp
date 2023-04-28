@@ -8,5 +8,6 @@ namespace TextWarp.Models.Database
         public int Id { get; set; }
         public string UserId { get; set; } = null!;
         public string JsonPath { get; set; } = null!;
+        public int Version { get; set; }
     }
 }

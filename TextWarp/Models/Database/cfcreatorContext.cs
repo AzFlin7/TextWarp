@@ -30,6 +30,8 @@ namespace TextWarp.Models.Database
         public virtual DbSet<FavouriteWarpText> FavouriteWarpTexts { get; set; } = null!;
         public virtual DbSet<Font> Fonts { get; set; } = null!;
         public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
+        public virtual DbSet<MyDesign> MyDesigns { get; set; } = null!;
+        public virtual DbSet<SvgLike> SvgLikes { get; set; } = null!;
         public virtual DbSet<Upload> Uploads { get; set; } = null!;
         public virtual DbSet<WarpedSvg> WarpedSvgs { get; set; } = null!;
         public virtual DbSet<Warpfont> Warpfonts { get; set; } = null!;
@@ -182,6 +184,8 @@ namespace TextWarp.Models.Database
                 entity.Property(e => e.JsonPath).HasColumnType("text");
 
                 entity.Property(e => e.UserId).HasMaxLength(450);
+
+                entity.Property(e => e.Version).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<Clipart>(entity =>
@@ -205,17 +209,27 @@ namespace TextWarp.Models.Database
 
                 entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.JsonPath).HasColumnType("text");
+                entity.Property(e => e.JsonPath)
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
 
                 entity.Property(e => e.Name).HasMaxLength(256);
 
-                entity.Property(e => e.PreviewImg).HasColumnType("text");
+                entity.Property(e => e.PreviewImg)
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("('')");
 
-                entity.Property(e => e.State).HasColumnType("text");
+                entity.Property(e => e.State)
+                    .HasColumnType("text")
+                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.UserId).HasMaxLength(450);
+
+                entity.Property(e => e.Version).HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<FavouriteWarpText>(entity =>
@@ -272,6 +286,41 @@ namespace TextWarp.Models.Database
                     .HasColumnName("TUrl");
 
                 entity.Property(e => e.Twidth).HasColumnName("TWidth");
+            });
+
+            modelBuilder.Entity<MyDesign>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.SvgfileName)
+                    .HasMaxLength(450)
+                    .HasColumnName("SVGFileName");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(450)
+                    .HasColumnName("UserID");
+
+                entity.Property(e => e.Words)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<SvgLike>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.SvgfileName)
+                    .HasMaxLength(255)
+                    .IsUnicode(false)
+                    .HasColumnName("SVGFileName");
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(450)
+                    .HasColumnName("UserID");
+
+                entity.Property(e => e.Words)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Upload>(entity =>

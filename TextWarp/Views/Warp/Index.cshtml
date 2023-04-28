@@ -8,14 +8,13 @@
 @section Styles{
     <link href="~/css/slick.css" rel="stylesheet" />
 }
-
 <input type="hidden" id="svg_id" data-id="@Model.id" />
 <input type="hidden" id="words" data-words="@Model.words" />
 <input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex" />
 <button id="btn_warpText" style="display:none;"></button>
 <button id="btn_warpEndHandler" style="display:none"></button>
-<div class="d-flex justify-content-center align-items-center" style="position:relative;width: 100%;">
-    <div class="align-items-end d-flex flex-column justify-content-center" style="width:200px;padding-right: 50px;">
+<div class="d-flex justify-content-center" style="position:relative;width: 100%;">
+    <div class="align-items-end d-flex flex-column justify-content-center" style="flex:1;padding-right: 50px;">
         <div id="addFavourite" class="d-flex align-items-center justify-content-center" style="width:40px;height:40px;margin-bottom: 5px;cursor:pointer;">
             <img src="~/imgs/agone-Heart.svg" class="mw-100 mh-100 iconImg" style="user-select:none;" />
         </div>
@@ -27,7 +26,37 @@
         <div class="vcarousel-item"></div>
         <div class="vcarousel-item"></div>
     </div>
-        <div id="favourites" class="d-flex flex-column justify-content-between align-items-center" style="width: 200px;max-height: 50%;overflow: auto;">
+        <div class="d-flex flex-column" style="flex:1;padding-left:50px">
+        <div id="myDesign">
+            <div style="color:#6f6d70;font-family:Lato;">My Design</div>
+            <div class="myDesign-container">
+                <div class="myDesign_svgs" style="overflow:hidden;">
+                </div>
+                <div class="btn-slick-cnt" id="slick-prev">
+                    <svg class="mw-100 mh-100 svg-inline--fa fa-angle-left" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
+                        <path fill="#fff" d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="btn-slick-cnt" id="slick-next">
+                    <svg class="mw-100 mh-100 svg-inline--fa fa-angle-right" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
+                        <path fill="#fff" d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="delete-design">
+                    <svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
+                        <path fill="#fff" d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div id="likes">
+            <div style="color:#6f6d70;font-size:14px;font-family:Lato;">Likes</div>
+            <div id="like_svgs" class="d-flex flex-wrap" style="overflow:auto;">
+            </div>
+        </div>
     </div>
     <div class="d-flex justify-content-center align-items-center" style="position: absolute;left: 0;top: 0;height: 100px;width: 100%;">
         <div id="up" class="d-none align-items-center justify-content-center">

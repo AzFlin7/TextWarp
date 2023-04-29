@@ -42,7 +42,7 @@ namespace TextWarp.Models.Database
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=10.10.16.94,3000;Database=cfcreator;persist security info=True;MultipleActiveResultSets=True;User ID=sa;Password=Sqlpassword37;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=cfcreator;persist security info=True;MultipleActiveResultSets=True;User ID=sa;Password=Sqlpassword37;TrustServerCertificate=True;");
             }
         }
 
@@ -292,6 +292,8 @@ namespace TextWarp.Models.Database
             {
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
                 entity.Property(e => e.SvgfileName)
                     .HasMaxLength(450)
                     .HasColumnName("SVGFileName");
@@ -308,6 +310,8 @@ namespace TextWarp.Models.Database
             modelBuilder.Entity<SvgLike>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
 
                 entity.Property(e => e.SvgfileName)
                     .HasMaxLength(255)

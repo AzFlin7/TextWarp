@@ -944,7 +944,11 @@ a:link, a:visited, a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor:pointer;
+    cursor: pointer;
+    display: none;
+}
+.slick-current .btn-save-design {
+    display: inherit;
 }
 #myDesign {
     display: none;

@@ -78,9 +78,7 @@ namespace TextWarp.Controllers
                 _context.WarpedSvgs.Add(WarpedSvg);
                 _context.SaveChanges();
 
-                var savedSvg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.WorkName.Equals(name))).Single();
-
-                return Json(new { status = "success", id = savedSvg.Id });
+                return Json(new { status = "success", id = WarpedSvg.Id });
             }
             catch (Exception e)
             {
@@ -222,6 +220,8 @@ namespace TextWarp.Controllers
                 newSvgLike.Words = svgLikeModel.words;
                 newSvgLike.StyleIndex = svgLikeModel.styleIndex;
                 newSvgLike.CreatedAt = DateTime.Now;
+                newSvgLike.MediaId = svgLikeModel.MediaId;
+
                 var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
                 if (!Directory.Exists(filepath))
                 {
@@ -245,9 +245,7 @@ namespace TextWarp.Controllers
                 _context.SvgLikes.Add(newSvgLike);
                 _context.SaveChanges();
 
-                var saved_like = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName == filename)).Single();
-
-                return Json(new { status = "success", saved_svg = saved_like });
+                return Json(new { status = "success", saved_svg = newSvgLike });
             }
             catch (Exception e)
             {
@@ -341,6 +339,7 @@ namespace TextWarp.Controllers
                 newDesign.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
                 newDesign.Words = svgDesignModel.words;
                 newDesign.StyleIndex = svgDesignModel.styleIndex;
+                newDesign.MediaId = svgDesignModel.MediaId;
                 newDesign.CreatedAt = DateTime.Now;
                 var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
                 if (!Directory.Exists(filepath))
@@ -365,9 +364,7 @@ namespace TextWarp.Controllers
                 _context.MyDesigns.Add(newDesign);
                 _context.SaveChanges();
 
-                var saved_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName == filename)).Single();
-
-                return Json(new { status = "success", saved_Design = saved_Design });
+                return Json(new { status = "success", saved_Design = newDesign });
             }
             catch (Exception e)
             {

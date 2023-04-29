@@ -41,6 +41,8 @@
     function newWarp() {
         var warpedSvg = $("#svg_container")[0].cloneNode(true);
         warpedSvg.setAttribute("data-id", currentWarpIndex);
+        warpedSvg.setAttribute("data-media-id", mediaIdGenerator("WARP"));
+
         var id = "warpedSvg" + currentWarpIndex;
         warpedSvg.setAttribute("id", id);
         warpedSvg.removeAttribute("style");
@@ -277,16 +279,20 @@
         else {
             currentSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].cloneNode(true);
         }
-        var data_id = currentSvg.getAttribute("data-id")
+        var data_id = currentSvg.getAttribute("data-id");
+        var mediaId = currentSvg.getAttribute("data-media-id");
+
         currentSvg.removeAttribute("id");
         currentSvg.removeAttribute("data-id");
         currentSvg.removeAttribute("class");
-        if (favouriteIds.length == 0 || (favouriteIds.length > 0  && favouriteIds.indexOf(data_id) == -1)) {
+        if (favouriteIds.indexOf(mediaId) == -1) {
             let blob = new Blob([currentSvg.outerHTML], { type: 'image/svg+xml' });
             var formData = new FormData();
             formData.append("svg_file", blob, 'warp-text.svg');
             formData.append("words", words);
             formData.append("styleIndex", styleIndex);
+            formData.append("mediaId", mediaId);
+            
             $("#loader").addClass("d-flex");
             $.ajax({
                 url: "/warp/saveLike/",
@@ -297,12 +303,14 @@
                 success: function (res) {
                     $("#loader").removeClass("d-flex");
                     if (res.status == "success") {
-                        favouriteIds.push(data_id);
+                        favouriteIds.push(mediaId);
                         var svgUrl = "/uploads/" + res.saved_svg.svgfileName;
                         fetch(svgUrl)
                             .then(response => response.text())
                             .then(svg => {
                                 wrapper.setAttribute("data-id", data_id);
+                                wrapper.setAttribute("data-media-id", mediaId);
+                                
                                 wrapper.innerHTML = svg;
                                 $("#like_svgs")[0].appendChild(wrapper);
                                 wrapper.children[0].setAttribute("id", res.saved_svg.id);
@@ -350,7 +358,7 @@
 
     $("#like_svgs").on("click", ".like-item>.delete-like", function () {
         var parentElement = this.parentElement;
-        var valueToRemove = parentElement.getAttribute("data-id");
+        var valueToRemove = parentElement.getAttribute("data-media-id");
         favouriteIds = favouriteIds.filter(item => item !== valueToRemove);
         var like_id = parentElement.children[0].getAttribute("id");
         $("#loader").addClass("d-flex");
@@ -375,75 +383,73 @@
     $(document).on("click", ".vcarousel-item .btn-save-design", function () {
         var currentSvg;
         var parentNode;
-        if ($(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].tagName == "svg") {
-            currentSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].cloneNode(true);
-            parentNode = this.parentElement.parentElement.parentElement.parentElement;
-        }
-        else {
-            currentSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].cloneNode(true);
-            parentNode = this.parentElement.parentElement.parentElement;
+        
+        parentNode = $(this).closest(".slick-slide.slick-current")
+        currentSvg = parentNode.find("svg")[0].cloneNode(true);
+        parentNode = parentNode[0].cloneNode(true);
 
-        }
         var data_id = currentSvg.getAttribute("data-id");
-        if (myDesignIds.length == 0 || (myDesignIds.length > 0 && myDesignIds.indexOf(data_id) == -1)) {
-            if (parentNode.classList.contains("slick-center")) {
-                currentSvg.removeAttribute("id");
-                currentSvg.removeAttribute("data-id");
-                currentSvg.removeAttribute("class");
-                let blob = new Blob([currentSvg.outerHTML], { type: 'image/svg+xml' });
-                var formData = new FormData();
-                formData.append("svg_file", blob, 'warp-text.svg');
-                formData.append("words", words);
-                formData.append("styleIndex", styleIndex);
-                $("#loader").addClass("d-flex");
-                $.ajax({
-                    url: "/warp/saveDesign/",
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (res) {
-                        $("#loader").removeClass("d-flex");
-                        if (res.status == "success") {
-                            if (data_id != null) {
-                                myDesignIds.push(data_id);
-                            }
-                            var svgUrl = "/uploads/" + res.saved_Design.svgfileName;
-                            fetch(svgUrl)
-                                .then(response => response.text())
-                                .then(svg => {
-                                    currentMyDesignIndex++;
-                                    var wrapper;
-                                    wrapper = document.createElement("div");
-                                    wrapper.classList.add("design-item");
-                                    wrapper.setAttribute("data-id", data_id);
-                                    wrapper.innerHTML = svg;
-                                    wrapper.children[0].setAttribute("id", res.saved_Design.id);
-                                    wrapper.children[0].classList.add("mw-100");
-                                    wrapper.children[0].classList.add("mh-100");
-                                    if (currentMyDesignIndex == 0) {
-                                        $(".myDesign_svgs")[0].append(wrapper);
-                                        $(".myDesign_svgs").slick({
-                                            slidesToShow: 1,
-                                            arrows: false,
-                                            infinite: true
-                                        });
-                                        $("#myDesign").addClass("active");
-                                        $(".delete-design").addClass("d-flex");
-                                    }
-                                    else {
-                                        $(".myDesign_svgs").slick("slickAdd", wrapper);
-                                        $(".btn-slick-cnt").addClass("d-flex");
-                                        $(".myDesign_svgs").slick("slickGoTo", currentMyDesignIndex);
-                                    }
-                                });
-                        }
-                        else {
-                            console.error(res.msg);
-                        }
-                    },
-                });
-            }
+        let mediaId = currentSvg.getAttribute("data-media-id");
+
+        if (myDesignIds.indexOf(mediaId) == -1) {
+            currentSvg.removeAttribute("id");
+            currentSvg.removeAttribute("data-id");
+            currentSvg.removeAttribute("class");
+            let blob = new Blob([currentSvg.outerHTML], { type: 'image/svg+xml' });
+            var formData = new FormData();
+            formData.append("svg_file", blob, 'warp-text.svg');
+            formData.append("words", words);
+            formData.append("styleIndex", styleIndex);
+            formData.append("mediaId", mediaId);
+
+            $("#loader").addClass("d-flex");
+            $.ajax({
+                url: "/warp/saveDesign/",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    $("#loader").removeClass("d-flex");
+                    if (res.status == "success") {
+                        myDesignIds.push(mediaId);
+
+                        var svgUrl = "/uploads/" + res.saved_Design.svgfileName;
+                        fetch(svgUrl)
+                            .then(response => response.text())
+                            .then(svg => {
+                                currentMyDesignIndex++;
+                                var wrapper;
+                                wrapper = document.createElement("div");
+                                wrapper.classList.add("design-item");
+                                wrapper.setAttribute("data-id", data_id);
+                                wrapper.setAttribute("data-media-id", mediaId);
+                                wrapper.innerHTML = svg;
+                                wrapper.children[0].setAttribute("id", res.saved_Design.id);
+                                wrapper.children[0].classList.add("mw-100");
+                                wrapper.children[0].classList.add("mh-100");
+                                if (currentMyDesignIndex == 0) {
+                                    $(".myDesign_svgs")[0].append(wrapper);
+                                    $(".myDesign_svgs").slick({
+                                        slidesToShow: 1,
+                                        arrows: false,
+                                        infinite: true
+                                    });
+                                    $("#myDesign").addClass("active");
+                                    $(".delete-design").addClass("d-flex");
+                                }
+                                else {
+                                    $(".myDesign_svgs").slick("slickAdd", wrapper);
+                                    $(".btn-slick-cnt").addClass("d-flex");
+                                    $(".myDesign_svgs").slick("slickGoTo", currentMyDesignIndex);
+                                }
+                            });
+                    }
+                    else {
+                        console.error(res.msg);
+                    }
+                },
+            });
         }
     });
 
@@ -490,11 +496,11 @@
         let designDataId;
         if ($(".slick-slide.slick-current.slick-active")[0].children[0].tagName == "svg") {
             currentDesignId = $(".slick-slide.slick-current.slick-active")[0].children[0].getAttribute("id");
-            designDataId = $(".slick-slide.slick-current.slick-active")[0].getAttribute("data-id");
+            designDataId = $(".slick-slide.slick-current.slick-active")[0].getAttribute("data-media-id");
         }
         else {
             currentDesignId = $(".slick-slide.slick-current.slick-active")[0].children[0].children[0].children[0].getAttribute("id");
-            designDataId = $(".slick-slide.slick-current.slick-active")[0].children[0].children[0].getAttribute("data-id");
+            designDataId = $(".slick-slide.slick-current.slick-active")[0].children[0].children[0].getAttribute("data-media-id");
         }
         
         myDesignIds = myDesignIds.filter(item => item !== designDataId);

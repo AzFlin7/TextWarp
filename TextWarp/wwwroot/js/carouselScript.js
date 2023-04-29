@@ -215,10 +215,12 @@
         vertical: true,
         centerMode: true,
         arrows: false,
-        centerPadding: '210px',
         touchMove: true,
         infinite: false,
         draggable: false,
+        slidesToShow: 1,
+        centerMode: true,
+        centerPadding: '0px',
     });
 
     $("#up").click(function () {

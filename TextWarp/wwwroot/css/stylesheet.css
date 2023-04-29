@@ -740,8 +740,8 @@ a:link, a:visited, a:hover {
     opacity: 1;
 }
 .vcarousel-item{
-    width:500px;
-    height:500px;
+    /*width:500px;
+    height:500px;*/
     display:flex !important;
     flex-direction:column;
     position:relative;

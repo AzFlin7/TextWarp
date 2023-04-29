@@ -254,7 +254,6 @@ namespace TextWarp.Controllers
         }
 
         [Route("warp/deleteLike/{id?}")]
-        [HttpDelete]
         public ActionResult DeleteLike(int id)
         {
             try
@@ -373,7 +372,6 @@ namespace TextWarp.Controllers
         }
 
         [Route("warp/deleteDesign/{id?}")]
-        [HttpDelete]
         public ActionResult DeleteDesign(int id)
         {
             try

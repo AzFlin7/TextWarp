@@ -364,7 +364,6 @@
         $("#loader").addClass("d-flex");
         $.ajax({
             url: '/warp/deleteLike/' + like_id,
-            type: 'delete',
             success: function (res) {
                 $("#loader").removeClass("d-flex");
                 if (res.status == "success") {
@@ -507,7 +506,6 @@
         $("#loader").addClass("d-flex");
         $.ajax({
             url: '/warp/deleteDesign/' + currentDesignId,
-            type: 'delete',
             success: function (res) {
                 $("#loader").removeClass("d-flex");
                 if (res.status == "success" && res.msg == null) {

@@ -1,7 +1,12 @@
 ﻿$(document).ready(function () {
-    var svg_id = $("#svg_id").attr("data-id");
-    let words = $("#words").data("words");
-    let styleIndex = $("#styleIndex").data("styleIndex");
+    let words = $("#words").val();
+    let styleIndex = $("#styleIndex").val();
+    let msg = $("#message").val();
+
+    if (msg != "") {
+        console.error(msg);
+        window.location.href = "warp/createnew";
+    }
 
     $("#spana").click(function (e) {
         $(".toolbar-icon").removeClass("active");
@@ -74,9 +79,10 @@
         $("#loader").removeClass("d-flex");
     });
 
-    $("#btn_save").click(function () {
+    $("#save_send").click(function () {
         $("#svg_container").find("*").removeClass("currentActivePath");
         let mediaId = $("#svg_container").data("media-id");
+        $("#svg_container")[0].removeAttribute("data-media-id");
         var svg_data = document.getElementById("svg_container").outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();

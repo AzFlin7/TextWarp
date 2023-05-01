@@ -3,64 +3,23 @@
     $("#loader").addClass("d-flex");
 
     function searchDesigns(name) {
+        $("#loader").addClass("d-flex");
         $.get("/gallery/getData?name=" + name, function (data, status) {
-            if (status == "success") {
+            if (status == "success" && data.msg == "") {
                 drawContent(data.saved_svgs);
                 $('#search_input').autocomplete({
                     lookup: availableNames,
                 });
-
-                $(".check_container").on("click", function (e) {
-                    e.stopPropagation();
-                    for (const check of $(".check_container")) {
-                        check.children[0].classList.remove("active");
-                    }
-                    if (this.children[0].classList.contains("active")) {
-                        this.children[0].classList.remove("active");
-                    }
-                    else {
-                        this.children[0].classList.add("active");
-                    }
-                });
-
-                $(".gallery-item-overlay").click(function (e) {
-                    e.stopPropagation();
-                    for (const check of $(".check_container")) {
-                        check.children[0].classList.remove("active");
-                    }
-                    if ($(this).siblings()[0].children[0].classList.contains("active")) {
-                        $(this).siblings()[0].children[0].classList.remove("active");
-                    }
-                    else {
-                        $(this).siblings()[0].children[0].classList.add("active");
-                    }
-                });
-
-                $(document).on("click", ".gallery-content", function (e) {
-                    e.stopPropagation();
-                    if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
-                        $("#select_sub_menu").removeClass("d-flex");
-                        $(".gallery-item-overlay").removeClass("active");
-                        $(".check_container").removeClass('active');
-                    }
-                });
-
-                $(".gallery-content").on("click", ".gallery-item-img", function (e) {
-                    e.stopPropagation();
-                    var svg_id = this.parentElement.children[0].getAttribute("data-id");
-                    window.location.href = "/warp/editor/" + svg_id;
-                })
-
-                $("#loader").removeClass("d-flex");
             }
             else {
                 console.error(data.msg);
             }
+            $("#loader").removeClass("d-flex");
         });
     }
 
     function init() {
-        searchDesigns("");
+        searchDesigns('');
     }
 
     function drawContent(contentData) {
@@ -69,7 +28,9 @@
             var svg = contentData[i];
             availableNames.push(svg.workName);
             var newDoc = $(`<div class="gallery-item">
-                        <input type="hidden" data-id="`+ svg.id + `" />
+                        <input type="hidden" data-mediaid="`+ svg.mediaId + `" />
+                        <input type="hidden" data-words="`+ svg.words + `" />
+                        <input type="hidden" data-styleindex="`+ svg.styleIndex + `" />
                         <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
                         <div class="gallery-item-overlay"></div>
                         <div class="active check_container">
@@ -78,7 +39,7 @@
                                 <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
                             </div>
                         </div>
-                        <img src="/uploads/`+ svg.svgfileName + `" style="max-width: 100%; max-height:100%; ">
+                        <img src="/uploads/`+ svg.svgfileName + "?v=" + svg.version + `" style="max-width: 100%; max-height:100%; ">
                         </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
                                 <div class="editable-object" data-workName="`+ svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + svg.workName + `</div >
@@ -88,6 +49,49 @@
             container.appendChild(newDoc[0]);
         }
     }
+
+    $(document).on("click", ".gallery-content", function (e) {
+        e.stopPropagation();
+        if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
+            $("#select_sub_menu").removeClass("d-flex");
+            $(".gallery-item-overlay").removeClass("active");
+            $(".check_container").removeClass('active');
+        }
+    });
+
+    $(document).on("click", ".gallery-content .gallery-item-img", function (e) {
+        e.stopPropagation();
+        var mediaId = $(this).siblings().eq(0).data("mediaid");
+        var words = $(this).siblings().eq(1).data("words");
+        var styleIndex = $(this).siblings().eq(2).data("styleindex");
+        window.location.href = "/warp/editor?mediaId=" + mediaId + "&words=" + words + "&style=" + styleIndex;
+    })
+
+    $(document).on("click", ".check_container", function (e) {
+        e.stopPropagation();
+        for (const check of $(".check_container")) {
+            check.children[0].classList.remove("active");
+        }
+        if (this.children[0].classList.contains("active")) {
+            this.children[0].classList.remove("active");
+        }
+        else {
+            this.children[0].classList.add("active");
+        }
+    });
+
+    $(document).on("click", ".gallery-item-overlay", function (e) {
+        e.stopPropagation();
+        for (const check of $(".check_container")) {
+            check.children[0].classList.remove("active");
+        }
+        if ($(this).siblings(0).children(0).hasClass("active")) {
+            $(this).siblings(0).children(0).removeClass("active");
+        }
+        else {
+            $(this).siblings(0).children(0).addClass("active");
+        }
+    });
 
     window.addEventListener("change_workname", (e) => {
         $.ajax({
@@ -125,25 +129,23 @@
 
     $("#act_duplicate").click(function () {
         var selected_svg;
-        var svg_id = -1;
+        var mediaId = -1;
         for (const saved_svg of $(".check_container")) {
             if (saved_svg.children[0].classList.contains("active")) {
                 selected_svg = saved_svg.parentElement.parentElement.children[0];
-                svg_id = selected_svg.getAttribute("data-id");
+                mediaId = selected_svg.getAttribute("data-mediaid");
             }
         }
-        if (svg_id != -1) {
+        if (mediaId != -1) {
             $("#loader").addClass("d-flex");
-            $.ajax({
-                url: "/gallery/duplicate/" + svg_id,
-                type: "get",
-                data: {},
-                success: function (res) {
-                    if (res.status == "success") {
-                        var copied_svg = res.copiedSvg;
-                        var bodyNode = selected_svg.parentElement;
-                        var newDoc = $(`<div class="gallery-item">
-                        <input type="hidden" data-id="`+ copied_svg.id + `" />
+            $.get("/gallery/duplicate?mediaId=" + mediaId, function (data, status) {
+                if (status == "success") {
+                    var copied_svg = data.copiedSvg;
+                    var bodyNode = selected_svg.parentElement;
+                    var newDoc = $(`<div class="gallery-item">
+                        <input type="hidden" data-mediaid="`+ copied_svg.mediaId + `" />
+                        <input type="hidden" data-words="`+ copied_svg.words + `" />
+                        <input type="hidden" data-styleindex="`+ copied_svg.styleIndex + `" />
                         <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
                         <div class="gallery-item-overlay active"></div>
                         <div class="active check_container">
@@ -152,46 +154,38 @@
                                 <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
                             </div>
                         </div>
-                        <img src="/uploads/`+ copied_svg.svgfileName + `" style="max-width: 100%; max-height:100%; ">
+                        <img src="/uploads/`+ copied_svg.svgfileName + "?v=" + copied_svg.version + `" style="max-width: 100%; max-height:100%; ">
                         </div>
                             <div class="d-flex flex-column align-items-center justify-content-center">
                                 <div class="editable-object" data-workName="`+ copied_svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + copied_svg.workName + `</div >
                                 <div style="color:#dad8dd;font-size: 14px;">`+ copied_svg.createdAt + `</div>
                             </div>
                         </div>`);
-                        newDoc.insertBefore(bodyNode);
-                        $("#loader").removeClass("d-flex");
-                    }
-                    else {
-                        alert("Raised unkown exceptions on the Database side");
-                    }
-                },
+                    newDoc.insertBefore(bodyNode);
+                    $("#loader").removeClass("d-flex");
+                }
+                else {
+                    console.error(data.msg);
+                }
             });
         }
-        else return;
-    })
+    });
 
     $("#act_delete").click(function () {
         var selected_svg;
-        var svg_id = -1;
+        var mediaid = -1;
         for (const saved_svg of $(".check_container")) {
             if (saved_svg.children[0].classList.contains("active")) {
                 selected_svg = saved_svg.parentElement.parentElement.children[0];
-                svg_id = selected_svg.getAttribute("data-id");
+                mediaid = selected_svg.getAttribute("data-mediaid");
             }
         }
-        if (svg_id != -1) {
+        if (mediaid != -1) {
             $("#loader").addClass("d-flex");
-            $.ajax({
-                url: "/gallery/delete/" + svg_id,
-                type: "get",
-                data: {},
-                success: function (res) {
-                    if (res.status == "success") {
-                        selected_svg.parentElement.remove();
-                        $("#loader").removeClass("d-flex");
-                    }
-                },
+            $.get("/gallery/delete?mediaId=" + mediaid, function (data, status) {
+                if (status == "success") selected_svg.parentElement.remove();
+                else console.error(data.msg);
+                $("#loader").removeClass("d-flex");
             });
         }
         else {
@@ -252,82 +246,8 @@
     $("#search_input").on("keyup", function (event) {
         if (event.target.value != "") {
             if (event.keyCode === 13) {
-                $("#loader").addClass("d-flex");
-                $.ajax({
-                    url: "/gallery/getData/",
-                    type: "post",
-                    data: {
-                        WorkName: event.target.value,
-                    },
-                    success: function (res) {
-                        if (res.status == "success") {
-                            let num_child = $(".gallery-content")[0].children.length;
-                            for (let i = 1; i < num_child; i++) {
-                                let tempNode = $(".gallery-content")[0].children[1];
-                                $(".gallery-content")[0].removeChild(tempNode);
-                            }
-                            if (res.saved_svgs != null) {
-                                drawContent(res.saved_svgs);
-
-                                $(".check_container").on("click", function (e) {
-                                    e.stopPropagation();
-                                    for (const check of $(".check_container")) {
-                                        check.children[0].classList.remove("active");
-                                    }
-                                    if (this.children[0].classList.contains("active")) {
-                                        this.children[0].classList.remove("active");
-                                    }
-                                    else {
-                                        this.children[0].classList.add("active");
-                                    }
-                                });
-
-                                $(".gallery-item-overlay").click(function (e) {
-                                    e.stopPropagation();
-                                    for (const check of $(".check_container")) {
-                                        check.children[0].classList.remove("active");
-                                    }
-                                    if ($(this).siblings()[0].children[0].classList.contains("active")) {
-                                        $(this).siblings()[0].children[0].classList.remove("active");
-                                    }
-                                    else {
-                                        $(this).siblings()[0].children[0].classList.add("active");
-                                    }
-                                });
-
-                                $(document).on("click", ".gallery-content", function (e) {
-                                    e.stopPropagation();
-                                    if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
-                                        $("#select_sub_menu").removeClass("d-flex");
-                                        $(".gallery-item-overlay").removeClass("active");
-                                        $(".check_container").removeClass('active');
-                                    }
-                                });
-
-                                $(".gallery-content").on("click", ".gallery-item-img", function (e) {
-                                    e.stopPropagation();
-                                    var svg_id = this.parentElement.children[0].getAttribute("data-id");
-                                    window.location.href = "/warp/editor/" + svg_id;
-                                })
-                            }
-
-                            $("#loader").removeClass("d-flex");
-                        }
-                        else {
-                            alert(res.msg);
-                        }
-                    }
-                })
+                searchDesigns(e.target.value);
             }
-        }
-        else {
-
-        }
-    });
-
-    $("#search_input").on("input", function () {
-        if (this.value == "") {
-            init();
         }
     });
 

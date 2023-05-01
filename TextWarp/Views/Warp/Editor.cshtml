@@ -5,11 +5,12 @@
 }
 
 @*eidt view*@
-<input type="hidden" id="svg_id" data-id="@Model.id"/>
-<input type="hidden" id="svg_filePath" data-filePath="@Model.svgFilePath" />
-<input type="hidden" id="words" data-words="@Model.words"/>
-<input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex"/>
-<input type="hidden" id="version" data-version = "@Model.version"/>
+<input type="hidden" id="mediaId" value="@Model.mediaId"/>
+<input type="hidden" id="svg_filePath" value="@Model.svgFilePath" />
+<input type="hidden" id="words" value="@Model.words"/>
+<input type="hidden" id="styleIndex" value="@Model.styleIndex"/>
+<input type="hidden" id="version" value = "@Model.version"/>
+<input type="hidden" id="message" value = "@Model.msg"/>
 <button id="btn_warpEndHandler" style="display:none"></button>
 <div id="bodyOverlay"></div>
 <div id="svgEditorView" class="sub-view d-flex align-items-center w-100 h-100">
@@ -171,7 +172,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="actionToolBox" class="d-flex flex-column toolBox-theme" style="height: 30% !important;z-index:101;">
+                <div id="actionToolBox" class="d-flex flex-column toolBox-theme" style="height: 35% !important;z-index:101;">
                     <div class="default-text" style="font-size: 22px;margin-bottom: 15px;">
                         Actions
                     </div>
@@ -191,10 +192,6 @@
                         <div class="align-items-center d-flex my-2" id="svg_download" style="cursor:pointer;">
                             <img style="width: 22px;height: 20px;" src="~/imgs/download.png" />
                             <div class="default-text" style="font-size:14px;padding-left: 15px;">Download</div>
-                        </div>
-                        <div class="d-flex my-2" id="svg_download" style="cursor:pointer;">
-                            <div></div>
-                            <div class="default-text" id="btn_save" style="font-size:14px;padding-left: 38px;">Save</div>
                         </div>
                     </div>
                 </div>

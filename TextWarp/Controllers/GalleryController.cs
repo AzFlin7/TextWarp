@@ -32,8 +32,8 @@ namespace TextWarp.Controllers
                 query = query.Where(s => s.WorkName.Contains(name));
             }
             var saved_svgs = query.ToList();
-            if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs });
-            return Json(new { status = "success", msg = "There are no svgs." });
+            if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs, msg = "" });
+            return Json(new { status = "success", saved_svgs = new List<WarpedSvg>(), msg = "There are no svgs." });
         }
 
         [Route("gallery/rename")]
@@ -60,13 +60,13 @@ namespace TextWarp.Controllers
             }
         }
 
-        [Route("gallery/duplicate/{id?}")]
+        [Route("gallery/duplicate")]
         [HttpGet]
-        public ActionResult Duplicate(int id)
+        public ActionResult Duplicate(string mediaId = "")
         {
             try
             {
-                var selected_svg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+                var selected_svg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).FirstOrDefault();
 
                 if (selected_svg != null)
                 {
@@ -95,71 +95,52 @@ namespace TextWarp.Controllers
                         _context.SaveChanges();
                     }
 
-                    var copiedSvg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName.Equals(displayPath))).Single();
+                    var copiedSvg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName.Equals(displayPath))).FirstOrDefault();
                     if (copiedSvg != null)
                     {
-                        return Json(new { status = "success", copiedSvg = copiedSvg });
+                        return Json(new { status = "success", copiedSvg = copiedSvg, msg = "" });
                     }
-                    else return Json(new { status = "failed" });
+                    else return Json(new { status = "failed", copiedSvg = new List<WarpedSvg>(), msg = "Failed svg duplicate." });
                 }
-                else return Json(new { status = "failed" });
+                else return Json(new { status = "failed", copiedSvg = new List<WarpedSvg>(), msg = "Failed svg duplicate." });
             }
             catch(Exception e)
             {
-                return Json(new { status = "failed" });
+                return Json(new { status = "failed", msg = e.Message });
             }
         }
 
-        [Route("gallery/delete/{id?}")]
+        [Route("gallery/delete")]
         [HttpGet]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string mediaId = "")
         {
             try {
-                var selected_svg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
-                var fileName = selected_svg.SvgfileName;
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-                fileName = Path.Combine(filepath, fileName);
-                if (System.IO.File.Exists(fileName))
+                if (!String.IsNullOrEmpty(mediaId))
                 {
-                    try
+                    var selected_svg = _context.WarpedSvgs.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).FirstOrDefault();
+                    var fileName = selected_svg.SvgfileName;
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
+                    fileName = Path.Combine(filepath, fileName);
+                    if (System.IO.File.Exists(fileName))
                     {
-                        System.IO.File.Delete(fileName);
-                        _context.WarpedSvgs.Remove(selected_svg);
-                        _context.SaveChanges();
-
-                        return Json(new { status = "success" });
+                        try
+                        {
+                            System.IO.File.Delete(fileName);
+                        }
+                        catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
                     }
-                    catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
+                    _context.WarpedSvgs.Remove(selected_svg);
+                    _context.SaveChanges();
+                    return Json(new { status = "success", msg = "" });
                 }
                 else
                 {
-                    return Json(new { status = "failed", msg = "File Not found!" });
+                    return Json( new {status = "failed", msg = "Bad request."});
                 }
             }
             catch(Exception exp)
             {
-                return Json(new { status = "failed", msg = "Exception Raised." });
-            }
-        }
-
-        [Route("gallery/getWorkNameList")]
-        public ActionResult getWorkNameList()
-        {
-            try
-            {
-                var workNames = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderBy(s => s.WorkName).Select(s => s.WorkName).ToList();
-                return Json(new
-                {
-                    status = "success",
-                    workNames = workNames
-                }) ;
-            }
-            catch(Exception e)
-            {
-                return Json(new
-                {
-                    status = "failed"
-                });
+                return Json(new { status = "failed", msg = exp.Message });
             }
         }
     }

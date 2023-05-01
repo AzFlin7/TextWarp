@@ -1123,7 +1123,7 @@
             verticalOffset = 0;
         }
 
-        verticalOffset = (_.$slider[0].offsetHeight - 500 - 95) / 2;
+        verticalOffset = (_.$slider[0].offsetHeight - 450 - 95) / 2;
 
         if (_.options.centerMode === true && _.slideCount <= _.options.slidesToShow) {
             _.slideOffset = ((_.slideWidth * Math.floor(_.options.slidesToShow)) / 2) - ((_.slideWidth * _.slideCount) / 2);

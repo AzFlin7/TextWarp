@@ -740,8 +740,8 @@ a:link, a:visited, a:hover {
     opacity: 1;
 }
 .vcarousel-item{
-    width:500px;
-    height:500px;
+    width:450px;
+    height:450px;
     display:flex !important;
     flex-direction:column;
     position:relative;
@@ -763,14 +763,14 @@ a:link, a:visited, a:hover {
     opacity: 1;
 }
 #up {
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     background: #999999;
     font-size: 40px;
     color: #ffffff;
-    cursor:pointer;
-    display:flex;
+    cursor: pointer;
+    display: flex;
 }
 #up:hover {
     background: #0faeec;
@@ -779,8 +779,8 @@ a:link, a:visited, a:hover {
     background: #0faeec;
 }
 #down {
-    width: 56px;
-    height: 56px;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     font-size: 40px;
     color: #ffffff;
@@ -946,6 +946,7 @@ a:link, a:visited, a:hover {
     justify-content: center;
     cursor: pointer;
     display: none;
+    z-index:101;
 }
 .slick-current .btn-save-design {
     display: inherit;
@@ -1046,4 +1047,7 @@ a:link, a:visited, a:hover {
 }
 .btn-slick-cnt:hover{
     opacity:1;
+}
+.myDesign_svgs .slick-slide{
+    margin:0 !important;
 }

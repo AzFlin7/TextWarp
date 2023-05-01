@@ -8,8 +8,9 @@
 @section Styles{
     <link href="~/css/slick.css" rel="stylesheet" />
 }
-<input type="hidden" id="words" data-words="@Model.words" />
-<input type="hidden" id="styleIndex" data-styleIndex="@Model.styleIndex" />
+<input type="hidden" id="words" value="@Model.words" />
+<input type="hidden" id="styleIndex" value="@Model.styleIndex" />
+<input type="hidden" id="message" value="@Model.msg" />
 <button id="btn_warpText" style="display:none;"></button>
 <button id="btn_warpEndHandler" style="display:none"></button>
 <div class="d-flex justify-content-center" style="position:relative;width: 100%;">
@@ -21,7 +22,7 @@
             <img src="~/imgs/pen.svg" class="mw-100 mh-100 iconImg" style="user-select:none;" />
         </div>
     </div>
-    <div class="vcarousel" style="height:calc( 100vh - 48px ); width:500px;">
+    <div class="vcarousel" style="height:calc( 100vh - 48px ); width:450px;">
         <div class="vcarousel-item"></div>
         <div class="vcarousel-item"></div>
     </div>
@@ -54,7 +55,7 @@
             </div>
         <div id="likes">
             <div style="color:#6f6d70;font-size:14px;font-family:Lato;">Likes</div>
-            <div class="d-flex justify-content-end" style="width: 210px;">
+            <div class="d-flex justify-content-start" style="width: 210px;">
                 <div id="like_svgs" class="d-flex flex-wrap" style="overflow:auto;">
                 </div>
             </div>

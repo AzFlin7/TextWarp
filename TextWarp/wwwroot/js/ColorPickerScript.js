@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-    var svgFilePath = $("#svg_filePath").attr("data-filePath");
+    var svgFilePath = $("#svg_filePath").val();
+    var mediaId = $("#mediaId").val();
     let currentPaletteIndex = 0;
     let currentGradientIndex = 0;
     const historyColors = [];
@@ -61,6 +62,8 @@
             .then(response => response.text())
             .then(svg => {
                 $("#svgViewer").html(svg);
+                $("#svgViewer")[0].children[0].setAttribute("id", "svg_container");
+                $("#svgViewer")[0].children[0].setAttribute("data-media-id", mediaId);
                 initial();
             });
         $("body>svg").remove();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
 using TextWarp.Models;
 using TextWarp.Models.Database;
@@ -21,15 +22,25 @@ namespace TextWarp.Controllers
                 var SvgViewModel = new SVGViewModel();
                 SvgViewModel.words = words;
                 SvgViewModel.styleIndex = style;
+                SvgViewModel.msg = "";
                 return View(SvgViewModel);
             }
             catch(Exception e)
             {
-                return View();
+                var SvgViewModel = new SVGViewModel();
+                SvgViewModel.words = "";
+                SvgViewModel.styleIndex = -1;
+                SvgViewModel.msg = "Bad request.";
+                return View(SvgViewModel);
             }
         }
 
-        [Route("warp/editor/{meidaId}")]
+        public IActionResult CreateNew()
+        {
+            return View();
+        }
+
+        [Route("warp/editor")]
         public IActionResult Editor(string mediaId, string words, int style)
         {
             try
@@ -38,51 +49,30 @@ namespace TextWarp.Controllers
                 var SvgViewModel = new SVGViewModel
                 {
                     words = words,
-                    styleIndex = style
+                    styleIndex = style,
+                    msg = "",
+                    version = 1,
+                    mediaId = mediaId
                 };
                 if (warpText != null) {
                     var svgImgPath = "uploads/" + warpText.SvgfileName + "?v=" + warpText.Version;
                     SvgViewModel.svgFilePath = svgImgPath;
+                    SvgViewModel.version = warpText.Version;
                 }
                 return View(SvgViewModel);
             }
             catch(Exception e)
             {
-                return View();
+                var SvgViewModel = new SVGViewModel
+                {
+                    words = "",
+                    styleIndex = -1,
+                    msg = "Raised exception.",
+                    version = -1,
+                    mediaId = mediaId
+                };
+                return View(SvgViewModel);
             }
-        }
-
-        [Route("warp/addNew/{words}/{styleIndex}")]
-        [HttpGet]
-        public ActionResult addNew(string words, int styleIndex)
-        {
-            try
-            {
-                var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
-                var name = "Untitled" + "_" + DateTime.Now;
-                var WarpedSvg = new WarpedSvg();
-                WarpedSvg.CreatedAt = DateTime.Now;
-                WarpedSvg.UpdatedAt = DateTime.Now;
-                WarpedSvg.Words = words;
-                WarpedSvg.StyleIndex = styleIndex;
-                WarpedSvg.SvgfileName = "";
-                WarpedSvg.WorkName = name;
-                WarpedSvg.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
-                WarpedSvg.Version = 0;
-                _context.WarpedSvgs.Add(WarpedSvg);
-                _context.SaveChanges();
-
-                return Json(new { status = "success", id = WarpedSvg.Id });
-            }
-            catch (Exception e)
-            {
-                return Json(new { status = "error", id = e.Message });
-            }
-        }
-
-        public IActionResult CreateNew()
-        {
-            return View();
         }
 
         [HttpGet]
@@ -156,7 +146,7 @@ namespace TextWarp.Controllers
                     {
                         sVGSaveModel.svgFile.CopyTo(stream);
                     }
-
+                    svgImgPath = "svgFiles/" + filename;
                     WarpedSvg warpedSvg = new WarpedSvg
                     {
                         MediaId = mediaId,
@@ -193,12 +183,14 @@ namespace TextWarp.Controllers
                     return Json(new
                     {
                         status = "success",
-                        like_svgs = like_svgs
+                        like_svgs = like_svgs,
+                        msg = ""
                     });
                 }
                 return Json(new
                 {
                     status = "succss",
+                    like_svgs = new List<SvgLike>(),
                     msg = "There is no like svg."
                 });
             }
@@ -207,6 +199,7 @@ namespace TextWarp.Controllers
                 return Json(new
                 {
                     status = "failed",
+                    like_svg = new List<SvgLike>(),
                     msg = exp.Message
                 });
             }
@@ -253,20 +246,20 @@ namespace TextWarp.Controllers
                 _context.SvgLikes.Add(newSvgLike);
                 _context.SaveChanges();
 
-                return Json(new { status = "success", saved_svg = newSvgLike });
+                return Json(new { status = "success", saved_svg = newSvgLike, msg = "" });
             }
             catch (Exception e)
             {
-                return Json(new { status = "failed", msg = e.Message });
+                return Json(new { status = "failed", saved_svg = new List<SVGLikeModel>(), msg = e.Message });
             }
         }
 
-        [Route("warp/deleteLike/{id?}")]
-        public ActionResult DeleteLike(int id)
+        [Route("warp/deleteLike/{mediaId?}")]
+        public ActionResult DeleteLike(string mediaId)
         {
             try
             {
-                var selected_svg = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+                var selected_svg = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).Single();
                 if(selected_svg != null)
                 {
                     var fileName = selected_svg.SvgfileName;
@@ -277,21 +270,16 @@ namespace TextWarp.Controllers
                         try
                         {
                             System.IO.File.Delete(fileName);
-                            _context.SvgLikes.Remove(selected_svg);
-                            _context.SaveChanges();
-
-                            return Json(new { status = "success" });
                         }
                         catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
                     }
-                    else
-                    {
-                        return Json(new { status = "failed", msg = "File Not found!" });
-                    }
+                    _context.SvgLikes.Remove(selected_svg);
+                    _context.SaveChanges();
+                    return Json(new { status = "success", msg = "" });
                 }
                 else
                 {
-                    return Json(new { status = "failed", msg = "Not found saved svg." });
+                    return Json(new { status = "failed", msg = "Not found record." });
                 }
             }
             catch (Exception exp)
@@ -312,13 +300,15 @@ namespace TextWarp.Controllers
                     return Json(new
                     {
                         status = "success",
-                        design_svgs = design_svgs
+                        design_svgs = design_svgs,
+                        msg = ""
                     });
                 }
                 return Json(new
                 {
                     status = "succss",
-                    msg = "There is no like svg."
+                    design_svgs = new List<MyDesign>(),
+                    msg = "There is no my design."
                 });
             }
             catch (Exception exp)
@@ -326,6 +316,7 @@ namespace TextWarp.Controllers
                 return Json(new
                 {
                     status = "failed",
+                    design_svgs = new List<MyDesign>(),
                     msg = exp.Message
                 });
             }
@@ -371,20 +362,20 @@ namespace TextWarp.Controllers
                 _context.MyDesigns.Add(newDesign);
                 _context.SaveChanges();
 
-                return Json(new { status = "success", saved_Design = newDesign });
+                return Json(new { status = "success", saved_Design = newDesign, msg = "" });
             }
             catch (Exception e)
             {
-                return Json(new { status = "failed", msg = e.Message });
+                return Json(new { status = "failed", saved_Design = new List<MyDesign>(), msg = e.Message });
             }
         }
 
-        [Route("warp/deleteDesign/{id?}")]
-        public ActionResult DeleteDesign(int id)
+        [Route("warp/deleteDesign")]
+        public ActionResult DeleteDesign(string mediaId)
         {
             try
             {
-                var selected_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.Id == id)).Single();
+                var selected_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).FirstOrDefault();
                 if (selected_Design != null)
                 {
                     var fileName = selected_Design.SvgfileName;
@@ -395,21 +386,16 @@ namespace TextWarp.Controllers
                         try
                         {
                             System.IO.File.Delete(fileName);
-                            _context.MyDesigns.Remove(selected_Design);
-                            _context.SaveChanges();
-
-                            return Json(new { status = "success" });
                         }
                         catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
                     }
-                    else
-                    {
-                        return Json(new { status = "failed", msg = "File Not found!" });
-                    }
+                    _context.MyDesigns.Remove(selected_Design);
+                    _context.SaveChanges();
+                    return Json(new { status = "success", msg = "" });
                 }
                 else
                 {
-                    return Json(new { status = "failed", msg = "Not found saved svg." });
+                    return Json(new { status = "failed", msg = "Not found record." });
                 }
             }
             catch (Exception exp)

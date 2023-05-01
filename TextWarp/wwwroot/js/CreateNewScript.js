@@ -1,4 +1,5 @@
-﻿var inputElm = $('[name=tags]')[0]; //word input box
+﻿
+var inputElm = $('[name=tags]')[0]; //word input box
 var words = "";
 var currentStyleIndex = -1;
 //initialize tagify input
@@ -10,12 +11,17 @@ tagify = new Tagify(inputElm, {
 });
 
 if (window.localStorage.getItem("warp_words") != "" && window.localStorage.getItem("warp_words") != null) {
-    let tempWord = window.localStorage.getItem("warp_words");
-    tagify.addTags(tempWord.split(" "));
+    let tempWords = window.localStorage.getItem("warp_words");
+    tempWords = tempWords.split(" ");
+    if (tempWords.length < 3) {
+        tagify.addTags(tempWords);
+    }
 }
+
 if (window.localStorage.getItem("pathType") != null) {
     currentStyleIndex = window.localStorage.getItem("pathType");
 }
+
 if (currentStyleIndex > -1) {
     $(".style-tab")[0].parentElement.children[currentStyleIndex].children[1].classList.remove("d-none");
     $(".style-tab")[0].parentElement.children[currentStyleIndex].children[1].classList.add("d-flex");
@@ -28,9 +34,11 @@ function onChange(e) {
     var values = e.target.value;
     values = values.split(" ");
     $("#messageWrapper").css("visibility", "hidden");
-    if (values != "") {
+    if (e.target.value != "") {
         $("#wordsInput").addClass("active");
         if (values.length == 2) {
+            tagify.removeAllTags();
+            tagify.addTags(values);
             $("#messageWrapper").css("visibility", "visible");
             $(".tagify__input").addClass("d-none");
         }
@@ -41,8 +49,8 @@ function onChange(e) {
     }
     else {
         $("#wordsInput").removeClass("active");
-        $(".tagify__input")[0].classList.remove("d-none");
-        $(".tagify__input")[0].classList.add("d-inline-block");
+        $(".tagify__input").removeClass("d-none");
+        $(".tagify__input").addClass("d-inline-block");
     }
 }
 
@@ -59,7 +67,7 @@ $("#wordsInput").click(function () {
 });
 
 $(".style-tab").on("click", function () {
-    let selected = this.children[1].classList.contains("d-flex");
+    let selected = this.children[0].classList.add("d-flex");
     for (const temptab of $(".style-tab")) {
         temptab.children[1].classList.remove("d-flex");
         temptab.children[1].classList.add("d-none");
@@ -67,7 +75,7 @@ $(".style-tab").on("click", function () {
     if (selected != true) {
         $(this)[0].children[1].classList.remove("d-none");
         $(this)[0].children[1].classList.add("d-flex");
-        currentStyleIndex = $(this)[0].getAttribute("data-pathIndex");
+        currentStyleIndex = $(this).attr("data-pathIndex");
         $("#chooseStyle").addClass("active");
     }
     else {
@@ -76,8 +84,6 @@ $(".style-tab").on("click", function () {
         currentStyleIndex = -1;
         $("#chooseStyle").removeClass("active");
     }
-
-    $("#chooseStyle").attr("href", warpHref);
 });
 
 $("#chooseStyle").click(function () {

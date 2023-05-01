@@ -15,5 +15,6 @@ namespace TextWarp.Models.Database
         public string Words { get; set; } = null!;
         public int StyleIndex { get; set; }
         public int Version { get; set; }
+        public string MediaId { get; set; } = null!;
     }
 }

@@ -5,6 +5,7 @@ using TextWarp.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Policy;
 using System.Linq;
+using TextWarp.Services;
 
 namespace TextWarp.Controllers
 {
@@ -21,41 +22,18 @@ namespace TextWarp.Controllers
             return View();
         }
 
-        [Route("gallery/getData/")]
-        [HttpPost]
-        public ActionResult getData(WorkSearchModel workSearchItem)
+        [Route("gallery/getData")]
+        [HttpGet]
+        public ActionResult getData(string? name = "")
         {
-            try
+            var query = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d");
+            if (!string.IsNullOrEmpty(name))
             {
-                if(workSearchItem.WorkName != null)
-                {
-                    var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.WorkName.Contains(workSearchItem.WorkName)).ToList();
-                    if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs });
-                    return Json(new { status = "success", msg = "There are no svgs." });
-                }
-                else
-                {
-                    var saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d").ToList();
-                    if (saved_svgs != null)
-                    {
-                        foreach (var saved_svg in saved_svgs)
-                        {
-                            if (saved_svg.SvgfileName == "")
-                            {
-                                _context.WarpedSvgs.Remove(saved_svg);
-                                _context.SaveChanges();
-                            }
-                        }
-                        saved_svgs = _context.WarpedSvgs.Where(s => s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.SvgfileName != "").OrderByDescending(s => s.UpdatedAt).ToList();
-                        return Json(new { status = "success", saved_svgs = saved_svgs });
-                    }
-                    return Json(new { status = "success", msg = "There are no svgs." });
-                }
+                query = query.Where(s => s.WorkName.Contains(name));
             }
-            catch (Exception e)
-            {
-                return Json(new { status = "fail", msg = e.ToString() });
-            }
+            var saved_svgs = query.ToList();
+            if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs });
+            return Json(new { status = "success", msg = "There are no svgs." });
         }
 
         [Route("gallery/rename")]
@@ -108,6 +86,7 @@ namespace TextWarp.Controllers
                         warpedSvg.CreatedAt = DateTime.Now;
                         warpedSvg.UpdatedAt = DateTime.Now;
                         warpedSvg.SvgfileName = displayPath;
+                        warpedSvg.MediaId = MediaIdHelper.generate("WAPRTEXT");
                         warpedSvg.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
                         warpedSvg.WorkName = selected_svg.WorkName + "_copy";
                         warpedSvg.Words = selected_svg.Words;

@@ -2,66 +2,65 @@
     var availableNames = [];
     $("#loader").addClass("d-flex");
 
-    function init() {
-        $.ajax({
-            url: "/gallery/getData/",
-            type: "post",
-            data: "",
-            success: function (res) {
-                if (res.status == "success") {
-                    drawContent(res.saved_svgs);
-                    $('#search_input').autocomplete({
-                        lookup: availableNames,
-                    });
+    function searchDesigns(name) {
+        $.get("/gallery/getData?name=" + name, function (data, status) {
+            if (status == "success") {
+                drawContent(data.saved_svgs);
+                $('#search_input').autocomplete({
+                    lookup: availableNames,
+                });
 
-                    $(".check_container").on("click", function (e) {
-                        e.stopPropagation();
-                        for (const check of $(".check_container")) {
-                            check.children[0].classList.remove("active");
-                        }
-                        if (this.children[0].classList.contains("active")) {
-                            this.children[0].classList.remove("active");
-                        }
-                        else {
-                            this.children[0].classList.add("active");
-                        }
-                    });
+                $(".check_container").on("click", function (e) {
+                    e.stopPropagation();
+                    for (const check of $(".check_container")) {
+                        check.children[0].classList.remove("active");
+                    }
+                    if (this.children[0].classList.contains("active")) {
+                        this.children[0].classList.remove("active");
+                    }
+                    else {
+                        this.children[0].classList.add("active");
+                    }
+                });
 
-                    $(".gallery-item-overlay").click(function (e) {
-                        e.stopPropagation();
-                        for (const check of $(".check_container")) {
-                            check.children[0].classList.remove("active");
-                        }
-                        if ($(this).siblings()[0].children[0].classList.contains("active")) {
-                            $(this).siblings()[0].children[0].classList.remove("active");
-                        }
-                        else {
-                            $(this).siblings()[0].children[0].classList.add("active");
-                        }
-                    });
+                $(".gallery-item-overlay").click(function (e) {
+                    e.stopPropagation();
+                    for (const check of $(".check_container")) {
+                        check.children[0].classList.remove("active");
+                    }
+                    if ($(this).siblings()[0].children[0].classList.contains("active")) {
+                        $(this).siblings()[0].children[0].classList.remove("active");
+                    }
+                    else {
+                        $(this).siblings()[0].children[0].classList.add("active");
+                    }
+                });
 
-                    $(document).on("click", ".gallery-content", function (e) {
-                        e.stopPropagation();
-                        if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
-                            $("#select_sub_menu").removeClass("d-flex");
-                            $(".gallery-item-overlay").removeClass("active");
-                            $(".check_container").removeClass('active');
-                        }
-                    });
+                $(document).on("click", ".gallery-content", function (e) {
+                    e.stopPropagation();
+                    if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
+                        $("#select_sub_menu").removeClass("d-flex");
+                        $(".gallery-item-overlay").removeClass("active");
+                        $(".check_container").removeClass('active');
+                    }
+                });
 
-                    $(".gallery-content").on("click", ".gallery-item-img", function (e) {
-                        e.stopPropagation();
-                        var svg_id = this.parentElement.children[0].getAttribute("data-id");
-                        window.location.href = "/warp/editor/" + svg_id;
-                    })
+                $(".gallery-content").on("click", ".gallery-item-img", function (e) {
+                    e.stopPropagation();
+                    var svg_id = this.parentElement.children[0].getAttribute("data-id");
+                    window.location.href = "/warp/editor/" + svg_id;
+                })
 
-                    $("#loader").removeClass("d-flex");
-                }
-                else {
-                    console.error(res.msg);
-                }
+                $("#loader").removeClass("d-flex");
             }
-        })
+            else {
+                console.error(data.msg);
+            }
+        });
+    }
+
+    function init() {
+        searchDesigns("");
     }
 
     function drawContent(contentData) {

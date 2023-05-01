@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
     var svg_id = $("#svg_id").attr("data-id");
+    let words = $("#words").data("words");
+    let styleIndex = $("#styleIndex").data("styleIndex");
 
     $("#spana").click(function (e) {
         $(".toolbar-icon").removeClass("active");
@@ -73,14 +75,18 @@
     });
 
     $("#btn_save").click(function () {
-        $("#svg_container").find(".currentActivePath").removeClass("currentActivePath");
+        $("#svg_container").find("*").removeClass("currentActivePath");
+        let mediaId = $("#svg_container").data("media-id");
         var svg_data = document.getElementById("svg_container").outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
-        formData.append("svg_file", blob, 'warp-text.svg');
+        formData.append("svgFile", blob, 'warp-text.svg');
+        formData.append("words", words);
+        formData.append("styleIndex", styleIndex);
+
         $("#loader").addClass("d-flex");
         $.ajax({
-            url: "/warp/save/" + svg_id,
+            url: "/warp/save/" + mediaId,
             type: "POST",
             data: formData,
             processData: false,

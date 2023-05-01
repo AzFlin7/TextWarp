@@ -76,25 +76,14 @@ $(".style-tab").on("click", function () {
         currentStyleIndex = -1;
         $("#chooseStyle").removeClass("active");
     }
+
+    $("#chooseStyle").attr("href", warpHref);
 });
 
 $("#chooseStyle").click(function () {
     if (this.classList.contains("active")) {
         window.localStorage.setItem("pathType", currentStyleIndex);
-        $.ajax({
-            url: "/warp/addNew/" + words + "/" + currentStyleIndex,
-            type: "get",
-            data: {},
-            success: function (res) {
-                if (res.status == "success") {
-                    svg_id = res.id;
-                    window.location.href = "/warp/index?" + "id=" + svg_id;
-                }
-                else {
-                    alert("Create new document failed.");
-                }
-            },
-        });
+        window.location.href = "/warp?words=" + window.localStorage.warp_words + "&style=" + currentStyleIndex;
     }
 });
 

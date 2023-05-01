@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-    var svg_id = $("#svg_id").attr("data-id");
     var words = $("#words").attr("data-words");
     var styleIndex = $("#styleIndex").attr("data-styleIndex");
     var triggerButton = $("#btn_warpText")[0];
@@ -252,15 +251,13 @@
     });
 
     $("#edit").click(function () {
-        var selectedSvg = "";
-        if ($(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].tagName == "svg") {
-            selectedSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].children[0].outerHTML;
+        let svgElt = $(".slick-slide.slick-current.slick-center").find(".vcarousel-item>svg");
+        if (svgElt.length > 0) {
+            let mediaId = svgElt.data("media-id");
+            let selectedSvg = svgElt[0].outerHTML;
+            window.localStorage.setItem("selectedSvg", selectedSvg);
+            window.location.href = "/warp/editor/" + mediaId + "?words=" + words + "&style=" + styleIndex;
         }
-        else {
-            selectedSvg = $(".slick-slide.slick-current.slick-center")[0].children[0].children[0].outerHTML;
-        }
-        window.localStorage.setItem("selectedSvg", selectedSvg);
-        window.location.href = "/warp/editor?id=" + svg_id;
     });
 
     $("#addFavourite").click(function () {

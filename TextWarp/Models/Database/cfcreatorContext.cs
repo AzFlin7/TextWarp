@@ -366,6 +366,8 @@ namespace TextWarp.Models.Database
 
                 entity.Property(e => e.DeletedAt).HasColumnType("datetime");
 
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
                 entity.Property(e => e.SvgfileName)
                     .HasMaxLength(255)
                     .IsUnicode(false)

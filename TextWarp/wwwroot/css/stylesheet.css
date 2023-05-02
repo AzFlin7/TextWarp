@@ -928,8 +928,9 @@ a:link, a:visited, a:hover {
     align-items: center;
     justify-content: center;
     height: 40px;
-    position:absolute;
+    position: absolute;
     bottom: -60px;
+    z-index: 101;
 }
 .btn-save-design {
     padding: 0 16px;
@@ -943,7 +944,6 @@ a:link, a:visited, a:hover {
     justify-content: center;
     cursor: pointer;
     display: none;
-    z-index:101;
 }
 .slick-current .btn-save-design {
     display: inherit;

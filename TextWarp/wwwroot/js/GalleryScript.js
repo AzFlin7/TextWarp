@@ -1,13 +1,16 @@
 ﻿$(document).ready(function () {
-    var availableNames = [];
-    $("#loader").addClass("d-flex");
+    var searchVar = {
+        index: 1,
+        count: 30,
+        query: ""
+    };
 
-    function searchDesigns(name) {
+    $("#loader").addClass("d-flex");
+    function searchDesigns() {
         $("#loader").addClass("d-flex");
-        $(".gallery-content .gallery-item").remove();
-        $.get("/gallery/getData?name=" + name, function (data, status) {
+        $.get("/gallery/getData?name=" + searchVar.query + "&index=" + searchVar.index + "&count=" + searchVar.count, function (data, status) {
             if (status == "success" && data.msg == "") {
-                drawContent(data.saved_svgs);
+                drawContent(data.savedSvgs);
             }
             else {
                 console.error(data.msg);
@@ -16,22 +19,28 @@
         });
     }
 
-    function init() {
-        searchDesigns('');
-    }
+    $(".gallery-content").on("scroll", function (e) {
+        if (Math.round(e.currentTarget.offsetHeight + e.currentTarget.scrollTop) >= e.currentTarget.scrollHeight) {
+            searchVar.index++;
+            searchDesigns();
+        }
+    });
 
+    function init() {
+        emptyContainer();
+        searchDesigns();
+    }
+    function emptyContainer() {
+        $(".gallery-content .gallery-item").remove();
+    }
     function drawContent(contentData) {
         var container = $(".gallery-content")[0];
         for (let i = 0; i < contentData.length; i++) {
             var svg = contentData[i];
-            availableNames.push(svg.workName);
-            var newDoc = $(`<div class="gallery-item">
-                        <input type="hidden" data-mediaid="`+ svg.mediaId + `" />
-                        <input type="hidden" data-words="`+ svg.words + `" />
-                        <input type="hidden" data-styleindex="`+ svg.styleIndex + `" />
+            var newDoc = $(`<div class="gallery-item" data-media-id="` + svg.mediaId + `" data-words="` + svg.words + `" data-style-index="` + svg.styleIndex +`">
                         <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
                         <div class="gallery-item-overlay"></div>
-                        <div class="active check_container">
+                        <div class="check_container">
                             <div class="check-icon-container">
                                 <div class="check-icon"></div>
                                 <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
@@ -48,41 +57,17 @@
         }
     }
 
-    $(document).on("click", ".gallery-content", function (e) {
-        e.stopPropagation();
-        if ($("#select_sub_menu")[0].classList.contains("d-flex")) {
-            $("#select_sub_menu").removeClass("d-flex");
-            $(".gallery-item-overlay").removeClass("active");
-            $(".check_container").removeClass('active');
-        }
-    });
-
     $(document).on("click", ".gallery-content .gallery-item-img", function (e) {
         e.stopPropagation();
-        var mediaId = $(this).siblings().eq(0).data("mediaid");
-        var words = $(this).siblings().eq(1).data("words");
-        var styleIndex = $(this).siblings().eq(2).data("styleindex");
+        var mediaId = $(this).parent().data("media-id");
+        var words = $(this).parent().data("words");
+        var styleIndex = $(this).parent().data("styleindex");
         window.location.href = "/warp/editor?mediaId=" + mediaId + "&words=" + words + "&style=" + styleIndex;
     })
 
-    $(document).on("click", ".check_container", function (e) {
-        e.stopPropagation();
-        for (const check of $(".check_container")) {
-            check.children[0].classList.remove("active");
-        }
-        if (this.children[0].classList.contains("active")) {
-            this.children[0].classList.remove("active");
-        }
-        else {
-            this.children[0].classList.add("active");
-        }
-    });
-
     $(document).on("click", ".gallery-item-overlay", function (e) {
         e.stopPropagation();
-        for (const check of $(".check_container")) {
-            check.children[0].classList.remove("active");
-        }
+        $(".check-icon-container").removeClass("active");
         if ($(this).siblings(0).children(0).hasClass("active")) {
             $(this).siblings(0).children(0).removeClass("active");
         }
@@ -91,99 +76,90 @@
         }
     });
 
+    $(document).on("click", function (e) {
+        e.stopPropagation();
+        if (e.target.id == "btn_select") return;
+        if (selectMode && $(e.target).closest(".gallery-item-overlay").length == 0) {
+            selectMode = false;
+            $("#select_sub_menu").removeClass("d-flex");
+            $(".gallery-item-overlay").removeClass("active");
+            $(".check_container").removeClass('active');
+        }
+    });
+
     window.addEventListener("change_workname", (e) => {
+        $("#loader").addClass("d-flex");
         $.ajax({
             url: "/gallery/rename",
             type: "POST",
             data: {
-                id: e.detail.id,
+                mediaId: e.detail.mediaId,
                 name: e.detail.name
             },
-            dataType: "json",
-            success: function (res) {
-                if (res.status == "success") {
-                    $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0].innerHTML = e.detail.name;
-                    $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0].setAttribute("data-workName", e.detail.name);
+            success: function (data, status) {
+                if (status == "success" && data.msg == "") {
+                    $("[data-media-id='" + e.detail.mediaId + "']").find("[data-workName]").html(e.detail.name);
+                    $("[data-media-id='" + e.detail.mediaId + "']").find("[data-workName]").attr("data-workName", e.detail.name);
                 }
                 else {
-                    let alertMsg = "This name is already exist.";
-                    let workNameNode = $("[data-id='" + e.detail.id + "']").parent().find("[data-workName]")[0];
-                    workNameNode.innerHTML = workNameNode.getAttribute("data-workName");
+                    let alertMsg = data.msg;
+                    let workNameNode = $("[data-media-id='" + e.detail.mediaId + "']").find("[data-workName]");
+                    workNameNode.html(workNameNode.attr("data-workName"));
                     $("#msgWrapper").text(alertMsg);
-                    $("#msgWrapper")[0].style.visibility = "visible";
+                    $("#msgWrapper").css("visibility", "visible");
                     setTimeout(() => {
                         $("#msgWrapper")[0].style.visibility = "hidden";
                     }, 2000);
                 }
+                $("#loader").removeClass("d-flex");
             }
         });
     });
-    
+    let selectMode = false;
     $("#btn_select").click(function () {
         $("#select_sub_menu").addClass("d-flex");
         $(".gallery-item-overlay").addClass("active");
         $(".check_container").addClass('active');
+        selectMode = true;
+        $(this).focus();
+
     });
 
     $("#act_duplicate").click(function () {
-        var selected_svg;
-        var mediaId = -1;
-        for (const saved_svg of $(".check_container")) {
-            if (saved_svg.children[0].classList.contains("active")) {
-                selected_svg = saved_svg.parentElement.parentElement.children[0];
-                mediaId = selected_svg.getAttribute("data-mediaid");
-            }
-        }
-        if (mediaId != -1) {
+        var mediaId = $(".check-icon-container.active").closest(".gallery-item").data("media-id");
+        if (mediaId) {
             $("#loader").addClass("d-flex");
-            $.get("/gallery/duplicate?mediaId=" + mediaId, function (data, status) {
+            searchVar.query = $("#search_input").val();
+            $.get("/gallery/duplicate?mediaId=" + mediaId + "&query=" + searchVar.query, function (data, status) {
                 if (status == "success") {
-                    var copied_svg = data.copiedSvg;
-                    var bodyNode = selected_svg.parentElement;
-                    var newDoc = $(`<div class="gallery-item">
-                        <input type="hidden" data-mediaid="`+ copied_svg.mediaId + `" />
-                        <input type="hidden" data-words="`+ copied_svg.words + `" />
-                        <input type="hidden" data-styleindex="`+ copied_svg.styleIndex + `" />
-                        <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay active"></div>
-                        <div class="active check_container">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="/uploads/`+ copied_svg.svgfileName + "?v=" + copied_svg.version + `" style="max-width: 100%; max-height:100%; ">
-                        </div>
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                <div class="editable-object" data-workName="`+ copied_svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + copied_svg.workName + `</div >
-                                <div style="color:#dad8dd;font-size: 14px;">`+ copied_svg.createdAt + `</div>
-                            </div>
-                        </div>`);
-                    newDoc.insertBefore(bodyNode);
-                    $("#loader").removeClass("d-flex");
+                    emptyContainer();
+                    drawContent(data.savedSvgs);
+                    if ($("#select_sub_menu").hasClass("d-flex")) {
+                        $("#select_sub_menu").removeClass("d-flex");
+                        $(".gallery-item-overlay").removeClass("active");
+                        $(".check-icon-container").removeClass("active");
+                    }
                 }
                 else {
                     console.error(data.msg);
                 }
+                $("#loader").removeClass("d-flex");
             });
         }
     });
 
     $("#act_delete").click(function () {
-        var selected_svg;
-        var mediaid = -1;
-        for (const saved_svg of $(".check_container")) {
-            if (saved_svg.children[0].classList.contains("active")) {
-                selected_svg = saved_svg.parentElement.parentElement.children[0];
-                mediaid = selected_svg.getAttribute("data-mediaid");
-            }
-        }
-        if (mediaid != -1) {
+        var mediaId = $(".check-icon-container.active").closest(".gallery-item").data("media-id");
+        if (mediaId) {
             $("#loader").addClass("d-flex");
-            $.get("/gallery/delete?mediaId=" + mediaid, function (data, status) {
-                if (status == "success") selected_svg.parentElement.remove();
+            $.get("/gallery/delete?mediaId=" + mediaId, function (data, status) {
+                if (status == "success") $("[data-media-id=" + mediaId + "]").remove();
                 else console.error(data.msg);
-                $("#loader").removeClass("d-flex");
+                if ($("#select_sub_menu").hasClass("d-flex")) {
+                    $("#select_sub_menu").removeClass("d-flex");
+                    $(".gallery-item-overlay").removeClass("active");
+                    $(".check-icon-container").removeClass("active");
+                }
             });
         }
         else {
@@ -231,18 +207,25 @@
     $(document).on("blur", ".editable-object", function (e) {
         $(this).attr("contenteditable", "false");
         let newname = $(this).text();
-        let svg_id = this.parentElement.parentElement.children[0].getAttribute("data-id");
-        let origin_name = this.getAttribute("data-workName");
+        let mediaId = $(this).closest(".gallery-item").data("media-id");
+        let origin_name = $(this).attr("data-workName");
         if (newname != "" && newname != origin_name) {
-            window.dispatchEvent(new CustomEvent("change_workname", { detail: { name: newname, id: svg_id } }));
-        }
-        else {
-            this.innerHTML = this.getAttribute("data-workName");
+            window.dispatchEvent(new CustomEvent("change_workname", { detail: { name: newname, mediaId: mediaId } }));
         }
     });
 
+    $(document).on("blur", "#btn_select", function (e) {
+        e.stopPropagation();
+        
+    })
+
     $("#search_input").on("input", function (e) {
-        searchDesigns(e.target.value);
+        if (!selectMode) {
+            searchVar.query = e.target.value;
+            searchVar.index = 1;
+            emptyContainer();
+            searchDesigns();
+        }
     });
 
     init();

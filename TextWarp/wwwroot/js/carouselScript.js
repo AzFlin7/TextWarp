@@ -439,21 +439,16 @@
 
     $(document).on("click", ".design-item>svg", function () {
         let tempCenterElement = $(".slick-slide.slick-current.slick-center").find(".vcarousel-item");
+        tempCenterElement.html(this.outerHTML);
         let mediaId = $(this).data("media-id");
-        let tempNode = document.createElement("div");
-        tempNode.classList.add("vcarousel-item");
-        tempNode.style.width = "100%";
-        tempNode.innerHTML = this.outerHTML;
-        tempNode.children[0].setAttribute("data-media-id", mediaId);
+        tempCenterElement.find("svg").attr("data-media-id", mediaId);
         var btn_save_wrapper = document.createElement("div");
         btn_save_wrapper.classList.add("btn-save-wrapper");
         var btn_save_design = document.createElement("div");
         btn_save_design.classList.add("btn-save-design");
         btn_save_design.innerHTML = "Save this design";
         btn_save_wrapper.append(btn_save_design);
-        tempNode.append(btn_save_wrapper);
-        tempCenterElement.innerHTML = "";
-        tempCenterElement.append(tempNode);
+        tempCenterElement.append(btn_save_wrapper);
     });
 
     $(document).on("click", ".myDesign-container>.delete-design", function () {

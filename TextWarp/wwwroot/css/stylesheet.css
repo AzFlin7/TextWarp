@@ -688,13 +688,10 @@ a:link, a:visited, a:hover {
     border-radius: 50%;
     overflow: hidden;
     background-color: transparent;
-    display: none;
+    display: block;
     position: absolute;
     right: 10px;
     bottom: 10px;
-}
-.check_container.active{
-    display:block;
 }
 .check-icon {
     position:absolute;

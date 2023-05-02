@@ -31,7 +31,7 @@ namespace TextWarp.Controllers
             {
                 query = query.Where(s => s.WorkName.Contains(name));
             }
-            var saved_svgs = query.ToList();
+            var saved_svgs = query.OrderByDescending(s => s.UpdatedAt).ToList();
             if (saved_svgs != null) return Json(new { status = "success", saved_svgs = saved_svgs, msg = "" });
             return Json(new { status = "success", saved_svgs = new List<WarpedSvg>(), msg = "There are no svgs." });
         }

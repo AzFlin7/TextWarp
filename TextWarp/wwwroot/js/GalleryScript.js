@@ -4,12 +4,10 @@
 
     function searchDesigns(name) {
         $("#loader").addClass("d-flex");
+        $(".gallery-content .gallery-item").remove();
         $.get("/gallery/getData?name=" + name, function (data, status) {
             if (status == "success" && data.msg == "") {
                 drawContent(data.saved_svgs);
-                $('#search_input').autocomplete({
-                    lookup: availableNames,
-                });
             }
             else {
                 console.error(data.msg);
@@ -243,12 +241,8 @@
         }
     });
 
-    $("#search_input").on("keyup", function (event) {
-        if (event.target.value != "") {
-            if (event.keyCode === 13) {
-                searchDesigns(e.target.value);
-            }
-        }
+    $("#search_input").on("input", function (e) {
+        searchDesigns(e.target.value);
     });
 
     init();

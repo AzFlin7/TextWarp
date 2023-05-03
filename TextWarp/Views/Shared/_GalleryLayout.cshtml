@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
-
+@{string version = "1.01";}
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
     <link href="~/lib/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/css/stylesheet.css" rel="stylesheet">
+    <link href="~/css/stylesheet.css?v=@version" rel="stylesheet">
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="~/css/tagify.css" rel="stylesheet">
@@ -26,5 +26,5 @@
 @await RenderSectionAsync("Scripts", required: false)
 <script src="~/lib/fontawesome/js/all.min.js"></script>
 <script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
-<script src="~/js/GalleryScript.js"></script>
+<script src="~/js/GalleryScript.js?v=@version"></script>
 </html>

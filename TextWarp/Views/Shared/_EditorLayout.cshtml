@@ -1,12 +1,13 @@
 ﻿<!DOCTYPE html>
+@{string version = "1.01";}
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" />
     <link href="~/lib/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/css/stylesheet.css" rel="stylesheet">
+    <link href="~/css/stylesheet.css?v=@version" rel="stylesheet">
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet">
-    <link href="~/css/wheelcolorpicker.css" rel="stylesheet" />
+    <link href="~/css/wheelcolorpicker.css?v=@version" rel="stylesheet" />
     <title>@ViewData["title"]</title>
     @await RenderSectionAsync("Styles", required: false)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
@@ -62,14 +63,14 @@
 </body>
 <script src="~/js/warp_asset/d3.v3.min.js"></script>
 <script src="~/js/warp_asset/svg-path-properties.min.js"></script>
-<script src="~/js/warp_asset/seperatePathGenerator.js"></script>
+<script src="~/js/warp_asset/seperatePathGenerator.js?v=@version"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/fontawesome/js/all.min.js"></script>
 <script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
 <script src="~/js/jquery.wheelcolorpicker.js"></script>
-<script src="~/js/common.js"></script>
+<script src="~/js/common.js?v=@version"></script>
 <script src="~/js/toolcool-range-slider.min.js"></script>
-<script src="~/js/warp_asset/app.js"></script>
-<script src="~/js/ActionScript.js"></script>
+<script src="~/js/warp_asset/app.js?v=@version"></script>
+<script src="~/js/ActionScript.js?v=@version"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </html>

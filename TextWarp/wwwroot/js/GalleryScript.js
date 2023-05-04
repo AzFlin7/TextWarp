@@ -84,6 +84,7 @@
             $("#select_sub_menu").removeClass("d-flex");
             $(".gallery-item-overlay").removeClass("active");
             $(".check_container").removeClass('active');
+            $(".check-icon-container").removeClass('active');
         }
     });
 

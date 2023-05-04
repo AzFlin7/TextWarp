@@ -188,7 +188,10 @@
         let shower_id = "#" + $(this).attr("data-shower-id") + "";
         if ($(this).attr("data-shower-id") != "") {
             var intValue = parseInt($(this)[0].value);
-            $(shower_id).text(intValue + "%")
+            $(shower_id).text(intValue + "%");
+            if (this.id == "sli_stroke_contrast") {
+                $(shower_id).text($(this)[0].value);
+            }
         }
         if (this.id == "sli_stroke_gradientAngle") {
             var gradientDirection = this.value;
@@ -201,6 +204,29 @@
 
             for (const path of $(".warpedPath")) {
                 path.setAttribute("fill", gradientImage);
+            }
+        }
+        if (this.id == "sli_stroke_contrast") {
+            var contrast = this.value;
+            var currentPathIndex = -1;
+            var myItem = document.getElementsByClassName("currentActivePath")[0];
+            if (myItem != null) {
+                var parentUl = myItem.parentElement;
+
+                for (var i = 0; i < parentUl.children.length; i++) {
+                    if (parentUl.children[i].tagName == "path") {
+                        currentPathIndex++;
+                    }
+                    if (parentUl.children[i] === myItem) {
+                        break;
+                    }
+                }
+                var currentFilter = $("defs>filter").eq(currentPathIndex);
+                currentFilter.children().children().eq(0).attr("slope", contrast);
+                currentFilter.children().children().eq(1).attr("slope", contrast);
+                currentFilter.children().children().eq(2).attr("slope", contrast);
+                var filterId = "contrast" + currentPathIndex;
+                $(".currentActivePath").attr("filter", "url(#" + filterId + "");
             }
         }
         if (this.id == "sli_stroke_brightness" || this.id == "sli_stroke_hue" || this.id == "sli_stroke_saturation") {
@@ -287,6 +313,7 @@
                 $("#color-block").wheelColorPicker("setValue", color);
                 var hue = $("#color-block").wheelColorPicker('color').h;
                 var saturation = $("#color-block").wheelColorPicker('color').s;
+                var brightness = $("#color-block").wheelColorPicker('color').v;
                 $("#sli_stroke_brightness").val(brightness * 100);
                 $("#sli_stroke_hue").val(hue * 360);
                 $("#sli_stroke_saturation").val(saturation * 100);

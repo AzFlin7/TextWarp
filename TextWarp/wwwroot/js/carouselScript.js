@@ -82,7 +82,7 @@
         }
         if (currentColorIndex > colorPair.length - 20) {
             $.ajax({
-                url: '/Warp/getColors/' + 30,
+                url: '/warp/getColors/' + 30,
                 type: 'get',
                 success: function (res, data) {
                     let tempColors = res.colors.map((item) => {
@@ -116,7 +116,7 @@
             controlPoints_pair.push(controlPoints);
         }
 
-        $.get('/Warp/getColors/' + 100, function (data, status) {
+        $.get('/warp/getColors/' + 100, function (data, status) {
             if (status == "succss") {
                 colorPair = data.colors.map((item) => {
                     return [item.color1, item.color2];
@@ -241,7 +241,7 @@
 
     $("#edit").click(function () {
         let svgElt = $(".slick-slide.slick-current.slick-center").find(".vcarousel-item>svg");
-        if (svgElt.length > 0) {
+        if (svgElt.length == 1) {
             let mediaId = svgElt.data("media-id");
             let selectedSvg = svgElt[0].outerHTML;
             window.localStorage.setItem("selectedSvg", selectedSvg);

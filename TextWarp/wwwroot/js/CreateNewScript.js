@@ -57,8 +57,8 @@ function onChange(e) {
 $("#wordsInput").click(function () {
     if (this.classList.contains("active")) {
         words = $("#warp_words")[0].value;
-        window.localStorage.setItem("warp_words", words);
         words = words.toUpperCase();
+        window.localStorage.setItem("warp_words", words);
         $("#wordInputView").removeClass("d-flex");
         $("#wordInputView").addClass("d-none");
         $("#styleChooseView").removeClass("d-none");

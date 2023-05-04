@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="d-flex align-items-center h-100" style="padding-left:20px;">
-                <div id="colorToolBox" class="toolBox-theme flex-column" style="padding:30px 0 0 0 !important;z-index:101;">
+                <div id="colorToolBox" class="toolBox-theme flex-column" style="padding:30px 0 0 0 !important;z-index:101;height:650px !important;">
                     <div id="tab_name" class="default-text">Colors</div>
                     <div class="d-flex" style="margin:10px 25px;border-radius:8px;background-color:#fff;">
                         <div class="col-4 colorPanelTab active">Colors</div>
@@ -109,6 +109,9 @@
                     <div class="default-text" style="font-size: 22px;margin-bottom: 10px;">
                         Filters
                     </div>
+                    <div class="default-text" style="font-size: 18px;">
+                        Select word to adjust.
+                    </div>
                     <div class="detail-set-option">
                         <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
                             <div class="">
@@ -129,10 +132,10 @@
                             <div class="">
                                 Contrast
                             </div>
-                            <div class="progress-value"><span id="stroke_contrast">1%</span></div>
+                            <div class="progress-value"><span id="stroke_contrast">1</span></div>
                         </div>
                         <div class="">
-                            <tc-range-slider id="sli_stroke_contrast" data-default-value="1" data-shower-id="stroke_contrast" min="1" max="100" value="1"
+                            <tc-range-slider id="sli_stroke_contrast" data-default-value="1" data-shower-id="stroke_contrast" min="0" max="2" value="1" step="0.01"
                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
                                                 pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">

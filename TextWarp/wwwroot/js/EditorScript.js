@@ -5,7 +5,7 @@
 
     if (msg != "") {
         console.error(msg);
-        window.location.href = "warp/createnew";
+        window.location.href = "/warp/createnew";
     }
 
     $("#spana").click(function (e) {

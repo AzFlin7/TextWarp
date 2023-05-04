@@ -427,7 +427,7 @@ a:link, a:visited, a:hover {
     background-color: #7f7d80;
     border-radius: 10px;
     width: 350px;
-    height: 650px;
+    height: 35%;
     padding: 18px 25px;
     display: none !important;
     overflow: hidden;

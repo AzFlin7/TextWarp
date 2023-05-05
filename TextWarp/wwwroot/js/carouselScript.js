@@ -4,10 +4,21 @@
     var triggerButton = $("#btn_warpText")[0];
     var warpEndHandler = $("#btn_warpEndHandler")[0];
     var controlPoints_pair = [];
-    var initialColorPair = [
-        ["#be816c", "#c88087"],
-        ["#41badf", "#375152"]
-    ];
+    var initialColorPair = [];
+    var tempColorPairs = $("#colorPairs").val();
+    if (tempColorPairs) {
+        tempColorPairs = tempColorPairs.split(",");
+        initialColorPair = [
+            [tempColorPairs[0], tempColorPairs[1]],
+            [tempColorPairs[2], tempColorPairs[3]]
+        ];
+    }
+    else {
+        initialColorPair = [
+            ["#be816c", "#c88087"],
+            ["#41badf", "#375152"]
+        ];
+    }
     var colorPair = [];
     var currentColorIndex = -1;
     var currentWarpIndex = -1;

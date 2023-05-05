@@ -12,15 +12,15 @@
 </head>
 <body style="height: 100vh;position: relative;">
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
-        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;z-index:101;">
-            <div></div>
-            <div style="height:100%;width: 9rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
+        <div class="align-items-center d-flex" style="background-color: #6f6d70; height: 48px;z-index:101;">
+            <div style="margin: 0px 16px;"><i class="fa-solid fa-arrow-left-long text-white"></i></div>
+            <div style="height:100%;width: 9rem; padding-left: 4px; display: flex; align-items: center; justify-content: center;">
                 <a href="/gallery/" class="logo-container">
                     <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
                 </a>
             </div>
         </div>
-        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
+        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;padding: 0 24px 28px 24px;">
             @RenderBody()
         </div>
     </div>

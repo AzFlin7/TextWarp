@@ -401,6 +401,10 @@ a:link, a:visited, a:hover {
     font-family: Lato Regular;
     src: url("../fonts/Lato-Regular.ttf");
 }
+@font-face {
+    font-family: Century;
+    src: url("../fonts/CENTURY.ttf");
+}
 .btn-next {
     display: flex;
     align-items: center;
@@ -902,6 +906,7 @@ a:link, a:visited, a:hover {
     text-decoration: none;
     z-index: 101;
     cursor: pointer;
+    font-family:Century;
 }
 #save_send {
     height: 48px;

@@ -20,19 +20,20 @@ namespace TextWarp.Controllers
             var SvgViewModel = new SVGViewModel();
             try
             {
-                List<BrandmarkColor> colors = _context.BrandmarkColors.OrderBy(r => Guid.NewGuid()).Take(2).ToList();
+                var colors = _context.BrandmarkColors.OrderBy(r => Guid.NewGuid()).Take(2).ToList();
+                string colorPairs = colors[0].Color1 +", " + colors[0].Color2 +", " + colors[1].Color1 + ", " + colors[1].Color2;
                 SvgViewModel.words = words;
                 SvgViewModel.styleIndex = style;
                 SvgViewModel.msg = "";
-                SvgViewModel.initColors = colors;
+                SvgViewModel.colorPairs = colorPairs;
                 return View(SvgViewModel);
             }
             catch(Exception e)
             {
                 SvgViewModel.words = "";
                 SvgViewModel.styleIndex = -1;
-                SvgViewModel.msg = "";
-                SvgViewModel.initColors = new List<BrandmarkColor>();
+                SvgViewModel.msg = e.Message;
+                SvgViewModel.colorPairs = "";
                 return View(SvgViewModel);
             }  
         }

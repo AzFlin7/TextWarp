@@ -10,7 +10,6 @@ namespace TextWarp.Models
         public int? version { get; set; }
         public string? mediaId { get; set; }
         public string? msg { get; set; }
-        
-        public List<BrandmarkColor> initColors { get; set; }
+        public string? colorPairs { get; set; }
     }
 }

@@ -367,7 +367,6 @@
         
         parentNode = $(this).closest(".slick-slide.slick-current")
         currentSvg = parentNode.find("svg")[0].cloneNode(true);
-        parentNode = parentNode[0].cloneNode(true);
 
         let mediaId = currentSvg.getAttribute("data-media-id");
 

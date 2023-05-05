@@ -426,7 +426,7 @@ a:link, a:visited, a:hover {
 .toolBox-theme {
     background-color: #7f7d80;
     border-radius: 10px;
-    width: 350px;
+    width: 22rem;
     height: 35%;
     padding: 18px 25px;
     display: none !important;
@@ -440,7 +440,7 @@ a:link, a:visited, a:hover {
     font-family:"Lato Regular";
 }
 .detail-set-option{
-    margin-top:16px;
+    /*margin-top:16px;*/
 }
 .colorPanelTab {
     background-color: transparent;
@@ -641,7 +641,7 @@ a:link, a:visited, a:hover {
 }
 .edit-svg {
     max-width: 100%;
-    margin: 3rem;
+    padding: 3rem;
     z-index:101;
 }
 .currentActivePath {
@@ -675,6 +675,7 @@ a:link, a:visited, a:hover {
     top: 0;
     opacity:0;
     display:none;
+    z-index:101;
 }
 .gallery-item-overlay.active {
     display:block;
@@ -692,6 +693,7 @@ a:link, a:visited, a:hover {
     position: absolute;
     right: 10px;
     bottom: 10px;
+    z-index:101;
 }
 .check-icon {
     position:absolute;

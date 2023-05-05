@@ -13,14 +13,14 @@
 <body style="height: 100vh;position: relative;">
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
         <div class="align-items-center d-flex" style="background-color: #6f6d70; height: 48px;z-index:101;">
-            <div style="margin: 0px 16px;"><i class="fa-solid fa-arrow-left-long text-white"></i></div>
+            <div id="btn_back" style="margin: 0px 16px;cursor:pointer;"><i class="fa-solid fa-arrow-left-long text-white"></i></div>
             <div style="height:100%;width: 9rem; padding-left: 4px; display: flex; align-items: center; justify-content: center;">
                 <a href="/gallery/" class="logo-container">
                     <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
                 </a>
             </div>
         </div>
-        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;padding: 0 24px 28px 24px;">
+        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
             @RenderBody()
         </div>
     </div>
@@ -34,5 +34,5 @@
 @await RenderSectionAsync("Scripts", required: false)
 <script src="~/lib/fontawesome/js/all.min.js"></script>
 <script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
-<script src="~/js/FianlizeScript.js"></script>
+<script src="~/js/FinalizeScript.js"></script>
 </html>

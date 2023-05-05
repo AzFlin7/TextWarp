@@ -1,4 +1,6 @@
-﻿namespace TextWarp.Models
+﻿using TextWarp.Models.Database;
+
+namespace TextWarp.Models
 {
     public class SVGViewModel
     {
@@ -8,5 +10,7 @@
         public int? version { get; set; }
         public string? mediaId { get; set; }
         public string? msg { get; set; }
+        
+        public List<BrandmarkColor> initColors { get; set; }
     }
 }

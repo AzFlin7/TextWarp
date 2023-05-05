@@ -898,7 +898,7 @@ a:link, a:visited, a:hover {
     position: relative;
     border: none;
     color: #ffffff;
-    margin:0 0.5rem;
+    margin:0 10px;
     text-decoration: none;
     z-index: 101;
     cursor: pointer;
@@ -1049,4 +1049,17 @@ a:link, a:visited, a:hover {
 }
 .myDesign_svgs .slick-slide{
     margin:0 !important;
+}
+.finalize {
+    z-index: 101;
+    width: 160px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #34aeed;
+    cursor: pointer;
+    color: #fff;
+    font-size: 14px;
+    text-decoration:none;
 }

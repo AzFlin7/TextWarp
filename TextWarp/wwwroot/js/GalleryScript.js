@@ -76,10 +76,15 @@
         }
     });
 
+    $(document).on("click", ".gallery-item-img .check_container", function (e) {
+        e.stopPropagation();
+        $(this).siblings().eq(0).trigger("click");
+    });
+
     $(document).on("click", function (e) {
         e.stopPropagation();
         if (e.target.id == "btn_select") return;
-        if (selectMode && $(e.target).closest(".gallery-item-overlay").length == 0) {
+        if (selectMode && $(e.target).closest(".gallery-item-img").length == 0) {
             selectMode = false;
             $("#select_sub_menu").removeClass("d-flex");
             $(".gallery-item-overlay").removeClass("active");

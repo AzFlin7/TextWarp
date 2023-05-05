@@ -17,22 +17,24 @@ namespace TextWarp.Controllers
         [Route("warp")]
         public IActionResult Index(string words, int style)
         {
+            var SvgViewModel = new SVGViewModel();
             try
             {
-                var SvgViewModel = new SVGViewModel();
+                List<BrandmarkColor> colors = _context.BrandmarkColors.OrderBy(r => Guid.NewGuid()).Take(2).ToList();
                 SvgViewModel.words = words;
                 SvgViewModel.styleIndex = style;
                 SvgViewModel.msg = "";
+                SvgViewModel.initColors = colors;
                 return View(SvgViewModel);
             }
             catch(Exception e)
             {
-                var SvgViewModel = new SVGViewModel();
                 SvgViewModel.words = "";
                 SvgViewModel.styleIndex = -1;
-                SvgViewModel.msg = "Bad request.";
+                SvgViewModel.msg = "";
+                SvgViewModel.initColors = new List<BrandmarkColor>();
                 return View(SvgViewModel);
-            }
+            }  
         }
 
         public IActionResult CreateNew()
@@ -402,6 +404,11 @@ namespace TextWarp.Controllers
             {
                 return Json(new { status = "failed", msg = exp.Message });
             }
+        }
+
+        public IActionResult Finalize()
+        {
+            return View();
         }
     }
 }

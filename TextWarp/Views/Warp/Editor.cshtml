@@ -112,66 +112,68 @@
                     <div class="default-text" style="font-size: 18px;">
                         Select word to adjust.
                     </div>
-                    <div class="detail-set-option">
-                        <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
-                            <div class="">
-                                Brightness
+                    <div style="display:flex; flex-direction:column; justify-content:space-around; flex:1;">
+                        <div class="detail-set-option">
+                            <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                <div class="">
+                                    Brightness
+                                </div>
+                                <div class="progress-value"><span id="stroke_brightness">1%</span></div>
                             </div>
-                            <div class="progress-value"><span id="stroke_brightness">1%</span></div>
-                        </div>
-                        <div class="">
-                            <tc-range-slider id="sli_stroke_brightness" data-default-value="1" data-shower-id="stroke_brightness" min="1" max="100" value="1"
-                                                slider-width="100%" slider-height="3px" pointer-width="16px"
-                                                pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
-                                                pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
-                            </tc-range-slider>
-                        </div>
-                    </div>
-                    <div class="detail-set-option">
-                        <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
                             <div class="">
-                                Contrast
+                                <tc-range-slider id="sli_stroke_brightness" data-default-value="1" data-shower-id="stroke_brightness" min="1" max="100" value="1"
+                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                 pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                </tc-range-slider>
                             </div>
-                            <div class="progress-value"><span id="stroke_contrast">1</span></div>
                         </div>
-                        <div class="">
-                            <tc-range-slider id="sli_stroke_contrast" data-default-value="1" data-shower-id="stroke_contrast" min="0" max="2" value="1" step="0.01"
-                                                slider-width="100%" slider-height="3px" pointer-width="16px"
-                                                pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
-                                                pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
-                            </tc-range-slider>
-                        </div>
-                    </div>
-                    <div class="detail-set-option">
-                        <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                        <div class="detail-set-option">
+                            <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                <div class="">
+                                    Contrast
+                                </div>
+                                <div class="progress-value"><span id="stroke_contrast">1</span></div>
+                            </div>
                             <div class="">
-                                Saturation
+                                <tc-range-slider id="sli_stroke_contrast" data-default-value="1" data-shower-id="stroke_contrast" min="0" max="2" value="1" step="0.01"
+                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                 pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                </tc-range-slider>
                             </div>
-                            <div class="progress-value"><span id="stroke_saturation">1%</span></div>
                         </div>
-                        <div class="">
-                            <tc-range-slider id="sli_stroke_saturation" data-default-value="1" data-shower-id="stroke_saturation" min="1" max="100" value="1"
-                                                slider-width="100%" slider-height="3px" pointer-width="16px"
-                                                pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
-                                                pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
-                            </tc-range-slider>
-                        </div>
-                    </div>
-                    <div class="detail-set-option">
-                        <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                        <div class="detail-set-option">
+                            <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                <div class="">
+                                    Saturation
+                                </div>
+                                <div class="progress-value"><span id="stroke_saturation">1%</span></div>
+                            </div>
                             <div class="">
-                                Hue
+                                <tc-range-slider id="sli_stroke_saturation" data-default-value="1" data-shower-id="stroke_saturation" min="1" max="100" value="1"
+                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                 pointer-height="16px" slider-bg="#dedede" slider-bg-hover="#14bdff" slider-bg-fill="#14bdff"
+                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                </tc-range-slider>
                             </div>
-                            <div class="progress-value"><span id="stroke_hue">1%</span></div>
                         </div>
-                        <div class="">
-                            <tc-range-slider id="sli_stroke_hue" data-default-value="1" data-shower-id="stroke_hue" min="1" max="360" value="1"
-                                                slider-width="100%" slider-height="3px" pointer-width="16px"
-                                                pointer-height="16px" slider-bg="linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 16.666%, rgb(0, 255, 0) 33.333%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 66.666%, rgb(255, 0, 255) 83.333%, rgb(255, 0, 0) 100%)"
-                                                slider-bg-hover="None"
-                                                slider-bg-fill="None"
-                                                pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
-                            </tc-range-slider>
+                        <div class="detail-set-option">
+                            <div class="d-flex justify-content-between py-2 align-items-baseline default-text" style="font-size:12px">
+                                <div class="">
+                                    Hue
+                                </div>
+                                <div class="progress-value"><span id="stroke_hue">1%</span></div>
+                            </div>
+                            <div class="">
+                                <tc-range-slider id="sli_stroke_hue" data-default-value="1" data-shower-id="stroke_hue" min="1" max="360" value="1"
+                                                 slider-width="100%" slider-height="3px" pointer-width="16px"
+                                                 pointer-height="16px" slider-bg="linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 16.666%, rgb(0, 255, 0) 33.333%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 66.666%, rgb(255, 0, 255) 83.333%, rgb(255, 0, 0) 100%)"
+                                                 slider-bg-hover="None"
+                                                 slider-bg-fill="None"
+                                                 pointer-bg="#14bdff" pointer-bg-hover="#14bdff" pointer-bg-focus="#14bdff" pointer-border="None">
+                                </tc-range-slider>
+                            </div>
                         </div>
                     </div>
                 </div>

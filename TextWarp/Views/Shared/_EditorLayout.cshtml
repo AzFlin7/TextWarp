@@ -20,29 +20,16 @@
                     <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
                 </a>
             </div>
-            <div class="align-items-center d-flex justify-content-center w-100" style="position:fixed;top: 0;left: 0;color:#fff;z-index:101;">
-                <div class="d-flex flex-column">
-                    <div class="align-items-center d-flex justify-content-between" id="save_send" style="width:160px;cursor:pointer;">
-                        <div>Save and send</div>
-                        <div><i class="fa-solid fa-angle-down"></i></div>
-                    </div>
+            <div class="align-items-center d-flex justify-content-center w-100" style="position:fixed;top: 0;left: 0;color:#fff;height:48px;">
+                <div class="d-flex">
+                    <a href="/warp/createnew/" class="btn-head-action">Edit Info</a>
+                    <a href="/gallery/" class="btn-head-action">Gallery</a>
+                    <a class="btn-head-action">Sign in</a>
                 </div>
             </div>
-            <div style="padding: 0 0.5rem;">
-                <a href="/warp/createnew/" class="btn-head-action">Edit Info</a>
-                <a href="/gallery/" class="btn-head-action">Gallery</a>
-                <a class="btn-head-action">Sign in</a>
-            </div>
+            <a href="/warp/finalize/" class="finalize">Finalize</a>
         </div>
         <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;position:relative;">
-            <div class="d-flex justify-content-center align-items-center w-100" style="position:absolute;top:auto;left:0;">
-                <div id="send_actions" style="width: 160px;">
-                    <div class="send-action">Apparel</div>
-                    <div class="send-action">Creator</div>
-                    <div class="send-action">Boxby</div>
-                    <div class="send-action">TrueBrush</div>
-                </div>
-            </div>
             @RenderBody()
         </div>
     </div>

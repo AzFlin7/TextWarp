@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/bootstrap5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/stylesheet.css" rel="stylesheet">
+    <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet">
+    <title>@ViewData["title"]</title>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body style="height: 100vh;position: relative;">
+    <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
+        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;z-index:101;">
+            <div></div>
+            <div style="height:100%;width: 9rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
+                <a href="/gallery/" class="logo-container">
+                    <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
+                </a>
+            </div>
+        </div>
+        <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="d-none align-items-center justify-content-center w-100 h-100" id="loader">
+        <div>
+            <img src="~/imgs//loading.svg" style="width:80px; height:80px;" />
+        </div>
+    </div>
+</body>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/fontawesome/js/all.min.js"></script>
+<script src="~/lib/bootstrap5/js/bootstrap.min.js"></script>
+<script src="~/js/FianlizeScript.js"></script>
+</html>

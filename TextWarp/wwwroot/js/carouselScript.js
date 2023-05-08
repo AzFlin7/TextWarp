@@ -489,7 +489,7 @@
         });
     });
 
-    $("#save_send").click(function () {
+    $("#btn_goto_gallery").click(function () {
         var currentSVG = $(".slick-slide.slick-current.slick-center").find(".vcarousel-item>svg");
         let mediaId = currentSVG.data("media-id");
         var svg_data = currentSVG[0].outerHTML;
@@ -510,6 +510,8 @@
                 $("#loader").removeClass("d-flex");
                 if (res.status == "failed") {
                     console.error("Save failed.");
+                } else {
+                    window.location = "/gallery";
                 }
             },
         });

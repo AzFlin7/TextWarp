@@ -79,7 +79,7 @@
         $("#loader").removeClass("d-flex");
     });
 
-    $("#save_send").click(function () {
+    $("#btn_goto_gallery").click(function () {
         $("#svg_container").find("*").removeClass("currentActivePath");
         let mediaId = $("#svg_container").data("media-id");
         $("#svg_container")[0].removeAttribute("data-media-id");
@@ -101,6 +101,8 @@
                 $("#loader").removeClass("d-flex");
                 if (res.status == "failed") {
                     alert("Save failed.")
+                } else {
+                    window.location = "/gallery";
                 }
             },
         });

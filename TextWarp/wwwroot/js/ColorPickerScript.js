@@ -80,7 +80,7 @@
         e.stopPropagation();
         brightness = $(this).val();
         var color = $("#color-block").wheelColorPicker("color");
-        $("#color-block").wheelColorPicker('setHsv', parseInt(color.h * 255), parseInt(color.s * 255), brightness);
+        $("#color-block").wheelColorPicker('setHsv', color.h, color.s, parseFloat(brightness));
     });
 
     $("#clearHistory").click(function () {

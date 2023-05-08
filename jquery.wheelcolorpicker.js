@@ -210,7 +210,7 @@
    *                   tolerance value.
    */
   WCP.defaults = {
-    format: 'hsv', /* 1.x */
+    format: 'hex', /* 1.x */
     preview: false, /* 1.x */
     live: true, /* 2.0 */
     userinput: true, /* DEPRECATED 1.x */
@@ -883,7 +883,7 @@
       "<div class='jQWCP-wWidget'>" + 
         "<div class='jQWCP-wWheel'>" + 
           "<div class='jQWCP-wWheelOverlay'></div>" +
-        "<span class='jQWCP-wWheelCursor'></span>" +
+          "<span class='jQWCP-wWheelCursor'></span>" +
         "</div>" +
         "<div class='jQWCP-wHue jQWCP-slider-wrapper'>" +
           "<canvas class='jQWCP-wHueSlider jQWCP-slider' width='1' height='50' title='Hue'></canvas>" +
@@ -950,65 +950,64 @@
    * 
    * Create color wheel image and return as base64 encoded data url.
    */
-    WCP.ColorPicker.getWheelDataUrl = function (size) {
-        var r = size / 2; // radius
-        var center = r;
-        var canvas = document.createElement('canvas');
-        canvas.width = size;
-        canvas.height = size;
-        var context = canvas.getContext('2d');
+  WCP.ColorPicker.getWheelDataUrl = function( size ) {
+    var r = size / 2; // radius
+    var center = r;
+    var canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    var context = canvas.getContext('2d');
 
-        // Fill the wheel with colors
-        for (var y = 0; y < size; y++) {
-            for (var x = 0; x < size; x++) {
-                // Get the offset from central position
-                var offset = Math.sqrt(Math.pow(x - center, 2) + Math.pow(y - center, 2));
+    // Fill the wheel with colors
+    for(var y = 0; y < size; y++) {
+      for(var x = 0; x < size; x++) {
+        // Get the offset from central position
+        var offset = Math.sqrt(Math.pow(x - center, 2) + Math.pow(y - center, 2));
 
-                // Skip pixels outside picture area (plus 2 pixels)
-                if (offset > r + 2) {
-                    continue;
-                }
-
-                // Get the position in degree (hue)
-                var deg = (
-                    (x - center == 0
-                        ? (y < center ? 90 : 270)
-                        : (Math.atan((center - y) / (x - center)) / Math.PI * 180)
-                    )
-                    + (x < center ? 180 : 0)
-                    + 360
-                ) % 360;
-
-                // Relative offset (sat)
-                var sat = offset / r;
-
-                // Value is always 1
-                var val = 1;
-
-                // Calculate color
-                var cr = (Math.abs(deg + 360) + 60) % 360 < 120 ? 1
-                    : (deg > 240 ? (120 - Math.abs(deg - 360)) / 60
-                        : (deg < 120 ? (120 - deg) / 60
-                            : 0));
-                var cg = Math.abs(deg - 120) < 60 ? 1
-                    : (Math.abs(deg - 120) < 120 ? (120 - Math.abs(deg - 120)) / 60
-                        : 0);
-
-                var cb = Math.abs(deg - 240) < 60 ? 1
-                    : (Math.abs(deg - 240) < 120 ? (120 - Math.abs(deg - 240)) / 60
-                        : 0);
-                var pr = Math.round((cr + (1 - cr) * (1 - sat)) * 255);
-                var pg = Math.round((cg + (1 - cg) * (1 - sat)) * 255);
-                var pb = Math.round((cb + (1 - cb) * (1 - sat)) * 255);
-
-                context.fillStyle = 'rgb(' + pr + ',' + pg + ',' + pb + ')';
-                context.fillRect(x, y, 1, 1);
-            }
+        // Skip pixels outside picture area (plus 2 pixels)
+        if(offset > r + 2) {
+          continue;
         }
 
-        return canvas.toDataURL();
-    };
+        // Get the position in degree (hue)
+        var deg = (
+          (x - center == 0 
+            ? (y < center ? 90 : 270)
+            : (Math.atan((center - y) / (x - center)) / Math.PI * 180)
+          )
+          + (x < center ? 180 : 0)
+          + 360
+        ) % 360;
 
+        // Relative offset (sat)
+        var sat = offset / r;
+
+        // Value is always 1
+        var val = 1;
+
+        // Calculate color
+        var cr = (Math.abs(deg + 360) + 60) % 360 < 120 ? 1
+          : (deg > 240 ? (120 - Math.abs(deg - 360)) / 60
+          : (deg < 120 ? (120 - deg) / 60
+          : 0));
+        var cg = Math.abs(deg - 120) < 60 ? 1
+          : (Math.abs(deg - 120) < 120 ? (120 - Math.abs(deg - 120)) / 60
+          : 0);
+
+        var cb = Math.abs(deg - 240) < 60 ? 1
+          : (Math.abs(deg - 240) < 120 ? (120 - Math.abs(deg - 240)) / 60
+          : 0);
+        var pr = Math.round((cr + (1 - cr) * (1 - sat)) * 255);
+        var pg = Math.round((cg + (1 - cg) * (1 - sat)) * 255);
+        var pb = Math.round((cb + (1 - cb) * (1 - sat)) * 255);
+
+        context.fillStyle = 'rgb(' + pr + ',' + pg + ',' + pb + ')';
+        context.fillRect(x, y, 1, 1);
+      }
+    }
+
+    return canvas.toDataURL();
+  };
 
   /////////////
   // Members //
@@ -1576,12 +1575,12 @@
       $wheelCursor.css('left', (wheelOffsetX + (wheelX * $wheel.width() / 2)) + 'px');
       $wheelCursor.css('top', (wheelOffsetY - (wheelY * $wheel.height() / 2)) + 'px');
       // Keep shading to 1 if preserveWheel is true (DEPRECATED) or live is true
-        if (this.options.preserveWheel == true || (this.options.preserveWheel == null && this.options.live == false)) {
-            $wheelOverlay.css('opacity', 0);
-        }
-        else {
-            $wheelOverlay.css('opacity', 1 - (color.v < 0 ? 0 : color.v));
-        }
+      if(this.options.preserveWheel == true || (this.options.preserveWheel == null && this.options.live == false)) {
+        $wheelOverlay.css('opacity', 0);
+      }
+      else {
+        $wheelOverlay.css('opacity', 1 - (color.v < 0 ? 0 : color.v));
+      }
     }
 
     // Hue
@@ -2341,7 +2340,7 @@
     var $input = $(instance.input);
     
     $('body').data('jQWCP.activeControl', $this.get(0));
-
+    
     // Trigger sliderdown event
     $input.trigger('sliderdown');
 

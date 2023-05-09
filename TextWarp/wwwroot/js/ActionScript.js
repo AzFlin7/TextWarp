@@ -10,5 +10,8 @@
             this.children[1].style.rotate = "180deg";
             $("#send_actions").show();
         }
-    })
+    });
+    $("#btn_finalize").click(function () {
+        alert("test");
+    });
 })

@@ -8,16 +8,17 @@
     <link href="~/css/stylesheet.css?v=@version" rel="stylesheet">
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="~/css/wheelcolorpicker.css?v=@version" rel="stylesheet" />
+    <link href="~/css/editor-common.css?v=@version" rel="stylesheet" />
     <title>@ViewData["title"]</title>
     @await RenderSectionAsync("Styles", required: false)
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 <body style="height:100vh;  width: 100vw;position:relative;overflow:hidden;">
     <div class="d-flex flex-column" style="position:absolute; left:0; right:0;height: 100vh; width: 100vw">
-        <div class="align-items-center d-flex justify-content-between" style="background-color: #6f6d70; height: 48px;">
-            <div style="height:100%;width: 9rem; padding-left: 0.8rem; display: flex; align-items: center; justify-content: center;">
-                <a href="/gallery/" class="logo-container" style="z-index: 102;">
-                    <img class="mw-100" src="/imgs/logo_white.svg" style="width: 100%;">
+        <div class="editor-header">
+            <div class="header-logo">
+                <a href="/gallery/" class="logo-container">
+                    <img src="/imgs/logo_white.svg">
                 </a>
             </div>
             <div class="align-items-center d-flex justify-content-center w-100" style="position:fixed;top: 0;left: 0;color:#fff;height:48px;">
@@ -27,7 +28,7 @@
                     <a class="btn-head-action">Sign in</a>
                 </div>
             </div>
-            <a href="/warp/finalize/" class="finalize">Finalize</a>
+            <a href="#" class="finalize" id="btn_finalize">Finalize</a>
         </div>
         <div id="main" class="d-flex w-100" style="height: calc(100vh - 48px);overflow:hidden;position:relative;">
             @RenderBody()
@@ -61,6 +62,9 @@
             <img src="~/imgs//loading.svg" style="width:80px;height:80px;"/>
         </div>
     </div>
+    @{
+        await Html.RenderPartialAsync("./_FinalizePartialView");
+    }
 </body>
 <script src="~/js/warp_asset/d3.v3.min.js"></script>
 <script src="~/js/warp_asset/svg-path-properties.min.js"></script>

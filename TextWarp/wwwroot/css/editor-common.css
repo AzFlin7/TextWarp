@@ -1,0 +1,116 @@
+:root {
+    --color-primary: #0097eb;
+    --color-cc-header-gray: #eff0f0;
+    --color-cc-primary: #4aa6c1;
+    --color-title-primary: #414141;
+    --color-cc-dark-gray: #808285;
+    --color-cc-main-background-gray: #f5f5f5;
+    --color-divider-color: #a8a8a8;
+    --mobile-size: 767px;
+    font-size: 16px;
+}
+@media (max-width: 576px) {
+    :root {
+        font-size: 12px;
+    }
+}
+@font-face {
+    font-family: 'Lato-Bold';
+    src: url('../fonts/Lato-Bold.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lato-Regular';
+    src: url('../fonts/Lato-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+.btn-get-started {
+    width: 132px;
+    height: 32px;
+    display: flex;
+    background: black;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+}
+.editor-header {
+    background-color: #6f6d70;
+    height: 48px;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+.editor-header > .header-logo{
+    height: 100%;
+    padding-left: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.partial-finalize {
+    width: 100vw;
+    height: 100vh;
+    z-index: 102;
+    position: fixed;
+    background-color: #f6f7f8;
+}
+.partial-finalize .editor-header #btn_back_eidtor_view {
+    margin-right: 20px;
+    cursor: pointer;
+}
+.partial-finalize .editor-header #btn_back_eidtor_view img {
+    width: 20px;
+    margin-bottom: 8px;
+}
+.partial-finalize .partial-finalize-body {
+    padding: 3.125rem;
+    height: calc(100vh - 48px);
+    overflow-y: auto;
+    max-width: 1200px;
+    margin: auto;
+}
+.partial-finalize .partial-finalize-body .div-header {
+    display: flex;
+}
+.partial-finalize .partial-finalize-body .div-header {
+    display: flex;
+    margin-bottom: 4.5rem;
+}
+.partial-finalize-body .div-header .div-image {
+    margin-right: 2rem;
+}
+.partial-finalize-body .div-header .div-text {
+    color: #646265
+}
+.partial-finalize-body .div-header .div-text .title {
+    font-family: Lato-Bold;
+    font-size: 2rem;
+    margin-bottom: 1.125rem;
+}
+.partial-finalize-body .div-header .div-text .description {
+    font-family: Lato-Regular;
+    font-size: 14px;
+}
+.partial-finalize-body .div-header .div-text .description a#btn_finalize_download {
+    color: inherit;
+}
+.cf-services .service-item {
+    padding: 2rem;
+    display: flex;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 4px 4px 10px #ccc;
+    width: 500px;
+}
+.cf-services .service-item .div-image img {
+    height: 13.5rem;
+    margin-right: 2rem;
+}
+.cf-services .service-item .div-text .title{
+    font-size: 1.2rem;
+    font-family: Lato-Bold;
+    margin-bottom: 1rem;
+}

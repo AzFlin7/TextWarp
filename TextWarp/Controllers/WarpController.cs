@@ -406,10 +406,5 @@ namespace TextWarp.Controllers
                 return Json(new { status = "failed", msg = exp.Message });
             }
         }
-
-        public IActionResult Finalize()
-        {
-            return View();
-        }
     }
 }

@@ -765,7 +765,7 @@ a:link, a:visited, a:hover {
 .slick-slide.slick-current {
     opacity: 1;
 }
-#up {
+#up, #down {
     width: 46px;
     height: 46px;
     border-radius: 50%;
@@ -774,21 +774,19 @@ a:link, a:visited, a:hover {
     color: #ffffff;
     cursor: pointer;
     display: flex;
+    padding: 12px;
+}
+#up {
+    padding-bottom: 15px;
+}
+#down {
+    padding-top: 15px;
 }
 #up:hover {
     background: #0faeec;
 }
 #up:active {
     background: #0faeec;
-}
-#down {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    font-size: 40px;
-    color: #ffffff;
-    background: #999999;
-    cursor: pointer;
 }
 #down:hover {
     background: #0faeec;

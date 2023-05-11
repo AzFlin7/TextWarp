@@ -31,6 +31,7 @@ namespace TextWarp.Models.Database
         public virtual DbSet<Font> Fonts { get; set; } = null!;
         public virtual DbSet<Graffix> Graffixes { get; set; } = null!;
         public virtual DbSet<MyDesign> MyDesigns { get; set; } = null!;
+        public virtual DbSet<SendToApparel> SendToApparels { get; set; } = null!;
         public virtual DbSet<SvgLike> SvgLikes { get; set; } = null!;
         public virtual DbSet<Upload> Uploads { get; set; } = null!;
         public virtual DbSet<WarpedSvg> WarpedSvgs { get; set; } = null!;
@@ -307,6 +308,19 @@ namespace TextWarp.Models.Database
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<SendToApparel>(entity =>
+            {
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.MediaId).HasMaxLength(50);
+
+                entity.Property(e => e.Type).HasComment("1: TW 2: TB");
+
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+                entity.Property(e => e.UserId).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<SvgLike>(entity =>
             {
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime");
@@ -356,6 +370,8 @@ namespace TextWarp.Models.Database
                     .HasColumnName("TUrl");
 
                 entity.Property(e => e.Twidth).HasColumnName("TWidth");
+
+                entity.Property(e => e.Type).HasMaxLength(10);
             });
 
             modelBuilder.Entity<WarpedSvg>(entity =>

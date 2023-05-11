@@ -26,6 +26,32 @@
     font-weight: normal;
     font-style: normal;
 }
+#loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background-color: rgba(0,0,0,0.3);
+}
+#loader img {
+    width: 5rem;
+    height: 5rem;
+}
+.btn-start-creating {
+    width: 160px;
+    height: 42px;
+    display: flex;
+    background: black;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
 .btn-get-started {
     width: 132px;
     height: 32px;
@@ -35,6 +61,9 @@
     align-items: center;
     justify-content: center;
     border-radius: 16px;
+}
+.btn-get-started:hover, .btn-start-creating:hover{
+    background: #00a5e8;
 }
 .editor-header {
     background-color: #6f6d70;
@@ -53,9 +82,18 @@
 .partial-finalize {
     width: 100vw;
     height: 100vh;
+    left: 100vw;
     z-index: 102;
     position: fixed;
     background-color: #f6f7f8;
+    visibility: hidden;
+    transition-property: left,visibility;
+    transition-duration: .5s;
+    transition-timing-function: ease-in-out;
+}
+.partial-finalize.active{
+    visibility: visible;
+    left: 0;
 }
 .partial-finalize .editor-header #btn_back_eidtor_view {
     margin-right: 20px;
@@ -74,13 +112,20 @@
 }
 .partial-finalize .partial-finalize-body .div-header {
     display: flex;
-}
-.partial-finalize .partial-finalize-body .div-header {
-    display: flex;
     margin-bottom: 4.5rem;
+}
+@media (max-width: 767.98px) {
+    .partial-finalize .partial-finalize-body .div-header {
+        flex-wrap: wrap;
+    }
 }
 .partial-finalize-body .div-header .div-image {
     margin-right: 2rem;
+    margin-bottom: 1rem;
+}
+.partial-finalize-body .div-header svg {
+    width: 200px !important;
+    max-height: 200px !important;
 }
 .partial-finalize-body .div-header .div-text {
     color: #646265
@@ -97,20 +142,40 @@
 .partial-finalize-body .div-header .div-text .description a#btn_finalize_download {
     color: inherit;
 }
+.cf-services {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
 .cf-services .service-item {
     padding: 2rem;
     display: flex;
     background: white;
     border-radius: 1rem;
     box-shadow: 4px 4px 10px #ccc;
-    width: 500px;
+    max-width: 500px;
+    margin: 1rem;
 }
 .cf-services .service-item .div-image img {
     height: 13.5rem;
     margin-right: 2rem;
 }
-.cf-services .service-item .div-text .title{
+.cf-services .service-item .div-text{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.cf-services .service-item .div-text .title>p{
     font-size: 1.2rem;
     font-family: Lato-Bold;
+    margin-bottom: 1rem;
+}
+.cf-services .service-item .div-text .description>p{
+    font-size: 13px;
+    color: #646265;
+}
+.cf-services .service-item .div-text .title>img{
+    height: 24px;
     margin-bottom: 1rem;
 }

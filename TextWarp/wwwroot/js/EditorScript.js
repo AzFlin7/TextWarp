@@ -57,7 +57,7 @@
     });
 
     $("#svg_download").click(function () {
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         var svg = $("#svg_container")[0];
         var serializer = new XMLSerializer();
         var source = serializer.serializeToString(svg);
@@ -76,7 +76,7 @@
 
         theAnchor[0].click();
         theAnchor.remove();
-        $("#loader").removeClass("d-flex");
+        $("#loader").hide();
     });
 
     $("#btn_goto_gallery").click(function () {
@@ -90,7 +90,7 @@
         formData.append("words", words);
         formData.append("styleIndex", styleIndex);
 
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.ajax({
             url: "/warp/save/" + mediaId,
             type: "POST",
@@ -98,7 +98,7 @@
             processData: false,
             contentType: false,
             success: function (res) {
-                $("#loader").removeClass("d-flex");
+                $("#loader").hide();
                 if (res.status == "failed") {
                     alert("Save failed.")
                 } else {

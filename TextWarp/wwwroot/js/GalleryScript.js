@@ -5,9 +5,9 @@
         query: ""
     };
 
-    $("#loader").addClass("d-flex");
+    $("#loader").show();
     function searchDesigns() {
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.get("/gallery/getData?name=" + searchVar.query + "&index=" + searchVar.index + "&count=" + searchVar.count, function (data, status) {
             if (status == "success" && data.msg == "") {
                 drawContent(data.savedSvgs);
@@ -15,7 +15,7 @@
             else {
                 console.error(data.msg);
             }
-            $("#loader").removeClass("d-flex");
+            $("#loader").hide();
         });
     }
 
@@ -94,7 +94,7 @@
     });
 
     window.addEventListener("change_workname", (e) => {
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.ajax({
             url: "/gallery/rename",
             type: "POST",
@@ -117,7 +117,7 @@
                         $("#msgWrapper")[0].style.visibility = "hidden";
                     }, 2000);
                 }
-                $("#loader").removeClass("d-flex");
+                $("#loader").hide();
             }
         });
     });
@@ -134,7 +134,7 @@
     $("#act_duplicate").click(function () {
         var mediaId = $(".check-icon-container.active").closest(".gallery-item").data("media-id");
         if (mediaId) {
-            $("#loader").addClass("d-flex");
+            $("#loader").show();
             searchVar.query = $("#search_input").val();
             $.get("/gallery/duplicate?mediaId=" + mediaId + "&query=" + searchVar.query, function (data, status) {
                 if (status == "success") {
@@ -149,7 +149,7 @@
                 else {
                     console.error(data.msg);
                 }
-                $("#loader").removeClass("d-flex");
+                $("#loader").hide();
             });
         }
     });
@@ -157,7 +157,7 @@
     $("#act_delete").click(function () {
         var mediaId = $(".check-icon-container.active").closest(".gallery-item").data("media-id");
         if (mediaId) {
-            $("#loader").addClass("d-flex");
+            $("#loader").show();
             $.get("/gallery/delete?mediaId=" + mediaId, function (data, status) {
                 if (status == "success") $("[data-media-id=" + mediaId + "]").remove();
                 else console.error(data.msg);

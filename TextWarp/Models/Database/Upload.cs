@@ -18,5 +18,6 @@ namespace TextWarp.Models.Database
         public string? Turl { get; set; }
         public double? Twidth { get; set; }
         public double? Theight { get; set; }
+        public string Type { get; set; } = null!;
     }
 }

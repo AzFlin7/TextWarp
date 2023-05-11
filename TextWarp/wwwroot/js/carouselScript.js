@@ -44,14 +44,14 @@
             else {
                 $("#up").addClass("d-none");
             }
-            $("#loader").removeClass("d-flex");
+            $("#loader").hide();
         }
     });
 
     function newWarp() {
         var warpedSvg = $("#svg_container")[0].cloneNode(true);
         warpedSvg.setAttribute("data-id", currentWarpIndex);
-        warpedSvg.setAttribute("data-media-id", mediaIdGenerator("WARP"));
+        warpedSvg.setAttribute("data-media-id", mediaIdGenerator("TW"));
 
         var id = "warpedSvg" + currentWarpIndex;
         warpedSvg.setAttribute("id", id);
@@ -121,7 +121,7 @@
     function initial() {
         controlPoints_pair = [];
         colorPair = [];
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         for (var i = 0; i < 100; i++) {
             var controlPoints = splitPath(styleIndex, words);
             controlPoints_pair.push(controlPoints);
@@ -238,7 +238,7 @@
         if (currentSlideIndex + 2 > currentWarpIndex) {
             currentWarpIndex++;
             currentColorIndex++;
-            $("#loader").addClass("d-flex");
+            $("#loader").show();
             newWarp();
         }
         else {
@@ -290,7 +290,7 @@
             formData.append("styleIndex", styleIndex);
             formData.append("mediaId", mediaId);
             
-            $("#loader").addClass("d-flex");
+            $("#loader").show();
             $.ajax({
                 url: "/warp/saveLike/",
                 type: "POST",
@@ -298,7 +298,7 @@
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    $("#loader").removeClass("d-flex");
+                    $("#loader").hide();
                     if (res.status == "success") {
                         likeMediaIds.push(mediaId);
                         var svgUrl = "/uploads/" + res.saved_svg.svgfileName;
@@ -357,9 +357,9 @@
         var parentElement = this.parentElement;
         var mediaId = $(parentElement).find("svg").data("media-id");
         likeMediaIds = likeMediaIds.filter(item => item !== mediaId);
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.get('/warp/deleteLike/' + mediaId, function (data, status) {
-            $("#loader").removeClass("d-flex");
+            $("#loader").hide();
             if (status == "success") {
                 parentElement.remove();
             }
@@ -390,7 +390,7 @@
             formData.append("styleIndex", styleIndex);
             formData.append("mediaId", mediaId);
 
-            $("#loader").addClass("d-flex");
+            $("#loader").show();
             $.ajax({
                 url: "/warp/saveDesign/",
                 type: "POST",
@@ -398,7 +398,7 @@
                 processData: false,
                 contentType: false,
                 success: function (res) {
-                    $("#loader").removeClass("d-flex");
+                    $("#loader").hide();
                     if (res.status == "success") {
                         myDesignMediaIds.push(mediaId);
 
@@ -467,9 +467,9 @@
         let mediaId = currentSVG.data("media-id");
 
         myDesignMediaIds = myDesignMediaIds.filter(item => item !== mediaId);
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.get('/warp/deleteDesign?mediaId=' + mediaId, function (data, status) {
-            $("#loader").removeClass("d-flex");
+            $("#loader").hide();
             if (status == "success" && data.msg != null) {
                 currentMyDesignIndex--;
                 $(".myDesign_svgs").slick("slickRemove", slick_id);
@@ -499,7 +499,7 @@
         formData.append("words", words);
         formData.append("styleIndex", styleIndex);
 
-        $("#loader").addClass("d-flex");
+        $("#loader").show();
         $.ajax({
             url: "/warp/save/" + mediaId,
             type: "POST",
@@ -507,7 +507,7 @@
             processData: false,
             contentType: false,
             success: function (res) {
-                $("#loader").removeClass("d-flex");
+                $("#loader").hide();
                 if (res.status == "failed") {
                     console.error("Save failed.");
                 } else {

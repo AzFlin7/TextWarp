@@ -109,7 +109,7 @@ namespace TextWarp.Controllers
 
         [Route("warp/save/{mediaId}")]
         [HttpPost]
-        public ActionResult Save(string mediaId, SVGSaveModel sVGSaveModel)
+        public async Task<ActionResult> Save(string mediaId, SVGSaveModel sVGSaveModel)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace TextWarp.Controllers
                     warpedImg.UpdatedAt = DateTime.Now;
                     warpedImg.Version += 1;
                     _context.WarpedSvgs.Update(warpedImg);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                 }
                 else
                 {
@@ -162,13 +162,48 @@ namespace TextWarp.Controllers
                         UpdatedAt = DateTime.Now,
                         Version = 1
                     };
-                    _context.WarpedSvgs.Add(warpedSvg);
-                    _context.SaveChanges();
+                    await _context.WarpedSvgs.AddAsync(warpedSvg);
+                    await _context.SaveChangesAsync();
                 }
 
                 return Json(new { status = "success" });
             }
             catch(Exception e)
+            {
+                return Json(new { status = "failed" });
+            }
+        }
+        [Route("warp/send-to-apparel/{mediaId}")]
+        [HttpPost]
+        public async Task<ActionResult> SendToApparel(string mediaId, SVGSaveModel sVGSaveModel)
+        {
+            try
+            {
+                await Save(mediaId, sVGSaveModel);
+                SendToApparel _sendToApparel = _context.SendToApparels.Where(s => s.MediaId == mediaId).FirstOrDefault();
+                if (_sendToApparel == null) {
+                    await _context.SendToApparels.AddAsync(new SendToApparel
+                    {
+                        MediaId = mediaId,
+                        Type = 1, //TW
+                        IsRead = false,
+                        UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d",
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now,
+                    });
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _sendToApparel.IsRead = false;
+                    _sendToApparel.UpdatedAt = DateTime.Now;
+                    _context.SendToApparels.Update(_sendToApparel);
+                    await _context.SaveChangesAsync();
+                }
+                
+                return Json(new { status = "success" });
+            }
+            catch (Exception e)
             {
                 return Json(new { status = "failed" });
             }

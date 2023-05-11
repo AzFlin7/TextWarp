@@ -1,4 +1,6 @@
-﻿<div class="partial-finalize">
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+<div class="partial-finalize active">
     <div class="editor-header">
         <div class="header-logo">
             <a id="btn_back_eidtor_view">
@@ -11,46 +13,80 @@
     </div>
     <div class="partial-finalize-body">
         <div class="div-header">
-            <div class="div-image">
+            <div class="div-image" id="div_current_svg">
                 <img src="~/imgs/embrance.png" />
             </div>
             <div class="div-text">
                 <p class="title">Use your design with any of our tools.</p>
-                <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Or simply <a href="#" id="btn_finalize_download">download</a> here.</p>
+                <p class="description">With the use of custom design tools such as TrueBrush, your design can be further embellished and customized to create a unique personaized look. Create attention-grabbing marketing materials, add a personal touch to t-shirts and other apparel, and create a creative and memorable branding experience across all packaging and marketing materials.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Or simply <a href="#" id="btn_finalize_download">download</a> here.</p>
             </div>
         </div>
         <div class="cf-services">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="service-item">
-                        <div class="div-image">
-                            <img src="~/imgs/true-brush-service.jpg"/>
-                        </div>
-                        <div class="div-text">
-                            <div class="title">
-                                <div class="tb-logo">
-                                    <img />
-                                </div>
-                            </div>
-                        </div>
+            <div class="service-item">
+                <div class="div-image">
+                    <img src="~/imgs/true-brush-service.jpg"/>
+                </div>
+                <div class="div-text">
+                    <div class="title">
+                        <img src="~/imgs/truebrush-logo-black.svg"/>
+                    </div>
+                    <div class="description">
+                        <p>Add your own creative elements to your typography art. Use TrueBrush you can take your design to the next level and create truly unique and visually stunning artwork.</p>
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <div class="action">
+                        <a class="btn-start-creating" href="#">Get Started</a>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="service-item">
-                        <div class="div-image">
-                            <img src="~/imgs/fdt-service.jpg"/>
-                        </div>
-                        <div class="div-text">
-                            <div class="title">
-                                <p>The Creator</p>
-                            </div>
-                            <div class="description">
-                                <p>Lorem ipsum dolor sit vamet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. </p>
-                            </div>
-                            <div class="action">
-                                <a class="btn-get-started" href="#">Get Started</a>
-                            </div>
-                        </div>
+            </div>
+            <div class="service-item">
+                <div class="div-image">
+                    <img src="~/imgs/fdt-service.jpg"/>
+                </div>
+                <div class="div-text">
+                    <div class="title">
+                        <p>The Creator</p>
+                    </div>
+                    <div class="description">
+                        <p>With Creator, you can easily import and incorporate your design into a design and create a print-ready file. Creator also offers a range of print-ready templates for a number of different products.</p>
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <div class="action">
+                        <a class="btn-start-creating" href="#">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service-item">
+                <div class="div-image">
+                    <img src="~/imgs/tdt-service.jpg"/>
+                </div>
+                <div class="div-text">
+                    <div class="title">
+                        <p>Apparel Designer</p>
+                    </div>
+                    <div class="description">
+                        <p>Whether you're looking to create a fun and whimsical design or showcase your brand's creativity , words morphed into different shapes can be a great design element to incorporate into your product line.</p>
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <div class="action">
+                        <a class="btn-start-creating" href="#" data-href="@Configuration["CfcreatorTshirtDesignURL"]" id="btn_goto_tdt">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="service-item">
+                <div class="div-image">
+                    <img src="~/imgs/bdt-service.jpg"/>
+                </div>
+                <div class="div-text">
+                    <div class="title">
+                        <p>Boxby</p>
+                    </div>
+                    <div class="description">
+                        <p>Add personality, style, and visual interest to your packaging design. Typography art can elevate a brand's packaging, making it stand out on the shelves and creating a memorable experience for consumers.</p>
+                    </div>
+                    <div class="flex-grow-1"></div>
+                    <div class="action">
+                        <a class="btn-start-creating" href="#">Get Started</a>
                     </div>
                 </div>
             </div>

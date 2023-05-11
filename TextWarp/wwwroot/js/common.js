@@ -1,6 +1,6 @@
 ﻿function mediaIdGenerator(type) {
 	if (!type) type = "RASTER";
-	return type.substr(0, 1).toUpperCase() + GenerateRNDString(10);
+	return type.substr(0, 2).toUpperCase() + GenerateRNDString(10);
 }
 function GenerateRNDString(length) {
 	var result = '';

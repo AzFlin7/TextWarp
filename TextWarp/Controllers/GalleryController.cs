@@ -85,7 +85,7 @@ namespace TextWarp.Controllers
                         warpedSvg.CreatedAt = DateTime.Now;
                         warpedSvg.UpdatedAt = DateTime.Now;
                         warpedSvg.SvgfileName = displayPath;
-                        warpedSvg.MediaId = MediaIdHelper.generate("WAPRTEXT");
+                        warpedSvg.MediaId = MediaIdHelper.generate("TW");
                         warpedSvg.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
                         warpedSvg.WorkName = selected_svg.WorkName;
                         warpedSvg.Words = selected_svg.Words;

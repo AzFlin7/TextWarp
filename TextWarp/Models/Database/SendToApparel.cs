@@ -15,5 +15,7 @@ namespace TextWarp.Models.Database
         /// 1: TW 2: TB
         /// </summary>
         public byte Type { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
     }
 }

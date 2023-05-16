@@ -180,7 +180,6 @@
     });
 
     $("#generatePalettes").on("click", () => {
-        $("#loader").show();
         generatePalettes();
     });
 
@@ -354,13 +353,14 @@
     }
 
     function generatePalettes() {
-        $("#palettes")[0].innerHTML = "";
+        $("#loader").show();
         palettes = [];
         $.ajax({
             url: '/Warp/GeneratePalettes',
             type: 'get',
             success: function (res, data) {
                 if (res.status == 200) {
+                    $("#palettes").empty();
                     for (const field of res.palettes) {
                         var palette = [];
                         palette.push(field.color1);
@@ -409,8 +409,9 @@
                     };
                 }
                 else {
-                    alert(res.message);
+                    console.err(res.message);
                 }
+                $("#loader").hide();
             }
         });
     }

@@ -140,7 +140,7 @@
                 $("#likes").addClass("active");
                 for (let i = 0; i < data.like_svgs.length; i++) {
                     let tempSvg = data.like_svgs[i];
-                    var svgUrl = "/uploads/" + tempSvg.svgfileName;
+                    var svgUrl = "/uploads/likes/" + tempSvg.mediaId + ".svg";
                     likeMediaIds.push(tempSvg.mediaId);
                     fetch(svgUrl)
                         .then(response => response.text())
@@ -161,7 +161,7 @@
                 }
             }
             else {
-                console.error(data.msg);
+                console.log(data.msg);
             }
         });
 
@@ -169,7 +169,7 @@
         if (status == "success" && data.msg == "") {
             for (let i = 0; i < data.design_svgs.length; i++) {
                 let tempSvg = data.design_svgs[i];
-                var svgUrl = "/uploads/" + tempSvg.svgfileName;
+                var svgUrl = "/uploads/designs/" + tempSvg.mediaId + ".svg";
                 myDesignMediaIds.push(tempSvg.mediaId);
                     fetch(svgUrl)
                         .then(response => response.text())
@@ -199,7 +199,7 @@
                 }
             }
             else {
-                console.error(data.msg);
+                console.log(data.msg);
             }
         });
         
@@ -301,7 +301,7 @@
                     $("#loader").hide();
                     if (res.status == "success") {
                         likeMediaIds.push(mediaId);
-                        var svgUrl = "/uploads/" + res.saved_svg.svgfileName;
+                        var svgUrl = "/uploads/likes/" + res.saved_svg.mediaId + ".svg";
                         fetch(svgUrl)
                             .then(response => response.text())
                             .then(svg => {
@@ -402,7 +402,7 @@
                     if (res.status == "success") {
                         myDesignMediaIds.push(mediaId);
 
-                        var svgUrl = "/uploads/" + res.saved_Design.svgfileName;
+                        var svgUrl = "/uploads/designs/" + res.saved_Design.mediaId + ".svg";
                         fetch(svgUrl)
                             .then(response => response.text())
                             .then(svg => {
@@ -491,13 +491,20 @@
 
     $("#btn_goto_gallery").click(function () {
         var currentSVG = $(".slick-slide.slick-current.slick-center").find(".vcarousel-item>svg");
-        let mediaId = currentSVG.data("media-id");
-        var svg_data = currentSVG[0].outerHTML;
+        let width = fixFloat(currentSVG[0].getBBox().width, 3);
+        let height = fixFloat(currentSVG[0].getBBox().height, 3);
+
+        let clonedSvg = currentSVG.clone();
+        clonedSvg.removeAttr("class").removeAttr("style").removeAttr("data-id").removeAttr("id");
+        let mediaId = clonedSvg.data("media-id");
+        var svg_data = clonedSvg[0].outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
         formData.append("svgFile", blob, 'warp-text.svg');
         formData.append("words", words);
         formData.append("styleIndex", styleIndex);
+        formData.append("width", width);
+        formData.append("height", height);
 
         $("#loader").show();
         $.ajax({

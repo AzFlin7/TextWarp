@@ -69,14 +69,21 @@
             console.error("can't get svg element");
             return;
         }
+        let width = fixFloat(currentSVG[0].getBBox().width, 3);
+        let height = fixFloat(currentSVG[0].getBBox().height, 3);
+
+        let clonedSvg = currentSVG.clone();
+        clonedSvg.removeAttr("class").removeAttr("style").removeAttr("data-id").removeAttr("id");
 
         let mediaId = currentSVG.data("media-id");
-        var svg_data = currentSVG[0].outerHTML;
+        var svg_data = clonedSvg[0].outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
         formData.append("svgFile", blob, 'warp-text.svg');
         formData.append("words", words);
         formData.append("styleIndex", styleIndex);
+        formData.append("width", width);
+        formData.append("height", height);
 
         $("#loader").show();
         $.ajax({

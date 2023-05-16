@@ -48,7 +48,7 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var warpText = _context.WarpedSvgs.Where(w => w.MediaId == mediaId).FirstOrDefault();
+                var warpText = _context.Twsvgs.Where(w => w.MediaId == mediaId).FirstOrDefault();
                 var SvgViewModel = new SVGViewModel
                 {
                     words = words,
@@ -58,7 +58,7 @@ namespace TextWarp.Controllers
                     mediaId = mediaId
                 };
                 if (warpText != null) {
-                    var svgImgPath = "uploads/" + warpText.SvgfileName + "?v=" + warpText.Version;
+                    var svgImgPath = "uploads\\svgs\\" + mediaId + ".svg?v=" + warpText.Version;
                     SvgViewModel.svgFilePath = svgImgPath;
                     SvgViewModel.version = warpText.Version;
                 }
@@ -113,64 +113,55 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var svgImgPath = "";
-                var imgfilepath = "";
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-
-                WarpedSvg warpedImg = _context.WarpedSvgs.Where(w => w.MediaId == mediaId).FirstOrDefault();
-                if (warpedImg != null)
-                {
-                    svgImgPath = warpedImg.SvgfileName;
-                    imgfilepath = Path.Combine(filepath, svgImgPath);
-                    using (var stream = new FileStream(imgfilepath, FileMode.Create))
-                    {
-                        sVGSaveModel.svgFile.CopyTo(stream);
-                    }
-                    warpedImg.UpdatedAt = DateTime.Now;
-                    warpedImg.Version += 1;
-                    _context.WarpedSvgs.Update(warpedImg);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    var filename = Guid.NewGuid().ToString() + ".svg";
-                    svgImgPath = "svgFiles\\" + filename;
-
-                    if (!Directory.Exists(filepath))
-                    {
-                        Directory.CreateDirectory(filepath);
-                    }
-                    if (!Directory.Exists(filepath + "\\svgFiles"))
-                    {
-                        Directory.CreateDirectory(filepath + "\\svgFiles");
-                    }
-                    imgfilepath = Path.Combine(filepath, svgImgPath);
-                    using (var stream = new FileStream(imgfilepath, FileMode.Create))
-                    {
-                        sVGSaveModel.svgFile.CopyTo(stream);
-                    }
-                    svgImgPath = "svgFiles/" + filename;
-                    WarpedSvg warpedSvg = new WarpedSvg
-                    {
-                        MediaId = mediaId,
-                        Words = sVGSaveModel.words,
-                        StyleIndex = sVGSaveModel.styleIndex,
-                        SvgfileName = svgImgPath,
-                        WorkName = "Untitled",
-                        UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d",
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now,
-                        Version = 1
-                    };
-                    await _context.WarpedSvgs.AddAsync(warpedSvg);
-                    await _context.SaveChangesAsync();
-                }
-
+                await _SaveAsync(mediaId, sVGSaveModel);
                 return Json(new { status = "success" });
             }
             catch(Exception e)
             {
                 return Json(new { status = "failed" });
+            }
+        }
+        private async Task<Twsvg> _SaveAsync(string mediaId, SVGSaveModel sVGSaveModel) {
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads\\svgs");
+            var svgImgPath = mediaId + ".svg";
+            var imgfilepath = Path.Combine(filepath, svgImgPath);
+
+
+            Twsvg warpedImg = _context.Twsvgs.Where(w => w.MediaId == mediaId).FirstOrDefault();
+            if (warpedImg != null)
+            {
+                using (var stream = new FileStream(imgfilepath, FileMode.Create))
+                {
+                    sVGSaveModel.svgFile.CopyTo(stream);
+                }
+                warpedImg.UpdatedAt = DateTime.Now;
+                warpedImg.Version += 1;
+                _context.Twsvgs.Update(warpedImg);
+                await _context.SaveChangesAsync();
+                return warpedImg;
+            }
+            else
+            {
+                using (var stream = new FileStream(imgfilepath, FileMode.Create))
+                {
+                    sVGSaveModel.svgFile.CopyTo(stream);
+                }
+                Twsvg warpedSvg = new Twsvg
+                {
+                    MediaId = mediaId,
+                    Words = sVGSaveModel.words,
+                    StyleIndex = sVGSaveModel.styleIndex,
+                    Width = sVGSaveModel.width,
+                    Height = sVGSaveModel.height,
+                    WorkName = "Untitled",
+                    UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d",
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    Version = 1
+                };
+                await _context.Twsvgs.AddAsync(warpedSvg);
+                await  _context.SaveChangesAsync();
+                return warpedSvg;
             }
         }
         [Route("warp/send-to-apparel/{mediaId}")]
@@ -179,7 +170,7 @@ namespace TextWarp.Controllers
         {
             try
             {
-                await Save(mediaId, sVGSaveModel);
+                Twsvg twsvg = await _SaveAsync(mediaId, sVGSaveModel);
                 SendToApparel _sendToApparel = _context.SendToApparels.Where(s => s.MediaId == mediaId).FirstOrDefault();
                 if (_sendToApparel == null) {
                     await _context.SendToApparels.AddAsync(new SendToApparel
@@ -190,12 +181,16 @@ namespace TextWarp.Controllers
                         UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d",
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,
+                        Width = sVGSaveModel.width,
+                        Height = sVGSaveModel.height
                     });
                     await _context.SaveChangesAsync();
                 }
                 else
                 {
                     _sendToApparel.IsRead = false;
+                    _sendToApparel.Width = sVGSaveModel.width;
+                    _sendToApparel.Height = sVGSaveModel.height;
                     _sendToApparel.UpdatedAt = DateTime.Now;
                     _context.SendToApparels.Update(_sendToApparel);
                     await _context.SaveChangesAsync();
@@ -215,7 +210,7 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var like_svgs = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
+                var like_svgs = _context.Twlikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
                 if (like_svgs.Count > 0)
                 {
                     return Json(new
@@ -249,29 +244,16 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var svgImgPath = "";
-                var newSvgLike = new SvgLike();
-                var filename = Guid.NewGuid().ToString() + ".svg";
-                svgImgPath = "svgLikes\\" + filename;
-                filename = "svgLikes/" + filename;
-                newSvgLike.SvgfileName = filename;
+                var newSvgLike = new Twlike();
+                var filename = svgLikeModel.MediaId + ".svg";
                 newSvgLike.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
                 newSvgLike.Words = svgLikeModel.words;
                 newSvgLike.StyleIndex = svgLikeModel.styleIndex;
                 newSvgLike.CreatedAt = DateTime.Now;
                 newSvgLike.MediaId = svgLikeModel.MediaId;
 
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-                if (!Directory.Exists(filepath))
-                {
-                    Directory.CreateDirectory(filepath);
-                }
-                if (!Directory.Exists(filepath + "\\svgLikes"))
-                {
-                    Directory.CreateDirectory(filepath + "\\svgLikes");
-                }
-
-                var imgfilepath = Path.Combine(filepath, svgImgPath);
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads\\likes");
+                var imgfilepath = Path.Combine(filepath, filename);
 
                 if (imgfilepath != null)
                 {
@@ -281,7 +263,7 @@ namespace TextWarp.Controllers
                     }
                 }
 
-                _context.SvgLikes.Add(newSvgLike);
+                _context.Twlikes.Add(newSvgLike);
                 _context.SaveChanges();
 
                 return Json(new { status = "success", saved_svg = newSvgLike, msg = "" });
@@ -297,12 +279,11 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var selected_svg = _context.SvgLikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).Single();
+                var selected_svg = _context.Twlikes.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).Single();
                 if(selected_svg != null)
                 {
-                    var fileName = selected_svg.SvgfileName;
-                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-                    fileName = Path.Combine(filepath, fileName);
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads\\likes");
+                    string fileName = Path.Combine(filepath, selected_svg.MediaId + ".svg");
                     if (System.IO.File.Exists(fileName))
                     {
                         try
@@ -311,7 +292,7 @@ namespace TextWarp.Controllers
                         }
                         catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
                     }
-                    _context.SvgLikes.Remove(selected_svg);
+                    _context.Twlikes.Remove(selected_svg);
                     _context.SaveChanges();
                     return Json(new { status = "success", msg = "" });
                 }
@@ -332,7 +313,7 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var design_svgs = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
+                var design_svgs = _context.Twdesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d")).ToList();
                 if (design_svgs.Count > 0)
                 {
                     return Json(new
@@ -366,28 +347,16 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var svgImgPath = "";
-                var newDesign = new MyDesign();
-                var filename = Guid.NewGuid().ToString() + ".svg";
-                svgImgPath = "myDesigns\\" + filename;
-                filename = "myDesigns/" + filename;
-                newDesign.SvgfileName = filename;
+                var newDesign = new Twdesign();
+                var filename = svgDesignModel.MediaId + ".svg";
                 newDesign.UserId = "41ae9ea6-035a-4bc6-98f9-fd758422de6d";
                 newDesign.Words = svgDesignModel.words;
                 newDesign.StyleIndex = svgDesignModel.styleIndex;
                 newDesign.MediaId = svgDesignModel.MediaId;
                 newDesign.CreatedAt = DateTime.Now;
-                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-                if (!Directory.Exists(filepath))
-                {
-                    Directory.CreateDirectory(filepath);
-                }
-                if (!Directory.Exists(filepath + "\\myDesigns"))
-                {
-                    Directory.CreateDirectory(filepath + "\\myDesigns");
-                }
 
-                var imgfilepath = Path.Combine(filepath, svgImgPath);
+                var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads\\designs");
+                var imgfilepath = Path.Combine(filepath, filename);
 
                 if (imgfilepath != null)
                 {
@@ -397,7 +366,7 @@ namespace TextWarp.Controllers
                     }
                 }
 
-                _context.MyDesigns.Add(newDesign);
+                _context.Twdesigns.Add(newDesign);
                 _context.SaveChanges();
 
                 return Json(new { status = "success", saved_Design = newDesign, msg = "" });
@@ -413,12 +382,11 @@ namespace TextWarp.Controllers
         {
             try
             {
-                var selected_Design = _context.MyDesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).FirstOrDefault();
+                var selected_Design = _context.Twdesigns.Where(s => (s.UserId == "41ae9ea6-035a-4bc6-98f9-fd758422de6d" && s.MediaId == mediaId)).FirstOrDefault();
                 if (selected_Design != null)
                 {
-                    var fileName = selected_Design.SvgfileName;
-                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads");
-                    fileName = Path.Combine(filepath, fileName);
+                    var filepath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads\\designs");
+                    string fileName = Path.Combine(filepath, selected_Design.MediaId + ".svg");
                     if (System.IO.File.Exists(fileName))
                     {
                         try
@@ -427,7 +395,7 @@ namespace TextWarp.Controllers
                         }
                         catch (Exception e) { return Json(new { status = "failed", msg = e.Message }); }
                     }
-                    _context.MyDesigns.Remove(selected_Design);
+                    _context.Twdesigns.Remove(selected_Design);
                     _context.SaveChanges();
                     return Json(new { status = "success", msg = "" });
                 }

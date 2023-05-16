@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace TextWarp.Models.Database
 {
-    public partial class WarpedSvg
+    public partial class Twsvg
     {
         public int Id { get; set; }
         public string UserId { get; set; } = null!;

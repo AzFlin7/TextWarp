@@ -83,12 +83,20 @@
         $("#svg_container").find("*").removeClass("currentActivePath");
         let mediaId = $("#svg_container").data("media-id");
         $("#svg_container")[0].removeAttribute("data-media-id");
-        var svg_data = document.getElementById("svg_container").outerHTML;
+
+        let width = fixFloat($("#svg_container")[0].getBBox().width, 3);
+        let height = fixFloat($("#svg_container")[0].getBBox().height, 3);
+
+        let clonedSvg = $("#svg_container").clone();
+        clonedSvg.removeAttr("class").removeAttr("style").removeAttr("data-id").removeAttr("id");
+        var svg_data = clonedSvg[0].outerHTML;
         let blob = new Blob([svg_data], { type: 'image/svg+xml' });
         var formData = new FormData();
         formData.append("svgFile", blob, 'warp-text.svg');
         formData.append("words", words);
         formData.append("styleIndex", styleIndex);
+        formData.append("width", width);
+        formData.append("height", height);
 
         $("#loader").show();
         $.ajax({

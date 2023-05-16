@@ -38,21 +38,21 @@
         for (let i = 0; i < contentData.length; i++) {
             var svg = contentData[i];
             var newDoc = $(`<div class="gallery-item" data-media-id="` + svg.mediaId + `" data-words="` + svg.words + `" data-style-index="` + svg.styleIndex +`">
-                        <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
-                        <div class="gallery-item-overlay"></div>
-                        <div class="check_container">
-                            <div class="check-icon-container">
-                                <div class="check-icon"></div>
-                                <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
-                            </div>
-                        </div>
-                        <img src="/uploads/`+ svg.svgfileName + "?v=" + svg.version + `" style="max-width: 100%; max-height:100%; ">
-                        </div>
-                            <div class="d-flex flex-column align-items-center justify-content-center">
-                                <div class="editable-object" data-workName="`+ svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + svg.workName + `</div >
-                                <div style="color:#dad8dd;font-size: 14px;">`+ svg.createdAt + `</div>
-                            </div>
-                        </div>`);
+                <div class="gallery-item-img d-flex align-items-center justify-content-center" style="position:relative;">
+                <div class="gallery-item-overlay"></div>
+                <div class="check_container">
+                    <div class="check-icon-container">
+                        <div class="check-icon"></div>
+                        <i class="fa-solid fa-check" style="color: #fff;font-weight:900;z-index: 101;"></i>
+                    </div>
+                </div>
+                <img class="svg-preview" src="/uploads/svgs/`+ svg.mediaId + ".svg?v=" + svg.version + `">
+                </div>
+                    <div class="d-flex flex-column align-items-center justify-content-center">
+                        <div class="editable-object" data-workName="`+ svg.workName + `" style="color:#dad8dd;font-size: 14px;margin-top: 8px;">` + svg.workName + `</div >
+                        <div style="color:#dad8dd;font-size: 14px;">`+ svg.createdAt + `</div>
+                    </div>
+                </div>`);
             container.appendChild(newDoc[0]);
         }
     }
@@ -61,7 +61,7 @@
         e.stopPropagation();
         var mediaId = $(this).parent().data("media-id");
         var words = $(this).parent().data("words");
-        var styleIndex = $(this).parent().data("styleindex");
+        var styleIndex = $(this).parent().data("style-index");
         window.location.href = "/warp/editor?mediaId=" + mediaId + "&words=" + words + "&style=" + styleIndex;
     })
 

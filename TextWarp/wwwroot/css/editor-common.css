@@ -112,7 +112,7 @@
 }
 .partial-finalize .partial-finalize-body .div-header {
     display: flex;
-    margin-bottom: 4.5rem;
+    margin-bottom: 3rem;
 }
 @media (max-width: 767.98px) {
     .partial-finalize .partial-finalize-body .div-header {
@@ -149,7 +149,7 @@
     flex-wrap: wrap;
 }
 .cf-services .service-item {
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     background: white;
     border-radius: 1rem;

@@ -643,6 +643,11 @@ a:link, a:visited, a:hover {
     overflow: hidden;
     background-color:#fff;  
 }
+.gallery-item-img .svg-preview {
+    max-width: 100%;
+    max-height: 100%;
+    padding: 1rem;
+}
 .edit-svg {
     max-width: 100%;
     padding: 3rem;

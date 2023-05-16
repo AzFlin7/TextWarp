@@ -11,3 +11,6 @@ function GenerateRNDString(length) {
 	}
 	return result;
 }
+function fixFloat(number, decimal) {
+	return Math.round(number * Math.pow(10, decimal)) / Math.pow(10, decimal);
+}
